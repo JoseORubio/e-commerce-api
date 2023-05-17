@@ -3,6 +3,7 @@ package com.ecommerceapi.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,16 +12,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity @Table (name = "clientes-teste")
+@Entity
+@Table(name = "clientes-teste")
 public class ClienteModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NotEmpty @Size(max=80,message="Nome deve ter no máximo {max} caracteres ")
-    @Pattern (regexp = "[A-Z][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*",
-            message = "Deve obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula")
+    @NotEmpty
+    @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres ")
+    @Pattern(regexp = "[A-Z][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*", message = "Deve obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula")
     private String nome;
 
     public UUID getId() {
@@ -38,17 +41,43 @@ public class ClienteModel implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
-//    @NotEmpty @Size(min = 8, max=20,message="Login deve ter entre {min} e {max} caracteres ")
-//    @Pattern(regexp = "^[a-z\\d_]+$", message = "Deve conter apenas letras minúsculas, números ou '_'")
-//    private String login;
+
+    @NotEmpty
+    @Size(min = 8, max = 20, message = "Login deve ter entre {min} e {max} caracteres ")
+    @Pattern(regexp = "^(?=.*[a-z])[a-z\\d_]+$", message = "Deve conter apenas números ou '_', e pelo menos uma letra minúscula ")
+    private String login;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 //
-//    @NotEmpty @Size(min = 8, max=20,message="Senha deve ter entre {min} e {max} caracteres ")
-//    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
-//             message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número")
-//    private String senha;
+    @NotEmpty @Size(min = 8, max=20,message="Senha deve ter entre {min} e {max} caracteres ")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
+             message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número")
+    private String senha;
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 //
-//    @NotEmpty @CPF
-//    private String cpf;
+    @NotEmpty @CPF()
+    private String cpf;
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 //
 //    @NotEmpty
 //    private LocalDate data_nasc;
