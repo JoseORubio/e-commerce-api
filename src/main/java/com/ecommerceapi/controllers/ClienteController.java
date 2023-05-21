@@ -1,9 +1,11 @@
 package com.ecommerceapi.controllers;
 
+import com.ecommerceapi.dtos.ClienteDTO;
 import com.ecommerceapi.models.ClienteModel;
 import com.ecommerceapi.services.ClienteService;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +32,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteModel clienteModel, Errors errors){
+    public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errors){
     if (errors.hasErrors()){
         List<Map<String, String>> listaErros = new ArrayList<>();
 
@@ -40,6 +45,16 @@ public class ClienteController {
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
     }
+
+        ClienteModel clienteModel = new ClienteModel();
+        BeanUtils.copyProperties(clienteDTO,clienteModel);
+        try {
+            clienteModel.setData_nasc(LocalDate.parse(
+                    clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        } catch(DateTimeParseException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Data inválida");
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
     }
 

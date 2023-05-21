@@ -27,10 +27,7 @@ public class ClienteModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NotEmpty
-    @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres ")
-    @Pattern(regexp = "[A-Z][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*", message = "Deve obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula")
-    private String nome;
+
 
     public UUID getId() {
         return id;
@@ -40,6 +37,11 @@ public class ClienteModel implements Serializable {
         this.id = id;
     }
 
+//    @NotEmpty
+//    @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres ")
+//    @Pattern(regexp = "[A-Z][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*", message = "Deve obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula")
+    private String nome;
+
     public String getNome() {
         return nome;
     }
@@ -48,9 +50,9 @@ public class ClienteModel implements Serializable {
         this.nome = nome;
     }
 
-    @NotEmpty
-    @Size(min = 8, max = 20, message = "Login deve ter entre {min} e {max} caracteres ")
-    @Pattern(regexp = "^(?=.*[a-z])[a-z\\d_]+$", message = "Deve conter apenas números ou '_', e pelo menos uma letra minúscula ")
+//    @NotEmpty
+//    @Size(min = 8, max = 20, message = "Login deve ter entre {min} e {max} caracteres ")
+//    @Pattern(regexp = "^(?=.*[a-z])[a-z\\d_]+$", message = "Deve conter apenas números ou '_', e pelo menos uma letra minúscula ")
     private String login;
 
     public String getLogin() {
@@ -60,10 +62,10 @@ public class ClienteModel implements Serializable {
     public void setLogin(String login) {
         this.login = login;
     }
-//
-    @NotEmpty @Size(min = 8, max=20,message="Senha deve ter entre {min} e {max} caracteres ")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
-             message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número")
+
+//    @NotEmpty @Size(min = 8, max=20,message="Senha deve ter entre {min} e {max} caracteres ")
+//    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
+//             message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número")
     private String senha;
 
     public String getSenha() {
@@ -73,8 +75,8 @@ public class ClienteModel implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-//
-    @NotEmpty @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
+
+//    @NotEmpty @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
     private String cpf;
 
     public String getCpf() {
@@ -86,11 +88,8 @@ public class ClienteModel implements Serializable {
     }
 
 
-    @NotNull
-//    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Temporal(TemporalType.DATE)
-    @JsonFormat (pattern = "dd-MM-yyyy")
-
+    @JsonFormat (pattern = "dd/MM/yyyy")
     private LocalDate data_nasc;
 
     public LocalDate getData_nasc() {
@@ -100,6 +99,7 @@ public class ClienteModel implements Serializable {
     public void setData_nasc(LocalDate data_nasc) {
         this.data_nasc = data_nasc;
     }
+
 
 //    @NotEmpty
 //    private LocalDateTime data_cadastro;
