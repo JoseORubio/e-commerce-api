@@ -1,11 +1,17 @@
 package com.ecommerceapi.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import jakarta.websocket.OnMessage;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -68,7 +74,7 @@ public class ClienteModel implements Serializable {
         this.senha = senha;
     }
 //
-    @NotEmpty @CPF()
+    @NotEmpty @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
     private String cpf;
 
     public String getCpf() {
@@ -78,9 +84,23 @@ public class ClienteModel implements Serializable {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-//
-//    @NotEmpty
-//    private LocalDate data_nasc;
+
+
+    @NotNull
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
+    @JsonFormat (pattern = "dd-MM-yyyy")
+
+    private LocalDate data_nasc;
+
+    public LocalDate getData_nasc() {
+        return data_nasc;
+    }
+
+    public void setData_nasc(LocalDate data_nasc) {
+        this.data_nasc = data_nasc;
+    }
+
 //    @NotEmpty
 //    private LocalDateTime data_cadastro;
 //
