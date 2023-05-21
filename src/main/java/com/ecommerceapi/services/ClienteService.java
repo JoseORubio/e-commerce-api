@@ -18,12 +18,19 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteModel salvarCliente(ClienteModel clienteModel){
+    public ClienteModel salvarCliente(ClienteModel clienteModel) {
         return clienteRepository.save(clienteModel);
     }
 
-    public List<ClienteModel> buscarClientes(){
+    public List<ClienteModel> buscarClientes() {
         return clienteRepository.findAll();
     }
 
+    public boolean existsByLogin(String login) {
+        return clienteRepository.existsByLogin(login);
+    }
+
+    public boolean existsByCpf(String cpf){
+        return clienteRepository.existsByCpf(cpf);
+    }
 }
