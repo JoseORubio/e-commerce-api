@@ -115,13 +115,27 @@ public class ClienteModel implements Serializable {
     public void setSexo(char sexo) {
         this.sexo = sexo;
     }
+
+    private String telefone;
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     //
-//    @NotEmpty @Pattern(regexp = "^\\(\\d{2}\\)\\d{5}\\-\\d{4}$", message = "Padrão (12)12345-1234")
-//    private String telefone;
-//
-//    @NotEmpty @Email @Size( max=40,message="E-mail deve ter no máximo {max} caracteres ")
-//    private String email;
-//
 //
 //    @NotEmpty @Pattern(regexp = "\\d{5}-\\d{3}", message = "Siga o padrão 12345-678")
 //    private String  cep;
