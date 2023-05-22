@@ -46,6 +46,7 @@ public class ClienteController {
 
         ClienteModel clienteModel = new ClienteModel();
         BeanUtils.copyProperties(clienteDTO, clienteModel);
+
         if (clienteService.existsByLogin(clienteModel.getLogin())) {
             adicionarErros("login","Login já utilizado.");
         }
@@ -60,6 +61,8 @@ public class ClienteController {
         if (!listaErros.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
         }
+
+        clienteModel.setSexo(clienteDTO.getSexo().charAt(0));
         clienteModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
     }
