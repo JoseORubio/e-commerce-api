@@ -31,43 +31,30 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @PostMapping
-    public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errors) {
 
-        List<Map<String, String>> listaErros = new ArrayList<>();
-        if (errors.hasErrors()) {
-            List<FieldError> listaFieldErros = errors.getFieldErrors();
+    @PostMapping
+    public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao) {
+        listaErros.clear();
+        if (errosDeValidacao.hasErrors()) {
+            List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
             for (FieldError erro : listaFieldErros) {
-                Map<String, String> msgErro = new HashMap<String, String>();
-                msgErro.put("field", erro.getField());
-                msgErro.put("defaultMessage", erro.getDefaultMessage());
-                listaErros.add(msgErro);
+                adicionarErros(erro.getField(), erro.getDefaultMessage());
             }
         }
 
         ClienteModel clienteModel = new ClienteModel();
         BeanUtils.copyProperties(clienteDTO, clienteModel);
         if (clienteService.existsByLogin(clienteModel.getLogin())) {
-            Map<String, String> msgErro = new HashMap<String, String>();
-            msgErro.put("field", "login");
-            msgErro.put("defaultMessage", "Login já utilizado.");
-            listaErros.add(msgErro);
+            adicionarErros("login","Login já utilizado.");
         }
         if (clienteService.existsByCpf(clienteModel.getCpf())) {
-            Map<String, String> msgErro = new HashMap<String, String>();
-            msgErro.put("field", "cpf");
-            msgErro.put("defaultMessage", "CPF já utilizado.");
-            listaErros.add(msgErro);
+            adicionarErros("cpf","CPF já utilizado.");
         }
         try {
             clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         } catch (DateTimeParseException e) {
-            Map<String, String> msgErro = new HashMap<String, String>();
-            msgErro.put("field", "data_nasc");
-            msgErro.put("defaultMessage", "Data inválida");
-            listaErros.add(msgErro);
+            adicionarErros("data_nasc","Data inválida.");
         }
-
         if (!listaErros.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
         }
@@ -79,5 +66,11 @@ public class ClienteController {
         return clienteService.buscarClientes();
     }
 
-
+    private List<Map<String, String>> listaErros = new ArrayList<>();
+    private void adicionarErros(String campoErro, String msgErro){
+        Map<String, String> mapErro = new HashMap<String, String>();
+        mapErro.put("campo", campoErro);
+        mapErro.put("mensagem", msgErro);
+        listaErros.add(mapErro);
+    }
 }
