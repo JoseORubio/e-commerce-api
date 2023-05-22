@@ -14,8 +14,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
@@ -37,9 +40,6 @@ public class ClienteModel implements Serializable {
         this.id = id;
     }
 
-//    @NotEmpty
-//    @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres ")
-//    @Pattern(regexp = "[A-Z][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*", message = "Deve obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula")
     private String nome;
 
     public String getNome() {
@@ -50,9 +50,6 @@ public class ClienteModel implements Serializable {
         this.nome = nome;
     }
 
-//    @NotEmpty
-//    @Size(min = 8, max = 20, message = "Login deve ter entre {min} e {max} caracteres ")
-//    @Pattern(regexp = "^(?=.*[a-z])[a-z\\d_]+$", message = "Deve conter apenas números ou '_', e pelo menos uma letra minúscula ")
     private String login;
 
     public String getLogin() {
@@ -63,9 +60,6 @@ public class ClienteModel implements Serializable {
         this.login = login;
     }
 
-//    @NotEmpty @Size(min = 8, max=20,message="Senha deve ter entre {min} e {max} caracteres ")
-//    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
-//             message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número")
     private String senha;
 
     public String getSenha() {
@@ -76,7 +70,6 @@ public class ClienteModel implements Serializable {
         this.senha = senha;
     }
 
-//    @NotEmpty @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
     private String cpf;
 
     public String getCpf() {
@@ -86,7 +79,6 @@ public class ClienteModel implements Serializable {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-
 
     @Temporal(TemporalType.DATE)
     @JsonFormat (pattern = "dd/MM/yyyy")
@@ -101,9 +93,18 @@ public class ClienteModel implements Serializable {
     }
 
 
-//    @NotEmpty
-//    private LocalDateTime data_cadastro;
-//
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat (pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
+    private LocalDateTime data_cadastro;
+
+    public LocalDateTime getData_cadastro() {
+        return data_cadastro ;
+    }
+
+    public void setData_cadastro(LocalDateTime data_cadastro) {
+        this.data_cadastro = data_cadastro;
+    }
+    //
 //    @NotEmpty @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro")
 //    private char sexo;
 //

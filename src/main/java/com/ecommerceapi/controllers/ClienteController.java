@@ -14,6 +14,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class ClienteController {
         if (!listaErros.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
         }
+        clienteModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
     }
 
