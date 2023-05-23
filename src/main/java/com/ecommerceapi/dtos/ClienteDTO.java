@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
@@ -36,7 +37,8 @@ public class ClienteDTO {
         this.login = login;
     }
 
-    @NotBlank @Size(min = 8, max=20,message="Senha deve ter entre {min} e {max} caracteres ")
+    @NotBlank
+    @Size(min = 8, max = 20, message = "Senha deve ter entre {min} e {max} caracteres ")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
             message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número")
     private String senha;
@@ -49,7 +51,8 @@ public class ClienteDTO {
         this.senha = senha;
     }
 
-    @NotBlank @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
+    @NotBlank
+    @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
     private String cpf;
 
     public String getCpf() {
@@ -59,7 +62,6 @@ public class ClienteDTO {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-
 
 
     @NotBlank
@@ -73,8 +75,10 @@ public class ClienteDTO {
     public void setData_nasc(String data_nasc) {
         this.data_nasc = data_nasc;
     }
-    @NotBlank @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro")
-    private String  sexo;
+
+    @NotBlank
+    @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro")
+    private String sexo;
 
     public String getSexo() {
         return sexo;
@@ -84,7 +88,8 @@ public class ClienteDTO {
         this.sexo = sexo;
     }
 
-    @NotBlank @Pattern(regexp = "^\\(\\d{2}\\)\\d{5}\\-\\d{4}$", message = "Deve seguir o padrão, contendo DDD: (12)12345-1234")
+    @NotBlank
+    @Pattern(regexp = "^\\(\\d{2}\\)\\d{5}\\-\\d{4}$", message = "Deve seguir o padrão, contendo DDD: (12)12345-1234")
     private String telefone;
 
     public String getTelefone() {
@@ -95,7 +100,9 @@ public class ClienteDTO {
         this.telefone = telefone;
     }
 
-    @NotBlank @Email @Size( max=50,message="E-mail deve ter no máximo {max} caracteres ")
+    @NotBlank
+    @Email
+    @Size(max = 50, message = "E-mail deve ter no máximo {max} caracteres ")
     private String email;
 
     public String getEmail() {
@@ -105,14 +112,30 @@ public class ClienteDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-    //
-//
-//    @NotEmpty @Pattern(regexp = "\\d{5}-\\d{3}", message = "Siga o padrão 12345-678")
-//    private String  cep;
-//    private String uf;
-//    private String cidade;
-//    private String rua;
-//
-//    @NotNull @Range(min = 1, max = 99999)
-//    private int numero_rua;
+
+
+    @NotEmpty
+    @Pattern(regexp = "\\d{5}-\\d{3}", message = "Siga o padrão 12345-678")
+    private String cep;
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+
+    @NotBlank
+    @Pattern(regexp ="^[1-9]\\d{0,4}$", message = "Deve ser qualquer número entre 1 e 99999")
+    private String  numero_rua;
+
+    public String getNumero_rua() {
+        return numero_rua;
+    }
+
+    public void setNumero_rua(String numero_rua) {
+        this.numero_rua = numero_rua;
+    }
 }

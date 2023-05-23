@@ -3,6 +3,7 @@ package com.ecommerceapi.controllers;
 import com.ecommerceapi.dtos.ClienteDTO;
 import com.ecommerceapi.models.ClienteModel;
 import com.ecommerceapi.services.ClienteService;
+import com.ecommerceapi.utils.CEPUtils;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -53,15 +54,27 @@ public class ClienteController {
         if (clienteService.existsByCpf(clienteModel.getCpf())) {
             adicionarErros("cpf","CPF já utilizado.");
         }
+        if (clienteService.existsByEmail(clienteModel.getEmail())) {
+            adicionarErros("email","Email já utilizado.");
+        }
+
+        try {
+            clienteModel = new CEPUtils().retornaCep(clienteModel);
+        } catch (RuntimeException e){
+            adicionarErros("cep","CEP não existe.");
+        }
+
         try {
             clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         } catch (DateTimeParseException e) {
             adicionarErros("data_nasc","Data inválida.");
         }
+
         if (!listaErros.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
         }
 
+        clienteModel.setNumero_rua(Integer.parseInt(clienteDTO.getNumero_rua()));
         clienteModel.setSexo(clienteDTO.getSexo().charAt(0));
         clienteModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));

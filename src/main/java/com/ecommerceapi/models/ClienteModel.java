@@ -22,15 +22,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "clientes-teste")
+@Table(name = "clientes")
 public class ClienteModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-
 
     public UUID getId() {
         return id;
@@ -81,7 +79,7 @@ public class ClienteModel implements Serializable {
     }
 
     @Temporal(TemporalType.DATE)
-    @JsonFormat (pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_nasc;
 
     public LocalDate getData_nasc() {
@@ -92,20 +90,18 @@ public class ClienteModel implements Serializable {
         this.data_nasc = data_nasc;
     }
 
-
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat (pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
+    @JsonFormat(pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
     private LocalDateTime data_cadastro;
 
     public LocalDateTime getData_cadastro() {
-        return data_cadastro ;
+        return data_cadastro;
     }
 
     public void setData_cadastro(LocalDateTime data_cadastro) {
         this.data_cadastro = data_cadastro;
     }
-    //
-//    @NotEmpty @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro")
+
     private char sexo;
 
     public char getSexo() {
@@ -135,16 +131,51 @@ public class ClienteModel implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    //
-//
-//    @NotEmpty @Pattern(regexp = "\\d{5}-\\d{3}", message = "Siga o padrão 12345-678")
-//    private String  cep;
-//    private String uf;
-//    private String cidade;
-//    private String rua;
-//
-//    @NotNull @Range(min = 1, max = 99999)
-//    private int numero_rua;
 
+    private String cep;
+    private String uf;
+    private String cidade;
+    private String rua;
 
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    private int numero_rua;
+
+    public int getNumero_rua() {
+        return numero_rua;
+    }
+
+    public void setNumero_rua(int numero_rua) {
+        this.numero_rua = numero_rua;
+    }
 }

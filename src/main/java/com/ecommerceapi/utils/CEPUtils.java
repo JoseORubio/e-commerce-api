@@ -1,5 +1,6 @@
 package com.ecommerceapi.utils;
 
+import com.ecommerceapi.models.ClienteModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,9 +28,9 @@ public class CEPUtils {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(endereco).GET().build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 400) {
-                throw new RuntimeException("Pesquisa inválida");
-            }
+//            if (response.statusCode() == 400) {
+//                throw new RuntimeException("Pesquisa inválida");
+//            }
 
 //          System.out.println(response.statusCode());
             String body = response.body();
@@ -40,26 +41,27 @@ public class CEPUtils {
         }
     }
 
-//    public ClientesModel retornaCep(ClientesModel cliente) {
-//
-//        String dados = buscaDados(converteCEP(cliente.getCep()));
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonNode node;
-//        try {
-//            node = mapper.readTree(dados);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        if (node.get("erro") != null) {
+    public ClienteModel retornaCep(ClienteModel cliente) {
+
+        String dados = buscaDados(converteCEP(cliente.getCep()));
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node;
+        try {
+            node = mapper.readTree(dados);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        if (node.get("erro") != null) {
+            throw new RuntimeException();
 //            throw new RuntimeException("CEP não encontrado");
-////            System.out.println("CEP não encontrado");
-//        }
-//        cliente.setRua(node.get("logradouro").asText());
-//        cliente.setCidade(node.get("localidade").asText());
-//        cliente.setEstado(node.get("uf").asText());
-//        return cliente;
-//
-//    }
+//            System.out.println("CEP não encontrado");
+        }
+        cliente.setRua(node.get("logradouro").asText());
+        cliente.setCidade(node.get("localidade").asText());
+        cliente.setUf(node.get("uf").asText());
+        return cliente;
+
+    }
 
 }

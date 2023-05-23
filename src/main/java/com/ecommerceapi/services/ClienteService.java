@@ -2,6 +2,7 @@ package com.ecommerceapi.services;
 
 import com.ecommerceapi.models.ClienteModel;
 import com.ecommerceapi.repositories.ClienteRepository;
+import com.ecommerceapi.utils.CEPUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,8 @@ public class ClienteService {
 
     public boolean existsByCpf(String cpf){
         return clienteRepository.existsByCpf(cpf);
+    }
+    public boolean existsByEmail(String email){
+        return clienteRepository.existsByEmail(email);
     }
 }
