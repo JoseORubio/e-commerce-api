@@ -13,16 +13,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -37,11 +35,12 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao) {
-        listaErros.clear();
+        List<Map<String, String>> listaErros = new ArrayList<>();
+
         if (errosDeValidacao.hasErrors()) {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
             for (FieldError erro : listaFieldErros) {
-                adicionarErros(erro.getField(), erro.getDefaultMessage());
+                listaErros.add(adicionarErros(erro.getField(), erro.getDefaultMessage()));
             }
         }
 
@@ -49,25 +48,25 @@ public class ClienteController {
         BeanUtils.copyProperties(clienteDTO, clienteModel);
 
         if (clienteService.existsByLogin(clienteModel.getLogin())) {
-            adicionarErros("login","Login já utilizado.");
+            listaErros.add(adicionarErros("login", "Login já utilizado."));
         }
         if (clienteService.existsByCpf(clienteModel.getCpf())) {
-            adicionarErros("cpf","CPF já utilizado.");
+            listaErros.add(adicionarErros("cpf", "CPF já utilizado."));
         }
         if (clienteService.existsByEmail(clienteModel.getEmail())) {
-            adicionarErros("email","Email já utilizado.");
+            listaErros.add(adicionarErros("email", "Email já utilizado."));
         }
 
         try {
             clienteModel = new CEPUtils().retornaCep(clienteModel);
-        } catch (RuntimeException e){
-            adicionarErros("cep","CEP não existe.");
+        } catch (RuntimeException e) {
+            listaErros.add(adicionarErros("cep", "CEP não existe."));
         }
 
         try {
             clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         } catch (DateTimeParseException e) {
-            adicionarErros("data_nasc","Data inválida.");
+            listaErros.add(adicionarErros("data_nasc", "Data inválida."));
         }
 
         if (!listaErros.isEmpty()) {
@@ -80,16 +79,31 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
     }
 
-    @GetMapping
-    public List<ClienteModel> buscarClientes() {
-        return clienteService.buscarClientes();
-    }
-
-    private List<Map<String, String>> listaErros = new ArrayList<>();
-    private void adicionarErros(String campoErro, String msgErro){
+    private Map<String, String> adicionarErros(String campoErro, String msgErro) {
         Map<String, String> mapErro = new HashMap<String, String>();
         mapErro.put("campo", campoErro);
         mapErro.put("mensagem", msgErro);
-        listaErros.add(mapErro);
+        return mapErro;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClienteModel>> buscarClientes() {
+        return ResponseEntity.status(HttpStatus.OK).body(clienteService.buscarClientes());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> buscarClientesPorId(@PathVariable(value = "id") String id) {
+        UUID uuid = null;
+        try {
+             uuid = UUID.fromString(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+
+        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(uuid);
+        if (!clienteOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
     }
 }
