@@ -36,7 +36,6 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao) {
         List<Map<String, String>> listaErros = new ArrayList<>();
-
         if (errosDeValidacao.hasErrors()) {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
             for (FieldError erro : listaFieldErros) {
@@ -106,4 +105,92 @@ public class ClienteController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
     }
+
+    @GetMapping("/pesquisar/{nome}")
+    public ResponseEntity<Object> pesquisarClientes(@PathVariable(value = "nome") String nome){
+        Optional<List<ClienteModel>> clienteOptional = clienteService.pesquisarClientes(nome);
+        if (clienteOptional.get().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletarCliente(@PathVariable(value = "id") String id){
+        UUID uuid = null;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+
+        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(uuid);
+        if (!clienteOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+
+        clienteService.delete(clienteOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Cliente apagado com sucesso.");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> atualizarCliente(@PathVariable(value = "id") String id,
+                                                 @RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao){
+        UUID uuid = null;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+
+        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(uuid);
+        if (!clienteOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+
+        List<Map<String, String>> listaErros = new ArrayList<>();
+        if (errosDeValidacao.hasErrors()) {
+            List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
+            for (FieldError erro : listaFieldErros) {
+                listaErros.add(adicionarErros(erro.getField(), erro.getDefaultMessage()));
+            }
+        }
+
+        ClienteModel clienteModel = new ClienteModel();
+        BeanUtils.copyProperties(clienteDTO, clienteModel);
+        clienteModel.setId(uuid);
+        clienteModel.setData_cadastro(clienteOptional.get().getData_cadastro());
+
+        if (!clienteModel.getLogin().equals(clienteOptional.get().getLogin()) && clienteService.existsByLogin(clienteModel.getLogin()) ) {
+            listaErros.add(adicionarErros("login", "Login já utilizado."));
+        }
+        if (!clienteModel.getCpf().equals(clienteOptional.get().getCpf()) && clienteService.existsByCpf(clienteModel.getCpf())) {
+            listaErros.add(adicionarErros("cpf", "CPF já utilizado."));
+        }
+        if (!clienteModel.getEmail().equals(clienteOptional.get().getEmail()) && clienteService.existsByEmail(clienteModel.getEmail())) {
+            listaErros.add(adicionarErros("email", "Email já utilizado."));
+        }
+
+        try {
+            clienteModel = new CEPUtils().retornaCep(clienteModel);
+        } catch (RuntimeException e) {
+            listaErros.add(adicionarErros("cep", "CEP não existe."));
+        }
+
+        try {
+            clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        } catch (DateTimeParseException e) {
+            listaErros.add(adicionarErros("data_nasc", "Data inválida."));
+        }
+
+        if (!listaErros.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
+        }
+
+        clienteModel.setNumero_rua(Integer.parseInt(clienteDTO.getNumero_rua()));
+        clienteModel.setSexo(clienteDTO.getSexo().charAt(0));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
+    }
+
 }

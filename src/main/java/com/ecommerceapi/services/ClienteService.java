@@ -46,4 +46,13 @@ public class ClienteService {
     public Optional<ClienteModel> buscarClientePorId(UUID id){
         return clienteRepository.findById(id);
     }
+    public Optional<List<ClienteModel>> pesquisarClientes(String nome){
+        return clienteRepository.pesquisarClientes(nome);
+    }
+
+    @Transactional
+    public void delete(ClienteModel clienteModel){
+        clienteRepository.delete(clienteModel);
+    }
+
 }
