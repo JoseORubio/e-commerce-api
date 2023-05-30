@@ -4,16 +4,13 @@ import com.ecommerceapi.dtos.ClienteDTO;
 import com.ecommerceapi.models.ClienteModel;
 import com.ecommerceapi.services.ClienteService;
 import com.ecommerceapi.utils.CEPUtils;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,7 +31,7 @@ public class ClienteController {
 
 
     @PostMapping
-    public ResponseEntity<Object> salvarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao) {
+    public ResponseEntity<Object> cadastrarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao) {
         List<Map<String, String>> listaErros = new ArrayList<>();
         if (errosDeValidacao.hasErrors()) {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
@@ -152,6 +149,7 @@ public class ClienteController {
         if (errosDeValidacao.hasErrors()) {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
             for (FieldError erro : listaFieldErros) {
+
                 listaErros.add(adicionarErros(erro.getField(), erro.getDefaultMessage()));
             }
         }
@@ -161,13 +159,16 @@ public class ClienteController {
         clienteModel.setId(uuid);
         clienteModel.setData_cadastro(clienteOptional.get().getData_cadastro());
 
-        if (!clienteModel.getLogin().equals(clienteOptional.get().getLogin()) && clienteService.existsByLogin(clienteModel.getLogin()) ) {
+        if (!clienteModel.getLogin().equals(clienteOptional.get().getLogin())
+                && clienteService.existsByLogin(clienteModel.getLogin()) ) {
             listaErros.add(adicionarErros("login", "Login já utilizado."));
         }
-        if (!clienteModel.getCpf().equals(clienteOptional.get().getCpf()) && clienteService.existsByCpf(clienteModel.getCpf())) {
+        if (!clienteModel.getCpf().equals(clienteOptional.get().getCpf())
+                && clienteService.existsByCpf(clienteModel.getCpf())) {
             listaErros.add(adicionarErros("cpf", "CPF já utilizado."));
         }
-        if (!clienteModel.getEmail().equals(clienteOptional.get().getEmail()) && clienteService.existsByEmail(clienteModel.getEmail())) {
+        if (!clienteModel.getEmail().equals(clienteOptional.get().getEmail())
+                && clienteService.existsByEmail(clienteModel.getEmail())) {
             listaErros.add(adicionarErros("email", "Email já utilizado."));
         }
 
