@@ -1,13 +1,11 @@
 package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.dtos.ProdutoDTO;
-import com.ecommerceapi.models.ClienteModel;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.ProdutoService;
 import com.ecommerceapi.utils.ControllerUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,11 +17,11 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/produtos")
-public class ProdutosController {
+public class ProdutoController {
 
     final ProdutoService produtoService;
 
-    public ProdutosController(ProdutoService produtoService) {
+    public ProdutoController(ProdutoService produtoService) {
         this.produtoService = produtoService;
     }
 
