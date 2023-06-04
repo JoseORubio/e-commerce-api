@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Entity
@@ -22,6 +23,10 @@ public class VendaModel implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
     private LocalDateTime data_venda;
 
+    public VendaModel(){
+        this.valor_total= BigDecimal.ZERO;
+        this.data_venda = LocalDateTime.now(ZoneId.of("UTC"));
+    }
     public UUID getId() {
         return id;
     }

@@ -1,7 +1,9 @@
 package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.models.CarrinhoModel;
+import com.ecommerceapi.models.ProdutoDaVendaModel;
 import com.ecommerceapi.models.ProdutoModel;
+import com.ecommerceapi.models.VendaModel;
 import com.ecommerceapi.services.ProdutoDaVendaService;
 import com.ecommerceapi.services.ProdutoService;
 import com.ecommerceapi.services.VendaService;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,7 @@ public class VendaController {
     final VendaService vendaService;
     final ProdutoDaVendaService produtoDaVendaService;
     final ProdutoService produtoService;
-    private List<CarrinhoModel> carrinho;
+    private List<CarrinhoModel> carrinho = new ArrayList<CarrinhoModel>();
 
 
     public VendaController(VendaService vendaService, ProdutoDaVendaService produtoDaVendaService, ProdutoService produtoService) {
@@ -58,15 +61,23 @@ public class VendaController {
 
     @GetMapping
     public ResponseEntity<List<String>> verCarrinho() {
-        List<String> listaItens = new ArrayList<>();
+        List<String> listaItens = new ArrayList<String>();
         for (CarrinhoModel itens : carrinho) {
 //            int numCarrinho = carrinho.indexOf(itens) + 1;
-            listaItens.add(String.format("\nNúmero no carrinho: " + (carrinho.indexOf(itens) + 1)
-                                       + "\nProduto: " + itens.getProdutoModel().getNome())
-                                       + "\nPreço do produto: " + NumberFormat.getCurrencyInstance().format(itens.getProdutoModel().getPreco())
-                                       + "\nQuantidade: " + itens.getQuantidade()
-                                       + "\nPreço total: " + NumberFormat.getCurrencyInstance().format(itens.getValorTotalProduto())
-                                       + "\n-------------------------");
+            listaItens.add("Número no carrinho: " + (carrinho.indexOf(itens) + 1));
+            listaItens.add("Id do Produto: " + itens.getProdutoModel().getId());
+            listaItens.add("Produto: " + itens.getProdutoModel().getNome());
+            listaItens.add("Preço do produto: " + NumberFormat.getCurrencyInstance().format(itens.getProdutoModel().getPreco()));
+            listaItens.add("Quantidade: " + itens.getQuantidade());
+            listaItens.add("Preço total: " + NumberFormat.getCurrencyInstance().format(itens.getValorTotalProduto()));
+            listaItens.add("-------------------------");
+            //PASSAR ISTO PARA UM MAP ORDENADO
+//            listaItens.add(String.format("\nNúmero no carrinho: " + (carrinho.indexOf(itens) + 1)
+//                                       + "\nProduto: " + itens.getProdutoModel().getNome())
+//                                       + "\nPreço do produto: " + NumberFormat.getCurrencyInstance().format(itens.getProdutoModel().getPreco())
+//                                       + "\nQuantidade: " + itens.getQuantidade()
+//                                       + "\nPreço total: " + NumberFormat.getCurrencyInstance().format(itens.getValorTotalProduto())
+//                                       + "\n-------------------------");
 //            System.out.println("\nNúmero no carrinho: " + numCarrinho);
 //            System.out.println("Produto: " + itens.getProdutoModel().getNome());
 //            System.out.println("Preço do produto: " + NumberFormat.getCurrencyInstance().format(itens.getProdutoModel().getPreco()));
@@ -75,4 +86,30 @@ public class VendaController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(listaItens);
     }
+
+
+    @PostMapping("/confirmacao")
+    public ResponseEntity<Object> confirmaVenda(){
+        if (carrinho.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK).body("Carrinho vazio. Não é possivel efetivar a venda.");
+        }
+
+        VendaModel venda = vendaService.salvarVenda(new VendaModel());
+
+        for (CarrinhoModel itens : carrinho) {
+            ProdutoDaVendaModel produtoDaVendaModel = new ProdutoDaVendaModel();
+
+            produtoDaVendaModel.setId_venda(venda.getId());
+            ProdutoModel produtoModel = produtoService.buscarProdutoPorId(itens.getProdutoModel().getId()).get();
+            produtoDaVendaModel.setId_produto(produtoModel.getId());
+            produtoDaVendaModel.setQuantidade(itens.getQuantidade());
+//            produtoDaVendaModel.setValor_total_produto(BigDecimal.ONE);
+            produtoDaVendaService.inserirProduto(produtoDaVendaModel);
+        }
+
+        carrinho.clear();
+
+        return ResponseEntity.status(HttpStatus.OK).body("Venda confirmada.");
+    }
+
 }
