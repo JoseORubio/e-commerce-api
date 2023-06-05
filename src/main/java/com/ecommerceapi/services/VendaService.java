@@ -20,6 +20,10 @@ public class VendaService {
     public VendaModel salvarVenda(VendaModel vendaModel){
         return vendaRepository.save(vendaModel);
     }
+    @Transactional
+    public void apagarVenda(VendaModel vendaModel){
+        vendaRepository.delete(vendaModel);
+    }
 
     public List<VendaModel> listarVendas(){
         return vendaRepository.findAll();
