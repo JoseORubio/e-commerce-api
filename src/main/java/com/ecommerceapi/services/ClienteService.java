@@ -32,6 +32,9 @@ public class ClienteService {
     public boolean existsByLogin(String login) {
         return clienteRepository.existsByLogin(login);
     }
+    public boolean autorizaCliente(String login, String senha) {
+        return clienteRepository.existsByLoginAndSenha(login, senha);
+    }
     public boolean existsByCpf(String cpf){
         return clienteRepository.existsByCpf(cpf);
     }
@@ -45,6 +48,9 @@ public class ClienteService {
 
     public Optional<ClienteModel> buscarClientePorId(UUID id){
         return clienteRepository.findById(id);
+    }
+    public Optional<ClienteModel> buscarClientePorLogin(String login){
+        return clienteRepository.findByLogin(login);
     }
     public Optional<List<ClienteModel>> pesquisarClientes(String nome){
         return clienteRepository.pesquisarClientes(nome);

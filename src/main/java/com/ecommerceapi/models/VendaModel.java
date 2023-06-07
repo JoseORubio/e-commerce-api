@@ -17,6 +17,16 @@ public class VendaModel implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    private UUID id_cliente;
+
+    public UUID getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(UUID id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
     private BigDecimal valor_total;
 
     @Temporal(TemporalType.TIMESTAMP)
