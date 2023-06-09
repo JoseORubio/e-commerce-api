@@ -16,24 +16,15 @@ public class VendaModel implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private UUID id_cliente;
-
-    public UUID getId_cliente() {
-        return id_cliente;
-    }
-
-    public void setId_cliente(UUID id_cliente) {
-        this.id_cliente = id_cliente;
-    }
-
     private BigDecimal valor_total;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
     private LocalDateTime data_venda;
 
-    public VendaModel(){
+    public VendaModel(UUID id_cliente){
+        this.id_cliente = id_cliente;
         this.valor_total= BigDecimal.ZERO;
         this.data_venda = LocalDateTime.now(ZoneId.of("UTC"));
     }
@@ -43,6 +34,13 @@ public class VendaModel implements Serializable {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getId_cliente() {
+        return id_cliente;
+    }
+    public void setId_cliente(UUID id_cliente) {
+        this.id_cliente = id_cliente;
     }
 
     public BigDecimal getValor_total() {

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.ecommerceapi.controllers.HomeController.clienteLogado;
+
 @RestController
 @RequestMapping("/carrinho")
 public class CarrinhoController {
@@ -156,7 +158,7 @@ public class CarrinhoController {
             }
         }
 
-        VendaModel venda = vendaService.salvarVenda(new VendaModel());
+        VendaModel venda = vendaService.salvarVenda(new VendaModel(clienteLogado.getId()));
 
         for (CarrinhoModel itens : carrinho) {
             ProdutoDaVendaModel produtoDaVendaModel = new ProdutoDaVendaModel();
@@ -173,6 +175,12 @@ public class CarrinhoController {
         carrinho.clear();
 
         return ResponseEntity.status(HttpStatus.OK).body("Venda confirmada.");
+    }
+
+    @GetMapping("/cancelamento")
+    public ResponseEntity<Object> cancelaCarrinho(){
+        carrinho.clear();
+        return ResponseEntity.status(HttpStatus.OK).body("Carrinho cancelado.");
     }
 
 }
