@@ -17,7 +17,7 @@ import java.util.*;
 import static com.ecommerceapi.controllers.HomeController.clienteLogado;
 
 @RestController
-@RequestMapping("/carrinho")
+@RequestMapping("/itens-carrinho")
 public class CarrinhoController {
 
     final VendaService vendaService;
@@ -32,10 +32,12 @@ public class CarrinhoController {
         this.produtoService = produtoService;
     }
 
-    @PostMapping("/item")
+    @PostMapping
     public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto, @RequestParam("quantidade") String quantidadeString) {
+//        if () return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id não pode ser nulo.");
         UUID id = ControllerUtils.converteUUID(id_produto);
-        if (id == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        if (id_produto.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
         if (!produtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
@@ -45,71 +47,78 @@ public class CarrinhoController {
         try {
             quantidade = Integer.parseInt(quantidadeString);
         } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade inválida.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
         }
 
-        if (quantidade < 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade inválida.");
+        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
 
-        for (CarrinhoModel itens : carrinho) {
-            if (itens.getProdutoModel().getId().equals(produtoOptional.get().getId())) {
-                if (itens.getQuantidade() + quantidade > produtoOptional.get().getQuantidade_estoque()) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade indisponível no estoque.");
+        for (CarrinhoModel item : carrinho) {
+            if ((item !=null) && item.getProdutoModel().getId().equals(produtoOptional.get().getId())) {
+                if (item.getQuantidade() + quantidade > produtoOptional.get().getQuantidade_estoque()) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
                 } else {
-                    itens.setQuantidade(itens.getQuantidade() + quantidade);
+                    item.setQuantidade(item.getQuantidade() + quantidade);
                     return ResponseEntity.status(HttpStatus.OK).body(carrinho);
                 }
             }
         }
 
         if (quantidade > produtoOptional.get().getQuantidade_estoque()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade indisponível no estoque.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
         }
 
         carrinho.add(new CarrinhoModel(produtoOptional.get(), quantidade));
-        return ResponseEntity.status(HttpStatus.OK).body(carrinho);
+        return ResponseEntity.status(HttpStatus.CREATED).body(carrinho);
     }
 
     @GetMapping
     public ResponseEntity<Object> verCarrinho() {
         if (carrinho.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Carrinho vazio");
+            return ResponseEntity.status(HttpStatus.OK).body("Carrinho vazio");
         }
         List<Map<String, String>> listaItens = new ArrayList<Map<String, String>>();
-        for (CarrinhoModel itens : carrinho) {
-            Map<String, String> infoItens = new LinkedHashMap<>();
-            infoItens.put("Número no carrinho", String.valueOf(carrinho.indexOf(itens) + 1));
-            infoItens.put("Produto", String.valueOf(itens.getProdutoModel().getNome()));
-            infoItens.put("Preço do produto", String.valueOf(itens.getProdutoModel().getPreco()));
-            infoItens.put("Quantidade", String.valueOf(itens.getQuantidade()));
-            infoItens.put("Preço total", String.valueOf(itens.getValorTotalProduto()));
-            listaItens.add(infoItens);
+        for (CarrinhoModel item : carrinho) {
+            if (item!=null) {
+                Map<String, String> infoItens = new LinkedHashMap<>();
+                infoItens.put("Número no carrinho", String.valueOf(carrinho.indexOf(item) + 1));
+                infoItens.put("Produto", String.valueOf(item.getProdutoModel().getNome()));
+                infoItens.put("Preço do produto", String.valueOf(item.getProdutoModel().getPreco()));
+                infoItens.put("Quantidade", String.valueOf(item.getQuantidade()));
+                infoItens.put("Preço total", String.valueOf(item.getValorTotalProduto()));
+                listaItens.add(infoItens);
+            }
         }
         return ResponseEntity.status(HttpStatus.OK).body(listaItens);
     }
 
-    @PostMapping("/remocao/{numCarrinho}")
-    public ResponseEntity<Object> removeItemCarrinho(@PathVariable(value = "numCarrinho") String numItemString) {
+    @DeleteMapping("/{numItemCarrinho}")
+    public ResponseEntity<Object> removeItemCarrinho(@PathVariable(value = "numItemCarrinho") String numItemCarrinhoString) {
 
         if (carrinho.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Carrinho vazio");
         }
-        int numItem;
+        int numItemCarrinho;
         try {
-            numItem = Integer.parseInt(numItemString);
+            numItemCarrinho = Integer.parseInt(numItemCarrinhoString);
         } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Número inválido.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número inválido.");
         }
         String nomeItem = null;
+
         try {
-            nomeItem = carrinho.get(numItem - 1).getProdutoModel().getNome();
-            carrinho.remove(numItem - 1);
+            if (carrinho.get(numItemCarrinho - 1) == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item já removido.");
+            }
+            nomeItem = carrinho.get(numItemCarrinho - 1).getProdutoModel().getNome();
+//            carrinho.remove(numItemCarrinho - 1);
+            carrinho.set(numItemCarrinho - 1, null);
         } catch (IndexOutOfBoundsException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("Item não existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não existe.");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Item " + nomeItem + " removido.");
     }
 
-    @PostMapping("/alteracao/{numCarrinho}/{quantidade}")
+    @PutMapping("/{numCarrinho}/{quantidade}")
     public ResponseEntity<Object> alteraItemCarrinho(@PathVariable(value = "numCarrinho") String numItemString,
                                                      @PathVariable(value = "quantidade") String quantidadeString) {
         if (carrinho.isEmpty()) {
@@ -120,36 +129,35 @@ public class CarrinhoController {
         try {
             numItem = Integer.parseInt(numItemString);
         } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Número inválido.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número inválido.");
         }
 
         int quantidade;
         try {
             quantidade = Integer.parseInt(quantidadeString);
         } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade inválida.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
         }
 
-        if (quantidade < 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade inválida.");
+        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
 
         try {
             if (quantidade > carrinho.get(numItem - 1).getProdutoModel().getQuantidade_estoque()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quantidade indisponível no estoque.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
             }
             carrinho.get(numItem - 1).setQuantidade(quantidade);
         } catch (IndexOutOfBoundsException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("Item não existe");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não existe");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(String.format("Item %s alterado.",
                 carrinho.get(numItem - 1).getProdutoModel().getNome()));
     }
 
-
-    @PostMapping("/confirmacao-venda")
+    @PostMapping("/venda")
     public ResponseEntity<Object> confirmaVenda() {
         if (carrinho.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body("Carrinho vazio. Não é possivel efetivar a venda.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Carrinho vazio. Não é possivel efetivar a venda.");
         }
         for (CarrinhoModel itens : carrinho) {
             if (itens.getQuantidade() >
@@ -174,10 +182,10 @@ public class CarrinhoController {
 
         carrinho.clear();
 
-        return ResponseEntity.status(HttpStatus.OK).body("Venda confirmada.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
     }
 
-    @GetMapping("/cancelamento")
+    @DeleteMapping
     public ResponseEntity<Object> cancelaCarrinho(){
         carrinho.clear();
         return ResponseEntity.status(HttpStatus.OK).body("Carrinho cancelado.");
