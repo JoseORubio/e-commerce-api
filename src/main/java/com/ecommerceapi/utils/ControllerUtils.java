@@ -22,7 +22,6 @@ public class ControllerUtils {
             return uuid;
         } catch (Exception e) {
             return null;
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
     }
 }

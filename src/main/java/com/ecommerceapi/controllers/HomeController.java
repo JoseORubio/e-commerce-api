@@ -39,7 +39,7 @@ public class HomeController {
     @DeleteMapping
     public ResponseEntity<String>  logoff() {
         if (clienteLogado == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuário logado");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum usuário logado");
         }
         carrinhoController.cancelaCarrinho();
         clienteLogado = null;
