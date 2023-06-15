@@ -41,7 +41,7 @@ public class ProdutoController {
         }
 
         if (!listaErros.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(listaErros);
         }
 
         ProdutoModel produtoModel = new ProdutoModel();
@@ -60,23 +60,22 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscarProdutos());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> buscarProdutosPorId(@PathVariable(value = "id") String id) {
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
+    @GetMapping("/id/{id_produto}")
+    public ResponseEntity<Object> buscarProdutosPorId(@PathVariable(value = "id_produto") String id_produto) {
 
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(uuid);
+
+        UUID id = ControllerUtils.converteUUID(id_produto);
+        if (id_produto.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
         if (!produtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
     }
 
-    @GetMapping("/pesquisar/{nome}")
+    @GetMapping("/nome/{nome}")
     public ResponseEntity<Object> pesquisarProdutos(@PathVariable(value = "nome") String nome) {
         Optional<List<ProdutoModel>> produtoOptional = produtoService.pesquisarProdutos(nome);
         if (produtoOptional.get().isEmpty()) {
@@ -85,16 +84,14 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarProduto(@PathVariable(value = "id") String id) {
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
+    @DeleteMapping("/{id_produto}")
+    public ResponseEntity<Object> deletarProduto(@PathVariable(value = "id_produto") String id_produto) {
 
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(uuid);
+        UUID id = ControllerUtils.converteUUID(id_produto);
+        if (id_produto.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
         if (!produtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
@@ -103,18 +100,16 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body("Produto apagado com sucesso.");
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Object> atualizarProduto(@PathVariable(value = "id") String id,
+    @PutMapping("/{id_produto}")
+    public ResponseEntity<Object> atualizarProduto(@PathVariable(value = "id_produto") String id_produto,
                                                    @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult bindingResult) {
 
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
 
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(uuid);
+        UUID id = ControllerUtils.converteUUID(id_produto);
+        if (id_produto.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
         if (!produtoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
@@ -134,7 +129,7 @@ public class ProdutoController {
             }
         }
 
-        if (produtoDTO.getNome()!= null
+        if (produtoDTO.getNome() != null
                 && !produtoDTO.getNome().equals(produtoOptional.get().getNome())
                 && produtoService.existsByNome(produtoDTO.getNome())) {
             listaErros.add(ControllerUtils.adicionarErros("nome", "Nome já utilizado."));
@@ -146,28 +141,29 @@ public class ProdutoController {
 
         ProdutoModel produtoModel = new ProdutoModel();
         BeanUtils.copyProperties(produtoDTO, produtoModel);
-        produtoModel.setId(uuid);
+        produtoModel.setId(id);
 
         for (String campo : listaNulos) {
             switch (campo) {
-                case "nome" : produtoModel.setNome(produtoOptional.get().getNome()); break;
-                case "quantidade_estoque": produtoModel.setQuantidade_estoque(produtoOptional.get().getQuantidade_estoque()); break;
-                case "preco" : produtoModel.setPreco(produtoOptional.get().getPreco());break;
+                case "nome":
+                    produtoModel.setNome(produtoOptional.get().getNome());
+                    break;
+                case "quantidade_estoque":
+                    produtoModel.setQuantidade_estoque(produtoOptional.get().getQuantidade_estoque());
+                    break;
+                case "preco":
+                    produtoModel.setPreco(produtoOptional.get().getPreco());
+                    break;
             }
-//            if (campo.equals("nome")) produtoModel.setNome(produtoOptional.get().getNome());
-//            if (campo.equals("quantidade_estoque"))
-//                produtoModel.setQuantidade_estoque(produtoOptional.get().getQuantidade_estoque());
-//            if (campo.equals("preco")) produtoModel.setPreco(produtoOptional.get().getPreco());
         }
 
         if (produtoDTO.getQuantidade_estoque() != null)
             produtoModel.setQuantidade_estoque(Integer.parseInt(produtoDTO.getQuantidade_estoque()));
         if (produtoDTO.getPreco() != null)
-        produtoModel.setPreco(BigDecimal.valueOf(
-                Double.parseDouble(produtoDTO.getPreco().replace(',', '.'))));
+            produtoModel.setPreco(BigDecimal.valueOf(
+                    Double.parseDouble(produtoDTO.getPreco().replace(',', '.'))));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvarProduto(produtoModel));
+        return ResponseEntity.status(HttpStatus.OK).body(produtoService.salvarProduto(produtoModel));
     }
-
 
 }
