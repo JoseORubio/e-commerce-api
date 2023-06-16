@@ -4,6 +4,7 @@ import com.ecommerceapi.dtos.ClienteDTO;
 import com.ecommerceapi.models.ClienteModel;
 import com.ecommerceapi.services.ClienteService;
 import com.ecommerceapi.utils.CEPUtils;
+import com.ecommerceapi.utils.ControllerUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class ClienteController {
         if (errosDeValidacao.hasErrors()) {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
             for (FieldError erro : listaFieldErros) {
-                listaErros.add(adicionarErros(erro.getField(), erro.getDefaultMessage()));
+                listaErros.add(ControllerUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
             }
         }
 
@@ -44,25 +45,25 @@ public class ClienteController {
         BeanUtils.copyProperties(clienteDTO, clienteModel);
 
         if (clienteService.existsByLogin(clienteModel.getLogin())) {
-            listaErros.add(adicionarErros("login", "Login já utilizado."));
+            listaErros.add(ControllerUtils.adicionarErros("login", "Login já utilizado."));
         }
         if (clienteService.existsByCpf(clienteModel.getCpf())) {
-            listaErros.add(adicionarErros("cpf", "CPF já utilizado."));
+            listaErros.add(ControllerUtils.adicionarErros("cpf", "CPF já utilizado."));
         }
         if (clienteService.existsByEmail(clienteModel.getEmail())) {
-            listaErros.add(adicionarErros("email", "Email já utilizado."));
+            listaErros.add(ControllerUtils.adicionarErros("email", "Email já utilizado."));
         }
 
         try {
             clienteModel = new CEPUtils().retornaCep(clienteModel);
         } catch (RuntimeException e) {
-            listaErros.add(adicionarErros("cep", "CEP não existe."));
+            listaErros.add(ControllerUtils.adicionarErros("cep", "CEP não existe."));
         }
 
         try {
             clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         } catch (DateTimeParseException e) {
-            listaErros.add(adicionarErros("data_nasc", "Data inválida."));
+            listaErros.add(ControllerUtils.adicionarErros("data_nasc", "Data inválida."));
         }
 
         if (!listaErros.isEmpty()) {
@@ -75,28 +76,26 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
     }
 
-    private Map<String, String> adicionarErros(String campoErro, String msgErro) {
-        Map<String, String> mapErro = new HashMap<String, String>();
-        mapErro.put("campo", campoErro);
-        mapErro.put("mensagem", msgErro);
-        return mapErro;
-    }
 
     @GetMapping
     public ResponseEntity<List<ClienteModel>> buscarClientes() {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.buscarClientes());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> buscarClientesPorId(@PathVariable(value = "id") String id) {
-        UUID uuid = null;
-        try {
-             uuid = UUID.fromString(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
-        }
+    @GetMapping("/{id_cliente}")
+    public ResponseEntity<Object> buscarClientePorId(@PathVariable(value = "id_cliente") String id_cliente) {
+//        UUID uuid = null;
+//        try {
+//             uuid = UUID.fromString(id);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+//        }
 
-        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(uuid);
+        UUID id = ControllerUtils.converteUUID(id_cliente);
+        if (id_cliente.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(id);
         if (!clienteOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
         }
@@ -104,7 +103,7 @@ public class ClienteController {
     }
 
     @GetMapping("/pesquisar/{nome}")
-    public ResponseEntity<Object> pesquisarClientes(@PathVariable(value = "nome") String nome){
+    public ResponseEntity<Object> buscarClientesPorNome(@PathVariable(value = "nome") String nome){
         Optional<List<ClienteModel>> clienteOptional = clienteService.pesquisarClientes(nome);
         if (clienteOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
@@ -112,16 +111,20 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarCliente(@PathVariable(value = "id") String id){
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
-        }
+    @DeleteMapping("/{id_cliente}")
+    public ResponseEntity<Object> deletarCliente(@PathVariable(value = "id_cliente") String id_cliente){
+//        UUID uuid = null;
+//        try {
+//            uuid = UUID.fromString(id);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+//        }
 
-        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(uuid);
+        UUID id = ControllerUtils.converteUUID(id_cliente);
+        if (id_cliente.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(id);
         if (!clienteOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
         }
@@ -130,17 +133,21 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body("Cliente apagado com sucesso.");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizarCliente(@PathVariable(value = "id") String id,
+    @PutMapping("/{id_cliente}")
+    public ResponseEntity<Object> atualizarCliente(@PathVariable(value = "id_cliente") String id_cliente,
                                                  @RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao){
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
-        }
+//        UUID uuid = null;
+//        try {
+//            uuid = UUID.fromString(id);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+//        }
 
-        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(uuid);
+        UUID id = ControllerUtils.converteUUID(id_cliente);
+        if (id_cliente.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ClienteModel> clienteOptional = clienteService.buscarClientePorId(id);
         if (!clienteOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
         }
@@ -150,38 +157,40 @@ public class ClienteController {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
             for (FieldError erro : listaFieldErros) {
 
-                listaErros.add(adicionarErros(erro.getField(), erro.getDefaultMessage()));
+                listaErros.add(ControllerUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
             }
         }
 
         ClienteModel clienteModel = new ClienteModel();
         BeanUtils.copyProperties(clienteDTO, clienteModel);
-        clienteModel.setId(uuid);
+        clienteModel.setId(id);
         clienteModel.setData_cadastro(clienteOptional.get().getData_cadastro());
 
+
+        //SUBSTITUIR POR UM SWITCH
         if (!clienteModel.getLogin().equals(clienteOptional.get().getLogin())
                 && clienteService.existsByLogin(clienteModel.getLogin()) ) {
-            listaErros.add(adicionarErros("login", "Login já utilizado."));
+            listaErros.add(ControllerUtils.adicionarErros("login", "Login já utilizado."));
         }
         if (!clienteModel.getCpf().equals(clienteOptional.get().getCpf())
                 && clienteService.existsByCpf(clienteModel.getCpf())) {
-            listaErros.add(adicionarErros("cpf", "CPF já utilizado."));
+            listaErros.add(ControllerUtils.adicionarErros("cpf", "CPF já utilizado."));
         }
         if (!clienteModel.getEmail().equals(clienteOptional.get().getEmail())
                 && clienteService.existsByEmail(clienteModel.getEmail())) {
-            listaErros.add(adicionarErros("email", "Email já utilizado."));
+            listaErros.add(ControllerUtils.adicionarErros("email", "Email já utilizado."));
         }
 
         try {
             clienteModel = new CEPUtils().retornaCep(clienteModel);
         } catch (RuntimeException e) {
-            listaErros.add(adicionarErros("cep", "CEP não existe."));
+            listaErros.add(ControllerUtils.adicionarErros("cep", "CEP não existe."));
         }
 
         try {
             clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         } catch (DateTimeParseException e) {
-            listaErros.add(adicionarErros("data_nasc", "Data inválida."));
+            listaErros.add(ControllerUtils.adicionarErros("data_nasc", "Data inválida."));
         }
 
         if (!listaErros.isEmpty()) {
@@ -194,4 +203,10 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
     }
 
+    //    private Map<String, String> adicionarErros(String campoErro, String msgErro) {
+//        Map<String, String> mapErro = new HashMap<String, String>();
+//        mapErro.put("campo", campoErro);
+//        mapErro.put("mensagem", msgErro);
+//        return mapErro;
+//    }
 }

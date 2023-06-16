@@ -61,7 +61,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/id/{id_produto}")
-    public ResponseEntity<Object> buscarProdutosPorId(@PathVariable(value = "id_produto") String id_produto) {
+    public ResponseEntity<Object> buscarProdutoPorId(@PathVariable(value = "id_produto") String id_produto) {
 
 
         UUID id = ControllerUtils.converteUUID(id_produto);
@@ -76,7 +76,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<Object> pesquisarProdutos(@PathVariable(value = "nome") String nome) {
+    public ResponseEntity<Object> buscarProdutosPorNome(@PathVariable(value = "nome") String nome) {
         Optional<List<ProdutoModel>> produtoOptional = produtoService.pesquisarProdutos(nome);
         if (produtoOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
