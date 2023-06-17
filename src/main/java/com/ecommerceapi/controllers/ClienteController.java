@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,8 @@ public class ClienteController {
 
 
     @PostMapping
-    public ResponseEntity<Object> cadastrarCliente(@RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao) {
+    public ResponseEntity<Object> cadastrarCliente(@RequestBody @Valid ClienteDTO clienteDTO, BindingResult errosDeValidacao) {
+
         List<Map<String, String>> listaErros = new ArrayList<>();
         if (errosDeValidacao.hasErrors()) {
             List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
@@ -67,7 +69,7 @@ public class ClienteController {
         }
 
         if (!listaErros.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(listaErros);
         }
 
         clienteModel.setNumero_rua(Integer.parseInt(clienteDTO.getNumero_rua()));
@@ -82,14 +84,8 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.buscarClientes());
     }
 
-    @GetMapping("/{id_cliente}")
+    @GetMapping("/id/{id_cliente}")
     public ResponseEntity<Object> buscarClientePorId(@PathVariable(value = "id_cliente") String id_cliente) {
-//        UUID uuid = null;
-//        try {
-//             uuid = UUID.fromString(id);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
-//        }
 
         UUID id = ControllerUtils.converteUUID(id_cliente);
         if (id_cliente.equals("") || id == null)
@@ -99,26 +95,24 @@ public class ClienteController {
         if (!clienteOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
         }
+
         return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
     }
 
-    @GetMapping("/pesquisar/{nome}")
-    public ResponseEntity<Object> buscarClientesPorNome(@PathVariable(value = "nome") String nome){
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Object> buscarClientesPorNome(@PathVariable(value = "nome") String nome) {
+
         Optional<List<ClienteModel>> clienteOptional = clienteService.pesquisarClientes(nome);
+
         if (clienteOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
         }
+
         return ResponseEntity.status(HttpStatus.OK).body(clienteOptional.get());
     }
 
     @DeleteMapping("/{id_cliente}")
-    public ResponseEntity<Object> deletarCliente(@PathVariable(value = "id_cliente") String id_cliente){
-//        UUID uuid = null;
-//        try {
-//            uuid = UUID.fromString(id);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
-//        }
+    public ResponseEntity<Object> deletarCliente(@PathVariable(value = "id_cliente") String id_cliente) {
 
         UUID id = ControllerUtils.converteUUID(id_cliente);
         if (id_cliente.equals("") || id == null)
@@ -135,13 +129,7 @@ public class ClienteController {
 
     @PutMapping("/{id_cliente}")
     public ResponseEntity<Object> atualizarCliente(@PathVariable(value = "id_cliente") String id_cliente,
-                                                 @RequestBody @Valid ClienteDTO clienteDTO, Errors errosDeValidacao){
-//        UUID uuid = null;
-//        try {
-//            uuid = UUID.fromString(id);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
-//        }
+                                                   @RequestBody @Valid ClienteDTO clienteDTO, BindingResult bindingResult) {
 
         UUID id = ControllerUtils.converteUUID(id_cliente);
         if (id_cliente.equals("") || id == null)
@@ -153,11 +141,16 @@ public class ClienteController {
         }
 
         List<Map<String, String>> listaErros = new ArrayList<>();
-        if (errosDeValidacao.hasErrors()) {
-            List<FieldError> listaFieldErros = errosDeValidacao.getFieldErrors();
-            for (FieldError erro : listaFieldErros) {
+        List<String> listaNulos = new ArrayList<>();
 
-                listaErros.add(ControllerUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
+        if (bindingResult.hasErrors()) {
+            var listaFieldErros = bindingResult.getFieldErrors();
+            for (FieldError erro : listaFieldErros) {
+                if (erro.getRejectedValue() == null) {
+                    listaNulos.add(erro.getField());
+                } else {
+                    listaErros.add(ControllerUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
+                }
             }
         }
 
@@ -166,47 +159,87 @@ public class ClienteController {
         clienteModel.setId(id);
         clienteModel.setData_cadastro(clienteOptional.get().getData_cadastro());
 
-
-        //SUBSTITUIR POR UM SWITCH
-        if (!clienteModel.getLogin().equals(clienteOptional.get().getLogin())
-                && clienteService.existsByLogin(clienteModel.getLogin()) ) {
+        if (clienteModel.getLogin() != null
+                && !clienteModel.getLogin().equals(clienteOptional.get().getLogin())
+                && clienteService.existsByLogin(clienteModel.getLogin())) {
             listaErros.add(ControllerUtils.adicionarErros("login", "Login já utilizado."));
         }
-        if (!clienteModel.getCpf().equals(clienteOptional.get().getCpf())
+        if (clienteModel.getCpf() != null
+                && !clienteModel.getCpf().equals(clienteOptional.get().getCpf())
                 && clienteService.existsByCpf(clienteModel.getCpf())) {
             listaErros.add(ControllerUtils.adicionarErros("cpf", "CPF já utilizado."));
         }
-        if (!clienteModel.getEmail().equals(clienteOptional.get().getEmail())
+        if (clienteModel.getEmail() != null
+                && !clienteModel.getEmail().equals(clienteOptional.get().getEmail())
                 && clienteService.existsByEmail(clienteModel.getEmail())) {
             listaErros.add(ControllerUtils.adicionarErros("email", "Email já utilizado."));
         }
 
-        try {
-            clienteModel = new CEPUtils().retornaCep(clienteModel);
-        } catch (RuntimeException e) {
-            listaErros.add(ControllerUtils.adicionarErros("cep", "CEP não existe."));
+        if (clienteModel.getCep() != null) {
+            try {
+                clienteModel = new CEPUtils().retornaCep(clienteModel);
+            } catch (RuntimeException e) {
+                listaErros.add(ControllerUtils.adicionarErros("cep", "CEP não existe."));
+            }
         }
 
-        try {
-            clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        } catch (DateTimeParseException e) {
-            listaErros.add(ControllerUtils.adicionarErros("data_nasc", "Data inválida."));
+        if (clienteModel.getData_nasc() != null) {
+            try {
+                clienteModel.setData_nasc(LocalDate.parse(clienteDTO.getData_nasc(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            } catch (DateTimeParseException e) {
+                listaErros.add(ControllerUtils.adicionarErros("data_nasc", "Data inválida."));
+            }
         }
 
         if (!listaErros.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(listaErros);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(listaErros);
         }
 
-        clienteModel.setNumero_rua(Integer.parseInt(clienteDTO.getNumero_rua()));
-        clienteModel.setSexo(clienteDTO.getSexo().charAt(0));
+        for (String campo : listaNulos) {
+            switch (campo) {
+                case "nome":
+                    clienteModel.setNome(clienteOptional.get().getNome());
+                    break;
+                case "login":
+                    clienteModel.setLogin(clienteOptional.get().getLogin());
+                    break;
+                case "senha":
+                    clienteModel.setSenha(clienteOptional.get().getSenha());
+                    break;
+                case "cpf":
+                    clienteModel.setCpf(clienteOptional.get().getCpf());
+                    break;
+                case "data_nasc":
+                    clienteModel.setData_nasc(clienteOptional.get().getData_nasc());
+                    break;
+                case "sexo":
+                    clienteModel.setSexo(clienteOptional.get().getSexo());
+                    break;
+                case "telefone":
+                    clienteModel.setTelefone(clienteOptional.get().getTelefone());
+                    break;
+                case "email":
+                    clienteModel.setEmail(clienteOptional.get().getEmail());
+                    break;
+                case "cep":
+                    clienteModel.setCep(clienteOptional.get().getCep());
+                    clienteModel.setUf(clienteOptional.get().getUf());
+                    clienteModel.setCidade(clienteOptional.get().getCidade());
+                    clienteModel.setRua(clienteOptional.get().getRua());
+                    break;
+                case "numero_rua":
+                    clienteModel.setNumero_rua(clienteOptional.get().getNumero_rua());
+                    break;
+            }
+        }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.salvarCliente(clienteModel));
+        if (clienteDTO.getSexo() != null) {
+            clienteModel.setSexo(clienteDTO.getSexo().charAt(0));
+        }
+        if (clienteDTO.getNumero_rua() != null) {
+            clienteModel.setNumero_rua(Integer.parseInt(clienteDTO.getNumero_rua()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(clienteService.salvarCliente(clienteModel));
     }
-
-    //    private Map<String, String> adicionarErros(String campoErro, String msgErro) {
-//        Map<String, String> mapErro = new HashMap<String, String>();
-//        mapErro.put("campo", campoErro);
-//        mapErro.put("mensagem", msgErro);
-//        return mapErro;
-//    }
 }

@@ -104,7 +104,6 @@ public class ProdutoController {
     public ResponseEntity<Object> atualizarProduto(@PathVariable(value = "id_produto") String id_produto,
                                                    @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult bindingResult) {
 
-
         UUID id = ControllerUtils.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
@@ -120,7 +119,6 @@ public class ProdutoController {
         if (bindingResult.hasErrors()) {
             var listaFieldErrors = bindingResult.getFieldErrors();
             for (FieldError erro : listaFieldErrors) {
-
                 if (erro.getRejectedValue() == null) {
                     listaNulos.add(erro.getField());
                 } else {
