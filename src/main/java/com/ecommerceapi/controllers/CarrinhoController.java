@@ -1,15 +1,15 @@
 package com.ecommerceapi.controllers;
 
-import com.ecommerceapi.models.CarrinhoModel;
-import com.ecommerceapi.models.ProdutoDaVendaModel;
-import com.ecommerceapi.models.ProdutoModel;
-import com.ecommerceapi.models.VendaModel;
+import com.ecommerceapi.models.*;
 import com.ecommerceapi.services.ProdutoDaVendaService;
 import com.ecommerceapi.services.ProdutoService;
 import com.ecommerceapi.services.VendaService;
 import com.ecommerceapi.utils.ControllerUtils;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -33,7 +33,8 @@ public class CarrinhoController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto, @RequestParam("quantidade") String quantidadeString) {
+    public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto,
+                                                 @RequestParam("quantidade") String quantidadeString) {
         UUID id = ControllerUtils.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
@@ -149,6 +150,7 @@ public class CarrinhoController {
         if (carrinho.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Carrinho vazio. Não é possivel efetivar a venda.");
         }
+
         for (CarrinhoModel itens : carrinho) {
             if (itens.getQuantidade() >
                     produtoService.buscarProdutoPorId(itens.getProdutoModel().getId()).get().getQuantidade_estoque()) {
