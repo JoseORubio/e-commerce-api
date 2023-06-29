@@ -2,28 +2,19 @@ package com.ecommerceapi.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import jakarta.websocket.OnMessage;
-import org.hibernate.validator.constraints.Range;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "clientes")
-public class ClienteModel implements Serializable {
+@Table(name = "usuarios")
+public class UsuarioModel implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -67,6 +58,13 @@ public class ClienteModel implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    @ManyToMany
+    @JoinTable(name = "papeis_do_usuario"
+            , joinColumns = @JoinColumn(name = "id_usuario")
+            , inverseJoinColumns = @JoinColumn(name = "id_papel"))
+    private List<PapelModel> papeis;
+
 
     private String cpf;
 
@@ -177,5 +175,40 @@ public class ClienteModel implements Serializable {
 
     public void setNumero_rua(int numero_rua) {
         this.numero_rua = numero_rua;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.papeis;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

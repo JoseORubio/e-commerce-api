@@ -1,15 +1,9 @@
 package com.ecommerceapi.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.br.CPF;
 
-import java.time.LocalDate;
-
-public class ClienteDTO {
+public class UsuarioDTO {
 
     @NotBlank
     @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres.")
@@ -50,6 +44,18 @@ public class ClienteDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+//    @NotBlank
+//    @Pattern(regexp ="^[1-9]\\d{0,1}$", message = "Deve ser qualquer número entre 1 e 99.")
+//    private String papel;
+//
+//    public String getPapel() {
+//        return papel;
+//    }
+//
+//    public void setPapel(String papel) {
+//        this.papel = papel;
+//    }
 
     @NotBlank
     @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")

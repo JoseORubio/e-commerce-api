@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.ecommerceapi.controllers.HomeController.clienteLogado;
+//import static com.ecommerceapi.controllers.HomeController.clienteLogado;
 
 @RestController
 @RequestMapping("/itens-carrinho")
@@ -145,36 +145,37 @@ public class CarrinhoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item não existe");
     }
 
-    @PostMapping("/venda")
-    public ResponseEntity<Object> confirmaVenda() {
-        if (carrinho.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Carrinho vazio. Não é possivel efetivar a venda.");
-        }
-
-        for (CarrinhoModel itens : carrinho) {
-            if (itens.getQuantidade() >
-                    produtoService.buscarProdutoPorId(itens.getProdutoModel().getId()).get().getQuantidade_estoque()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("Quantidade de %s indisponível no estoque.", itens.getProdutoModel().getNome()));
-            }
-        }
-
-        VendaModel venda = vendaService.salvarVenda(new VendaModel(clienteLogado.getId()));
-
-        for (CarrinhoModel itens : carrinho) {
-            ProdutoDaVendaModel produtoDaVendaModel = new ProdutoDaVendaModel();
-            produtoDaVendaModel.setId_venda(venda.getId());
-            produtoDaVendaModel.setId_produto(itens.getProdutoModel().getId());
-            produtoDaVendaModel.setQuantidade(itens.getQuantidade());
-            produtoDaVendaService.inserirProduto(produtoDaVendaModel);
-
-            ProdutoModel produtoModel = itens.getProdutoModel();
-            produtoModel.setQuantidade_estoque(produtoModel.getQuantidade_estoque() - itens.getQuantidade());
-            produtoService.baixaProduto(produtoModel);
-        }
-
-        carrinho.clear();
-        return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
-    }
+//    @PostMapping("/venda")
+//    public ResponseEntity<Object> confirmaVenda() {
+//        if (carrinho.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Carrinho vazio. Não é possivel efetivar a venda.");
+//        }
+//
+//        for (CarrinhoModel itens : carrinho) {
+//            if (itens.getQuantidade() >
+//                    produtoService.buscarProdutoPorId(itens.getProdutoModel().getId()).get().getQuantidade_estoque()) {
+//                return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("Quantidade de %s indisponível no estoque.", itens.getProdutoModel().getNome()));
+//            }
+//        }
+//
+//        VendaModel venda = vendaService.salvarVenda(new VendaModel(clienteLogado.getId()));
+////        VendaModel venda = vendaService.salvarVenda(new VendaModel(clienteLogado.getId()));
+//
+//        for (CarrinhoModel itens : carrinho) {
+//            ProdutoDaVendaModel produtoDaVendaModel = new ProdutoDaVendaModel();
+//            produtoDaVendaModel.setId_venda(venda.getId());
+//            produtoDaVendaModel.setId_produto(itens.getProdutoModel().getId());
+//            produtoDaVendaModel.setQuantidade(itens.getQuantidade());
+//            produtoDaVendaService.inserirProduto(produtoDaVendaModel);
+//
+//            ProdutoModel produtoModel = itens.getProdutoModel();
+//            produtoModel.setQuantidade_estoque(produtoModel.getQuantidade_estoque() - itens.getQuantidade());
+//            produtoService.baixaProduto(produtoModel);
+//        }
+//
+//        carrinho.clear();
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
+//    }
 
     @DeleteMapping
     public ResponseEntity<Object> cancelaCarrinho() {

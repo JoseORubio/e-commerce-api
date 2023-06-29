@@ -1,6 +1,6 @@
 package com.ecommerceapi.utils;
 
-import com.ecommerceapi.models.ClienteModel;
+import com.ecommerceapi.models.UsuarioModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,8 +32,8 @@ public class CEPUtils {
         }
     }
 
-    public ClienteModel retornaCep(ClienteModel cliente) {
-        String dados = buscaDados(converteCEP(cliente.getCep()));
+    public UsuarioModel retornaCep(UsuarioModel usuario) {
+        String dados = buscaDados(converteCEP(usuario.getCep()));
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node;
 
@@ -47,10 +47,10 @@ public class CEPUtils {
             throw new RuntimeException();
         }
 
-        cliente.setRua(node.get("logradouro").asText());
-        cliente.setCidade(node.get("localidade").asText());
-        cliente.setUf(node.get("uf").asText());
+        usuario.setRua(node.get("logradouro").asText());
+        usuario.setCidade(node.get("localidade").asText());
+        usuario.setUf(node.get("uf").asText());
 
-        return cliente;
+        return usuario;
     }
 }
