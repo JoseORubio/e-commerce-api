@@ -20,6 +20,7 @@ public class CarrinhoModel implements Serializable {
     private ProdutoModel produto;
     private int quantidade;
     private BigDecimal valorTotalProduto;
+    public CarrinhoModel(){}
 
     public CarrinhoModel(UsuarioModel usuario, ProdutoModel produto, int quantidade) {
         this.usuario = usuario;

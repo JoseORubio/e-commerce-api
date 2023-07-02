@@ -24,11 +24,6 @@ public class ProdutoService {
         return produtoRepository.save(produtoModel);
     }
 
-
-    public void baixaProduto(ProdutoModel produtoModel){
-        salvarProduto(produtoModel);
-    }
-
     public boolean existsByNome(String nome){
         return produtoRepository.existsByNome(nome);
     }

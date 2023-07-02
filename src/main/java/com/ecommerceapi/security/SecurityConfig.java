@@ -22,8 +22,7 @@ public class SecurityConfig  {
                 .requestMatchers(HttpMethod.GET, "/produtos").permitAll()
                 .requestMatchers( "/produtos").hasRole("ADMIN")
                 .requestMatchers( "/clientes").hasRole("ADMIN")
-                .requestMatchers( "/itens-carrinho").hasRole("USER")
-                .requestMatchers( "/itens-carrinho/logado").permitAll()
+                .requestMatchers( "/itens-carrinho/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
