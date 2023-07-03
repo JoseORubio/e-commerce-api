@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ import java.util.*;
 
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/usuarios")
 public class UsuarioController {
     final UsuarioService usuarioService;
 
@@ -74,11 +75,16 @@ public class UsuarioController {
         usuarioModel.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
         usuarioModel.setSexo(usuarioDTO.getSexo().charAt(0));
         usuarioModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
+        usuarioModel.setSenha(new BCryptPasswordEncoder().encode(usuarioModel.getSenha()));
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvarUsuarios(usuarioModel));
     }
 
-
     @GetMapping
+    public ResponseEntity<UsuarioModel> buscarUsuarioLogado() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ControllerUtils(usuarioService).pegarUsuario());
+    }
+
+    @GetMapping("/todos")
     public ResponseEntity<List<UsuarioModel>> buscarUsuarios() {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.buscarUsuarios());
     }
@@ -126,18 +132,27 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body("Usuario apagado com sucesso.");
     }
 
-    @PutMapping("/{id_usuario}")
-    public ResponseEntity<Object> atualizarUsuario(@PathVariable(value = "id_usuario") String id_usuario,
-                                                   @RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult bindingResult) {
+    @DeleteMapping
+    public ResponseEntity<Object> deletarUsuarioLogado() {
 
-        UUID id = ControllerUtils.converteUUID(id_usuario);
-        if (id_usuario.equals("") || id == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+        UsuarioModel usuarioLogado = new ControllerUtils(usuarioService).pegarUsuario();
+        usuarioService.delete(usuarioLogado);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuario " + usuarioLogado.getNome() + " apagado com sucesso.");
+    }
 
-        Optional<UsuarioModel> usuarioOptional = usuarioService.buscarUsuarioPorId(id);
-        if (!usuarioOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
-        }
+    @PutMapping
+    public ResponseEntity<Object> atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult bindingResult) {
+
+//        UUID id = ControllerUtils.converteUUID(id_usuario);
+//        if (id_usuario.equals("") || id == null)
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+//        Optional<UsuarioModel> usuarioOptional = usuarioService.buscarUsuarioPorId(id);
+//        if (!usuarioOptional.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
+//        }
+
+        UsuarioModel usuarioLogado = new ControllerUtils(usuarioService).pegarUsuario();
 
         List<Map<String, String>> listaErros = new ArrayList<>();
         List<String> listaNulos = new ArrayList<>();
@@ -155,21 +170,21 @@ public class UsuarioController {
 
         UsuarioModel usuarioModel = new UsuarioModel();
         BeanUtils.copyProperties(usuarioDTO, usuarioModel);
-        usuarioModel.setId(id);
-        usuarioModel.setData_cadastro(usuarioOptional.get().getData_cadastro());
+        usuarioModel.setId(usuarioLogado.getId());
+        usuarioModel.setData_cadastro(usuarioLogado.getData_cadastro());
 
         if (usuarioModel.getLogin() != null
-                && !usuarioModel.getLogin().equals(usuarioOptional.get().getLogin())
+                && !usuarioModel.getLogin().equals(usuarioLogado.getLogin())
                 && usuarioService.existsByLogin(usuarioModel.getLogin())) {
             listaErros.add(ControllerUtils.adicionarErros("login", "Login já utilizado."));
         }
         if (usuarioModel.getCpf() != null
-                && !usuarioModel.getCpf().equals(usuarioOptional.get().getCpf())
+                && !usuarioModel.getCpf().equals(usuarioLogado.getCpf())
                 && usuarioService.existsByCpf(usuarioModel.getCpf())) {
             listaErros.add(ControllerUtils.adicionarErros("cpf", "CPF já utilizado."));
         }
         if (usuarioModel.getEmail() != null
-                && !usuarioModel.getEmail().equals(usuarioOptional.get().getEmail())
+                && !usuarioModel.getEmail().equals(usuarioLogado.getEmail())
                 && usuarioService.existsByEmail(usuarioModel.getEmail())) {
             listaErros.add(ControllerUtils.adicionarErros("email", "Email já utilizado."));
         }
@@ -197,37 +212,37 @@ public class UsuarioController {
         for (String campo : listaNulos) {
             switch (campo) {
                 case "nome":
-                    usuarioModel.setNome(usuarioOptional.get().getNome());
+                    usuarioModel.setNome(usuarioLogado.getNome());
                     break;
                 case "login":
-                    usuarioModel.setLogin(usuarioOptional.get().getLogin());
+                    usuarioModel.setLogin(usuarioLogado.getLogin());
                     break;
                 case "senha":
-                    usuarioModel.setSenha(usuarioOptional.get().getSenha());
+                    usuarioModel.setSenha(usuarioLogado.getSenha());
                     break;
                 case "cpf":
-                    usuarioModel.setCpf(usuarioOptional.get().getCpf());
+                    usuarioModel.setCpf(usuarioLogado.getCpf());
                     break;
                 case "data_nasc":
-                    usuarioModel.setData_nasc(usuarioOptional.get().getData_nasc());
+                    usuarioModel.setData_nasc(usuarioLogado.getData_nasc());
                     break;
                 case "sexo":
-                    usuarioModel.setSexo(usuarioOptional.get().getSexo());
+                    usuarioModel.setSexo(usuarioLogado.getSexo());
                     break;
                 case "telefone":
-                    usuarioModel.setTelefone(usuarioOptional.get().getTelefone());
+                    usuarioModel.setTelefone(usuarioLogado.getTelefone());
                     break;
                 case "email":
-                    usuarioModel.setEmail(usuarioOptional.get().getEmail());
+                    usuarioModel.setEmail(usuarioLogado.getEmail());
                     break;
                 case "cep":
-                    usuarioModel.setCep(usuarioOptional.get().getCep());
-                    usuarioModel.setUf(usuarioOptional.get().getUf());
-                    usuarioModel.setCidade(usuarioOptional.get().getCidade());
-                    usuarioModel.setRua(usuarioOptional.get().getRua());
+                    usuarioModel.setCep(usuarioLogado.getCep());
+                    usuarioModel.setUf(usuarioLogado.getUf());
+                    usuarioModel.setCidade(usuarioLogado.getCidade());
+                    usuarioModel.setRua(usuarioLogado.getRua());
                     break;
                 case "numero_rua":
-                    usuarioModel.setNumero_rua(usuarioOptional.get().getNumero_rua());
+                    usuarioModel.setNumero_rua(usuarioLogado.getNumero_rua());
                     break;
             }
         }

@@ -21,6 +21,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioModel, UUID> {
     //Se der certo apagaro o findByLogin e existsByLoginAndSenha
      Optional<UsuarioModel> findByLoginAndSenha(String login, String senha);
     List<UsuarioModel> findByOrderByNome();
-    @Query(value = "select * from clientes where nome like %?1% order by nome",nativeQuery = true)
+    @Query(value = "select * from usuarios where nome like %?1% order by nome",nativeQuery = true)
     Optional<List<UsuarioModel>> pesquisarUsuarios(String nome);
 }

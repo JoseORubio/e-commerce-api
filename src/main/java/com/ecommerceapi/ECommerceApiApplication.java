@@ -9,7 +9,7 @@ public class ECommerceApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ECommerceApiApplication.class, args);
-		System.out.println(new BCryptPasswordEncoder().encode("asd123aaD"));
+//		System.out.println(new BCryptPasswordEncoder().encode("asd123aaD"));
 	}
 
 }
