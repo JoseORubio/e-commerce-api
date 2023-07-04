@@ -23,4 +23,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioModel, UUID> {
     List<UsuarioModel> findByOrderByNome();
     @Query(value = "select * from usuarios where nome like %?1% order by nome",nativeQuery = true)
     Optional<List<UsuarioModel>> pesquisarUsuarios(String nome);
+
+
 }

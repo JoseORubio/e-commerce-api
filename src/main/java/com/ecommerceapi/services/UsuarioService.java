@@ -24,7 +24,6 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioModel);
     }
 
-
     public boolean existsByLogin(String login) {
         return usuarioRepository.existsByLogin(login);
     }

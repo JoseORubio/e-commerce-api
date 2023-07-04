@@ -2,6 +2,7 @@ package com.ecommerceapi.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "usuarios")
+@DynamicUpdate
 public class UsuarioModel implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -59,11 +61,12 @@ public class UsuarioModel implements UserDetails, Serializable {
         this.senha = senha;
     }
 
+//    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @ManyToMany
     @JoinTable(name = "papeis_do_usuario"
             , joinColumns = @JoinColumn(name = "id_usuario")
             , inverseJoinColumns = @JoinColumn(name = "id_papel"))
-    private List<PapelModel> papeis;
+    private  List<PapelModel> papeis;
 
 
     private String cpf;
