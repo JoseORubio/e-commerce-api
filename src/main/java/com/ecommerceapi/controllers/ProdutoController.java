@@ -3,7 +3,7 @@ package com.ecommerceapi.controllers;
 import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.ProdutoService;
-import com.ecommerceapi.utils.ControllerUtils;
+import com.ecommerceapi.utils.ValidacaoUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -32,12 +32,12 @@ public class ProdutoController {
         if (bindingResult.hasErrors()) {
             var listaFieldErrors = bindingResult.getFieldErrors();
             for (FieldError erro : listaFieldErrors) {
-                listaErros.add(ControllerUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
+                listaErros.add(ValidacaoUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
             }
         }
 
         if (produtoService.existsByNome(produtoDTO.getNome())) {
-            listaErros.add(ControllerUtils.adicionarErros("nome", "Nome já utilizado."));
+            listaErros.add(ValidacaoUtils.adicionarErros("nome", "Nome já utilizado."));
         }
 
         if (!listaErros.isEmpty()) {
@@ -64,7 +64,7 @@ public class ProdutoController {
     public ResponseEntity<Object> buscarProdutoPorId(@PathVariable(value = "id_produto") String id_produto) {
 
 
-        UUID id = ControllerUtils.converteUUID(id_produto);
+        UUID id = ValidacaoUtils.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
 
@@ -87,7 +87,7 @@ public class ProdutoController {
     @DeleteMapping("/{id_produto}")
     public ResponseEntity<Object> deletarProduto(@PathVariable(value = "id_produto") String id_produto) {
 
-        UUID id = ControllerUtils.converteUUID(id_produto);
+        UUID id = ValidacaoUtils.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
 
@@ -104,7 +104,7 @@ public class ProdutoController {
     public ResponseEntity<Object> atualizarProduto(@PathVariable(value = "id_produto") String id_produto,
                                                    @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult bindingResult) {
 
-        UUID id = ControllerUtils.converteUUID(id_produto);
+        UUID id = ValidacaoUtils.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
 
@@ -122,7 +122,7 @@ public class ProdutoController {
                 if (erro.getRejectedValue() == null) {
                     listaNulos.add(erro.getField());
                 } else {
-                    listaErros.add(ControllerUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
+                    listaErros.add(ValidacaoUtils.adicionarErros(erro.getField(), erro.getDefaultMessage()));
                 }
             }
         }
@@ -130,7 +130,7 @@ public class ProdutoController {
         if (produtoDTO.getNome() != null
                 && !produtoDTO.getNome().equals(produtoOptional.get().getNome())
                 && produtoService.existsByNome(produtoDTO.getNome())) {
-            listaErros.add(ControllerUtils.adicionarErros("nome", "Nome já utilizado."));
+            listaErros.add(ValidacaoUtils.adicionarErros("nome", "Nome já utilizado."));
         }
 
         if (!listaErros.isEmpty()) {

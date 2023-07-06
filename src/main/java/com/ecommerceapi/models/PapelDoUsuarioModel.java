@@ -16,6 +16,12 @@ public class PapelDoUsuarioModel implements Serializable {
     private UUID id_usuario;
     private UUID id_papel;
 
+    public PapelDoUsuarioModel(){}
+    public PapelDoUsuarioModel(UUID id_usuario, UUID id_papel) {
+        this.id_usuario = id_usuario;
+        this.id_papel = id_papel;
+    }
+
     public UUID getId() {
         return id;
     }

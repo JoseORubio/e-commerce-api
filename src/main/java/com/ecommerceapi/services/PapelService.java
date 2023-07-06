@@ -16,7 +16,7 @@ public class PapelService{
         this.papelRepository = papelRepository;
     }
 
-    public UUID getIdPapelUser(){
+    public UUID pegarIdPapelUsuario(){
         Optional<PapelModel> papel = papelRepository.findByNome(RoleName.ROLE_USER);
         return papel.get().getId();
         }

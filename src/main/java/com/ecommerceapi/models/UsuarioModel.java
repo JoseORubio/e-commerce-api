@@ -61,7 +61,6 @@ public class UsuarioModel implements UserDetails, Serializable {
         this.senha = senha;
     }
 
-//    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @ManyToMany
     @JoinTable(name = "papeis_do_usuario"
             , joinColumns = @JoinColumn(name = "id_usuario")
