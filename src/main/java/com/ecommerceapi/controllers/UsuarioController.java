@@ -1,7 +1,10 @@
 package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.dtos.UsuarioDTO;
+import com.ecommerceapi.models.PapelDoUsuarioModel;
 import com.ecommerceapi.models.UsuarioModel;
+import com.ecommerceapi.services.PapelDoUsuarioService;
+import com.ecommerceapi.services.PapelService;
 import com.ecommerceapi.services.UsuarioService;
 import com.ecommerceapi.utils.CEPUtils;
 import com.ecommerceapi.utils.ControllerUtils;
@@ -26,9 +29,13 @@ import java.util.*;
 @RequestMapping("/usuarios")
 public class UsuarioController {
     final UsuarioService usuarioService;
+    final PapelDoUsuarioService papelDoUsuarioService;
+    final PapelService papelService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, PapelDoUsuarioService papelDoUsuarioService, PapelService papelService) {
         this.usuarioService = usuarioService;
+        this.papelDoUsuarioService = papelDoUsuarioService;
+        this.papelService = papelService;
     }
 
 
@@ -76,7 +83,12 @@ public class UsuarioController {
         usuarioModel.setSexo(usuarioDTO.getSexo().charAt(0));
         usuarioModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
         usuarioModel.setSenha(new BCryptPasswordEncoder().encode(usuarioModel.getSenha()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvarUsuarios(usuarioModel));
+        usuarioService.salvarUsuarios(usuarioModel);
+        PapelDoUsuarioModel papelDoUsuarioModel = new PapelDoUsuarioModel();
+        papelDoUsuarioModel.setId_usuario(usuarioModel.getId());
+        papelDoUsuarioModel.setId_papel(papelService.getIdPapelUser());
+        papelDoUsuarioService.salvarPapelDoUsuario(papelDoUsuarioModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModel);
     }
 
     @GetMapping
@@ -254,6 +266,12 @@ public class UsuarioController {
             usuarioModel.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.salvarUsuarios(usuarioModel));
+
+        usuarioService.salvarUsuarios(usuarioModel);
+        PapelDoUsuarioModel papelDoUsuarioModel = new PapelDoUsuarioModel();
+        papelDoUsuarioModel.setId_usuario(usuarioModel.getId());
+        papelDoUsuarioModel.setId_papel(papelService.getIdPapelUser());
+        papelDoUsuarioService.salvarPapelDoUsuario(papelDoUsuarioModel);
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioModel);
     }
 }
