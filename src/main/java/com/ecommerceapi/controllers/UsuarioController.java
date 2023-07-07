@@ -38,7 +38,7 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Object> cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
 
-        Object validador = usuarioService.validaUsuario(usuarioDTO, errosDeValidacao);
+        Object validador = usuarioService.validaCadastroUsuario(usuarioDTO, errosDeValidacao);
 
         if (validador instanceof List<?>) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
@@ -192,6 +192,7 @@ public class UsuarioController {
         usuarioModel.setId(usuarioLogado.getId());
         usuarioModel.setData_cadastro(usuarioLogado.getData_cadastro());
 
+//        if (usuarioModel.getLogin() != null
         if (usuarioModel.getLogin() != null
                 && !usuarioModel.getLogin().equals(usuarioLogado.getLogin())
                 && usuarioService.existsByLogin(usuarioModel.getLogin())) {
