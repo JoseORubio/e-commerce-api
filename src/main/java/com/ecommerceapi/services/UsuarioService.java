@@ -8,8 +8,6 @@ import com.ecommerceapi.utils.ValidacaoUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -141,14 +139,10 @@ public class UsuarioService {
     public Object validaCadastroUsuario(UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
 
         validaPorBindingResult(errosDeValidacao);
-
-//        UsuarioModel usuarioModel = new UsuarioModel();
-//        BeanUtils.copyProperties(usuarioDTO, usuarioModel);
-
         UsuarioModel usuarioModel = validaPorRegrasNegocio(usuarioDTO);
 
         if (!listaErros.isEmpty()) {
-            return listaErros;
+            return converteListaErrosParaMap(listaErros);
         }
 
         usuarioModel.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
@@ -160,38 +154,48 @@ public class UsuarioService {
 
     }
 
-//    private List<Map<String, String>> organizaErros(List<Map<String, String>> listaErros) {
-//        List<Map<String, String>> listaErrosOrganizada = new ArrayList<>();
-//        for(Map<String, String> erro : listaErros){
-//            for(Map.Entry<String, String> errosValores : erro.entrySet()){
-//
-//            }
-//        }
-//
-//        Map<String, String> infoItens = new LinkedHashMap<>();
-//    }
-public   void adicionarErros(String campoErro, String msgErro) {
-//        Map<String, String> mapErro = new HashMap<String, String>();
-//    Map<String, String> mapErro =  new LinkedHashMap<>();
-//    List<String> camposEMensagens = new ArrayList<>();
-//    mapErro.put("campo", campoErro);
-//    mapErro.put("mensagem", msgErro);
-    boolean campoRepetido= false;
-    for (List<String> erro : listaErros){
-        if (erro.get(0).equals(campoErro)){
-            campoRepetido = true;
-            erro.add(msgErro);
+    public void adicionarErros(String campoErro, String msgErro) {
+        boolean campoRepetido = false;
+        for (List<String> erro : listaErros) {
+            if (erro.get(0).equals(campoErro)) {
+                campoRepetido = true;
+                erro.add(msgErro);
+            }
+        }
+        if (!campoRepetido) {
+            List<String> camposEMensagens = new ArrayList<>();
+            camposEMensagens.add(campoErro);
+            camposEMensagens.add(msgErro);
+            listaErros.add(camposEMensagens);
         }
     }
-    if (!campoRepetido){
-        List<String> camposEMensagens = new ArrayList<>();
-        camposEMensagens.add(campoErro);
-        camposEMensagens.add(msgErro);
-        listaErros.add(camposEMensagens);
+
+    private List<Map<String, String>> converteListaErrosParaMap(List<List<String>> listaErros) {
+
+        List<Map<String, String>> listaErrosMap = new ArrayList<>();
+
+        for (List<String> erro : listaErros) {
+            Map<String, String> infoItens = new LinkedHashMap<>();
+            boolean chaveCampo = true;
+            String mensagensErro = "";
+            for (String valoresErro : erro) {
+                if (chaveCampo) {
+                    infoItens.put("Campo", valoresErro);
+                    chaveCampo = false;
+                } else {
+                    mensagensErro = String.format(mensagensErro
+                            + valoresErro.toUpperCase().charAt(0)
+                            + valoresErro.substring(1)
+                            + (valoresErro.charAt(valoresErro.length() - 1)!= '.'?".":"")
+                            + " ");
+                }
+            }
+            infoItens.put("Erros", mensagensErro.substring(0, mensagensErro.length()-1));
+            listaErrosMap.add(infoItens);
+        }
+        return listaErrosMap;
     }
 
-//    return mapErro;
-}
     private void validaPorBindingResult(BindingResult errosDeValidacao) {
         listaErros = new ArrayList<>();
         if (errosDeValidacao.hasErrors()) {
@@ -199,7 +203,6 @@ public   void adicionarErros(String campoErro, String msgErro) {
             for (FieldError erro : listaFieldErros) {
                 System.out.println("!!!!!!!!!!!!!!!!!" + erro.getField());
                 adicionarErros(erro.getField(), erro.getDefaultMessage());
-//                listaErros.add(adicionarErros(erro.getField(), erro.getDefaultMessage()));
             }
         }
     }
