@@ -2,7 +2,7 @@ package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.models.*;
 import com.ecommerceapi.services.*;
-import com.ecommerceapi.utils.ValidacaoUtils;
+import com.ecommerceapi.utils.ConversorUUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -45,7 +45,7 @@ public class CarrinhoController {
     @PostMapping
     public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto,
                                                  @RequestParam("quantidade") String quantidadeString) {
-        UUID id = ValidacaoUtils.converteUUID(id_produto);
+        UUID id = ConversorUUID.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id do produto inválida");
         Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
@@ -112,7 +112,7 @@ public class CarrinhoController {
     @DeleteMapping("/{id_produto}")
     public ResponseEntity<Object> removeItemCarrinho(@PathVariable(value = "id_produto") String id_produto) {
 
-        UUID id = ValidacaoUtils.converteUUID(id_produto);
+        UUID id = ConversorUUID.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
@@ -151,7 +151,7 @@ public class CarrinhoController {
     public ResponseEntity<Object> alteraItemCarrinho(@PathVariable(value = "id_produto") String id_produto,
                                                      @PathVariable(value = "quantidade") String quantidadeString) {
 
-        UUID id = ValidacaoUtils.converteUUID(id_produto);
+        UUID id = ConversorUUID.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);

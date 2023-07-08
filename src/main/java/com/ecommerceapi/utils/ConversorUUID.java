@@ -1,11 +1,10 @@
 package com.ecommerceapi.utils;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ValidacaoUtils {
+public class ConversorUUID {
 
     public static  Map<String, String> adicionarErros(String campoErro, String msgErro) {
 //        Map<String, String> mapErro = new HashMap<String, String>();

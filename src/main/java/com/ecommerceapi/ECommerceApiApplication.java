@@ -34,8 +34,15 @@ public class ECommerceApiApplication {
 ////		System.out.println(erros.get(1));
 
 
-		String texto = "asd";
-		System.out.println(texto.length());
+//		System.out.println(new BCryptPasswordEncoder().encode("123123"));
+//		System.out.println(new BCryptPasswordEncoder().matches(
+//				"abc123","$2a$10$1dnkT6ZepB0n9vAkfziB0..XmY1K.a7BDDZ3R265kiUnC8E1OS7LK"));
+//	System.out.println(new BCryptPasswordEncoder().matches(
+//				"abc123","$2a$10$Zg2UXG1SU3B3bkyGje8O/.IrVjQJiQJiXjC52FSHr187NiJNdMWje"));
+//	System.out.println(new BCryptPasswordEncoder().matches(
+//				"abc123","$2a$10$xV3L9iX.5p04j9dEWK/53.sLW9VCkCgscbxmF9601DenJX3OoeDAq"));
+//	System.out.println(new BCryptPasswordEncoder().matches(
+//				"abc123","$2a$10$2C/w1uWD3GnDtw56/2hSKeJRM5jM8.Bg2sc1YMhpAX2bG4bkLV9Li"));
 	}
 
 }
