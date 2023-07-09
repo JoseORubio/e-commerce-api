@@ -126,10 +126,9 @@ public class UsuarioService {
             return null;
         }
         String login = authentication.getName();
-        UsuarioModel usuarioModel = buscarUsuarioPorLogin(login).get();
+        UsuarioModel usuarioModel = usuarioRepository.findByLogin(login).get();
         return usuarioModel;
     }
-
 
     private boolean existsByLogin(String login) {
         return usuarioRepository.existsByLogin(login);
@@ -142,11 +141,6 @@ public class UsuarioService {
     private boolean existsByEmail(String email) {
         return usuarioRepository.existsByEmail(email);
     }
-
-    private Optional<UsuarioModel> buscarUsuarioPorLogin(String login) {
-        return usuarioRepository.findByLogin(login);
-    }
-
 
     private Object validaPorRegrasDeNegocio(List<List<String>> listaErros, UsuarioDTO usuarioDTO) {
 

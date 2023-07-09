@@ -19,14 +19,19 @@ public class SecurityConfig  {
                 .httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/produtos").permitAll()
-                .requestMatchers( "/produtos").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/produtos/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/produtos").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/produtos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/produtos/**").hasRole("ADMIN")
+
                 .requestMatchers( HttpMethod.POST,"/usuarios").anonymous()
                 .requestMatchers( HttpMethod.GET,"/usuarios").hasAnyRole("ADMIN","USER")
                 .requestMatchers( HttpMethod.PUT,"/usuarios").hasRole("USER")
                 .requestMatchers( HttpMethod.DELETE,"/usuarios").hasRole("USER")
                 .requestMatchers( "/usuarios/**").hasRole("ADMIN")
+
                 .requestMatchers( "/itens-carrinho/**").hasRole("USER")
+
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

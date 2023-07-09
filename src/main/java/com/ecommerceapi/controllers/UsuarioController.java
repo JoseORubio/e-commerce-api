@@ -46,6 +46,53 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioViewDTO);
     }
 
+    @PutMapping
+    public ResponseEntity<Object> atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
+
+        UsuarioModel usuarioLogado = usuarioService.pegarUsuarioLogado();
+
+        Object validador = usuarioService.validaAtualizacaoUsuario(usuarioLogado, usuarioDTO, errosDeValidacao);
+
+        if (validador instanceof List<?>) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
+        }
+
+        UsuarioModel usuarioModel = (UsuarioModel) validador;
+        usuarioService.salvarUsuario(usuarioModel);
+        papelDoUsuarioService.salvarPapelDoUsuario(
+                new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioModel);
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioViewDTO);
+    }
+
+
+    @DeleteMapping("/{id_usuario}")
+    public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "id_usuario") String id_usuario) {
+
+        Optional<UsuarioModel> usuarioOptional = null;
+        try {
+            usuarioOptional = usuarioService.buscarUsuarioPorId(id_usuario);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id inválida.");
+        }
+
+        if (usuarioOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        }
+
+        usuarioService.delete(usuarioOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário " + usuarioOptional.get().getNome() + " apagado com sucesso.");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> deletarUsuarioLogado() {
+
+        UsuarioModel usuarioLogado = usuarioService.pegarUsuarioLogado();
+        usuarioService.delete(usuarioLogado);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuario " + usuarioLogado.getNome() + " apagado com sucesso.");
+    }
+
+
     @GetMapping
     public ResponseEntity<UsuarioViewDTO> buscarUsuarioLogado() {
         UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioService.pegarUsuarioLogado());
@@ -83,50 +130,5 @@ public class UsuarioController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());
-    }
-
-    @DeleteMapping("/{id_usuario}")
-    public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "id_usuario") String id_usuario) {
-
-        Optional<UsuarioModel> usuarioOptional = null;
-        try {
-            usuarioOptional = usuarioService.buscarUsuarioPorId(id_usuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id inválida.");
-        }
-
-        if (usuarioOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
-        }
-
-        usuarioService.delete(usuarioOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Usuário "+usuarioOptional.get().getNome()+" apagado com sucesso.");
-    }
-
-    @DeleteMapping
-    public ResponseEntity<Object> deletarUsuarioLogado() {
-
-        UsuarioModel usuarioLogado = usuarioService.pegarUsuarioLogado();
-        usuarioService.delete(usuarioLogado);
-        return ResponseEntity.status(HttpStatus.OK).body("Usuario " + usuarioLogado.getNome() + " apagado com sucesso.");
-    }
-
-    @PutMapping
-    public ResponseEntity<Object> atualizarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
-
-        UsuarioModel usuarioLogado = usuarioService.pegarUsuarioLogado();
-
-        Object validador = usuarioService.validaAtualizacaoUsuario(usuarioLogado,usuarioDTO, errosDeValidacao);
-
-        if (validador instanceof List<?>) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
-        }
-
-        UsuarioModel usuarioModel = (UsuarioModel) validador;
-        usuarioService.salvarUsuario(usuarioModel);
-        papelDoUsuarioService.salvarPapelDoUsuario(
-                new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
-        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioModel);
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioViewDTO);
     }
 }

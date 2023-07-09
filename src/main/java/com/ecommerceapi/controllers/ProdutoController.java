@@ -54,52 +54,6 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvarProduto(produtoModel));
     }
 
-
-    @GetMapping
-    public ResponseEntity<List<ProdutoModel>> buscarProdutos() {
-        return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscarProdutos());
-    }
-
-    @GetMapping("/id/{id_produto}")
-    public ResponseEntity<Object> buscarProdutoPorId(@PathVariable(value = "id_produto") String id_produto) {
-
-
-        UUID id = ConversorUUID.converteUUID(id_produto);
-        if (id_produto.equals("") || id == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
-
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-        if (!produtoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
-    }
-
-    @GetMapping("/nome/{nome}")
-    public ResponseEntity<Object> buscarProdutosPorNome(@PathVariable(value = "nome") String nome) {
-        Optional<List<ProdutoModel>> produtoOptional = produtoService.pesquisarProdutos(nome);
-        if (produtoOptional.get().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
-    }
-
-    @DeleteMapping("/{id_produto}")
-    public ResponseEntity<Object> deletarProduto(@PathVariable(value = "id_produto") String id_produto) {
-
-        UUID id = ConversorUUID.converteUUID(id_produto);
-        if (id_produto.equals("") || id == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
-
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-        if (!produtoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
-
-        produtoService.apagarProduto(produtoOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Produto apagado com sucesso.");
-    }
-
     @PutMapping("/{id_produto}")
     public ResponseEntity<Object> atualizarProduto(@PathVariable(value = "id_produto") String id_produto,
                                                    @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult bindingResult) {
@@ -163,5 +117,51 @@ public class ProdutoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.salvarProduto(produtoModel));
     }
+
+    @DeleteMapping("/{id_produto}")
+    public ResponseEntity<Object> deletarProduto(@PathVariable(value = "id_produto") String id_produto) {
+
+        UUID id = ConversorUUID.converteUUID(id_produto);
+        if (id_produto.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
+        if (!produtoOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        }
+
+        produtoService.apagarProduto(produtoOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Produto apagado com sucesso.");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProdutoModel>> buscarProdutos() {
+        return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscarProdutos());
+    }
+
+    @GetMapping("/id/{id_produto}")
+    public ResponseEntity<Object> buscarProdutoPorId(@PathVariable(value = "id_produto") String id_produto) {
+
+
+        UUID id = ConversorUUID.converteUUID(id_produto);
+        if (id_produto.equals("") || id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+
+        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
+        if (!produtoOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Object> buscarProdutosPorNome(@PathVariable(value = "nome") String nome) {
+        Optional<List<ProdutoModel>> produtoOptional = produtoService.pesquisarProdutos(nome);
+        if (produtoOptional.get().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
+    }
+
 
 }
