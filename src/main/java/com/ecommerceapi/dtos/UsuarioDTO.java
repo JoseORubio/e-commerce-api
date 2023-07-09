@@ -7,7 +7,8 @@ public class UsuarioDTO {
 
     @NotBlank
     @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres.")
-    @Pattern(regexp = "[A-Z][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*", message = "Deve obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula.")
+    @Pattern(regexp = "[A-Z\\u00C0-\\u00FF][a-zA-Z\\u00C0-\\u00FF]+(\\s([a-zA-Z\\u00C0-\\u00FF])+)*",
+            message = "Deve conter apenas letras e obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula.")
     private String nome;
 
     public String getNome() {
@@ -48,7 +49,7 @@ public class UsuarioDTO {
 
 
     @NotBlank
-    @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido. Digite apenas números.")
+    @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido.")
     private String cpf;
 
     public String getCpf() {

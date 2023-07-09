@@ -76,7 +76,7 @@ public class UsuarioController {
 
         Optional<List<UsuarioModel>> usuarioOptional = usuarioService.pesquisarUsuariosPorNome(nome);
         if (usuarioOptional.get().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuário encontrado.");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());

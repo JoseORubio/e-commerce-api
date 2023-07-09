@@ -44,15 +44,15 @@ public class UsuarioService {
         usuarioRepository.delete(usuarioModel);
     }
 
-    public boolean existsByLogin(String login) {
+    private boolean existsByLogin(String login) {
         return usuarioRepository.existsByLogin(login);
     }
 
-    public boolean existsByCpf(String cpf) {
+    private boolean existsByCpf(String cpf) {
         return usuarioRepository.existsByCpf(cpf);
     }
 
-    public boolean existsByEmail(String email) {
+    private boolean existsByEmail(String email) {
         return usuarioRepository.existsByEmail(email);
     }
 
@@ -67,7 +67,7 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Optional<UsuarioModel> buscarUsuarioPorLogin(String login) {
+    private Optional<UsuarioModel> buscarUsuarioPorLogin(String login) {
         return usuarioRepository.findByLogin(login);
     }
 
