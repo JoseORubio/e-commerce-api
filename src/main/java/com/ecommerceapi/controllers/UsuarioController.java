@@ -1,6 +1,7 @@
 package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.dtos.UsuarioDTO;
+import com.ecommerceapi.dtos.UsuarioViewDTO;
 import com.ecommerceapi.models.PapelDoUsuarioModel;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.PapelDoUsuarioService;
@@ -41,12 +42,14 @@ public class UsuarioController {
         papelDoUsuarioService.salvarPapelDoUsuario(
                 new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModel);
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioViewDTO);
     }
 
     @GetMapping
-    public ResponseEntity<UsuarioModel> buscarUsuarioLogado() {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.pegarUsuarioLogado());
+    public ResponseEntity<UsuarioViewDTO> buscarUsuarioLogado() {
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioService.pegarUsuarioLogado());
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioViewDTO);
     }
 
     @GetMapping("/todos")
@@ -123,7 +126,7 @@ public class UsuarioController {
         usuarioService.salvarUsuario(usuarioModel);
         papelDoUsuarioService.salvarPapelDoUsuario(
                 new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
-
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioModel);
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioModel);
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioViewDTO);
     }
 }

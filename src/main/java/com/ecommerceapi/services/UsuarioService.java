@@ -1,6 +1,7 @@
 package com.ecommerceapi.services;
 
 import com.ecommerceapi.dtos.UsuarioDTO;
+import com.ecommerceapi.dtos.UsuarioViewDTO;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.repositories.UsuarioRepository;
 import com.ecommerceapi.utils.CEPUtils;
@@ -39,51 +40,6 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioModel);
     }
 
-    @Transactional
-    public void delete(UsuarioModel usuarioModel) {
-        usuarioRepository.delete(usuarioModel);
-    }
-
-    private boolean existsByLogin(String login) {
-        return usuarioRepository.existsByLogin(login);
-    }
-
-    private boolean existsByCpf(String cpf) {
-        return usuarioRepository.existsByCpf(cpf);
-    }
-
-    private boolean existsByEmail(String email) {
-        return usuarioRepository.existsByEmail(email);
-    }
-
-    public List<UsuarioModel> buscarUsuarios() {
-        return usuarioRepository.findByOrderByNome();
-    }
-
-    public Optional<UsuarioModel> buscarUsuarioPorId(String id_usuario) {
-        UUID id = ConversorUUID.converteUUID(id_usuario);
-        if (id_usuario.equals("") || id == null)
-            throw new RuntimeException();
-        return usuarioRepository.findById(id);
-    }
-
-    private Optional<UsuarioModel> buscarUsuarioPorLogin(String login) {
-        return usuarioRepository.findByLogin(login);
-    }
-
-    public Optional<List<UsuarioModel>> pesquisarUsuariosPorNome(String nome) {
-        return usuarioRepository.pesquisarUsuarios(nome);
-    }
-
-    public UsuarioModel pegarUsuarioLogado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if ((authentication instanceof AnonymousAuthenticationToken)) {
-            return null;
-        }
-        String login = authentication.getName();
-        UsuarioModel usuarioModel = buscarUsuarioPorLogin(login).get();
-        return usuarioModel;
-    }
 
     public Object validaCadastroUsuario(UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
 
@@ -136,6 +92,61 @@ public class UsuarioService {
 
         return usuarioModel;
     }
+
+    @Transactional
+    public void delete(UsuarioModel usuarioModel) {
+        usuarioRepository.delete(usuarioModel);
+    }
+
+
+    public List<UsuarioModel> buscarUsuarios() {
+        return usuarioRepository.findByOrderByNome();
+    }
+
+    public UsuarioViewDTO mostrarUsuario(UsuarioModel usuarioModel) {
+        UsuarioViewDTO usuarioViewDTO = new UsuarioViewDTO();
+        BeanUtils.copyProperties(usuarioModel, usuarioViewDTO);
+        return usuarioViewDTO;
+    }
+
+    public Optional<UsuarioModel> buscarUsuarioPorId(String id_usuario) {
+        UUID id = ConversorUUID.converteUUID(id_usuario);
+        if (id_usuario.equals("") || id == null)
+            throw new RuntimeException();
+        return usuarioRepository.findById(id);
+    }
+
+    public Optional<List<UsuarioModel>> pesquisarUsuariosPorNome(String nome) {
+        return usuarioRepository.pesquisarUsuarios(nome);
+    }
+
+    public UsuarioModel pegarUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if ((authentication instanceof AnonymousAuthenticationToken)) {
+            return null;
+        }
+        String login = authentication.getName();
+        UsuarioModel usuarioModel = buscarUsuarioPorLogin(login).get();
+        return usuarioModel;
+    }
+
+
+    private boolean existsByLogin(String login) {
+        return usuarioRepository.existsByLogin(login);
+    }
+
+    private boolean existsByCpf(String cpf) {
+        return usuarioRepository.existsByCpf(cpf);
+    }
+
+    private boolean existsByEmail(String email) {
+        return usuarioRepository.existsByEmail(email);
+    }
+
+    private Optional<UsuarioModel> buscarUsuarioPorLogin(String login) {
+        return usuarioRepository.findByLogin(login);
+    }
+
 
     private Object validaPorRegrasDeNegocio(List<List<String>> listaErros, UsuarioDTO usuarioDTO) {
 

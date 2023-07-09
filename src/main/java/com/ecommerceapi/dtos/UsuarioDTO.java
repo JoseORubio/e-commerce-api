@@ -11,6 +11,45 @@ public class UsuarioDTO {
             message = "Deve conter apenas letras e obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula.")
     private String nome;
 
+    @NotBlank
+    @Size(min = 8, max = 20, message = "Login deve ter entre {min} e {max} caracteres.")
+    @Pattern(regexp = "^(?=.*[a-z])[a-z\\d_]+$", message = "Deve conter apenas números ou '_', e pelo menos uma letra minúscula.")
+    private String login;
+
+    @NotBlank
+    @Size(min = 8, max = 20, message = "Senha deve ter entre {min} e {max} caracteres.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
+            message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número.")
+    private String senha;
+
+    @NotBlank
+    @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido.")
+    private String cpf;
+    @NotBlank
+    @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Deve estar no formato: 'dd/MM/yyyy'.")
+    private String data_nasc;
+
+    @NotBlank
+    @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro.")
+    private String sexo;
+
+    @NotBlank
+    @Pattern(regexp = "^\\(\\d{2}\\)\\d{5}\\-\\d{4}$", message = "Deve seguir o padrão, contendo DDD: (12)12345-1234.")
+    private String telefone;
+
+    @NotBlank
+    @Email(message = "E-mail inválido.")
+    @Size(max = 50, message = "E-mail deve ter no máximo {max} caracteres.")
+    private String email;
+
+    @NotEmpty
+    @Pattern(regexp = "\\d{5}-\\d{3}", message = "Siga o padrão 12345-678.")
+    private String cep;
+
+    @NotBlank
+    @Pattern(regexp = "^[1-9]\\d{0,4}$", message = "Deve ser qualquer número entre 1 e 99999.")
+    private String numero_rua;
+
     public String getNome() {
         return nome;
     }
@@ -19,11 +58,6 @@ public class UsuarioDTO {
         this.nome = nome;
     }
 
-    @NotBlank
-    @Size(min = 8, max = 20, message = "Login deve ter entre {min} e {max} caracteres.")
-    @Pattern(regexp = "^(?=.*[a-z])[a-z\\d_]+$", message = "Deve conter apenas números ou '_', e pelo menos uma letra minúscula.")
-    private String login;
-
     public String getLogin() {
         return login;
     }
@@ -31,12 +65,6 @@ public class UsuarioDTO {
     public void setLogin(String login) {
         this.login = login;
     }
-
-    @NotBlank
-    @Size(min = 8, max = 20, message = "Senha deve ter entre {min} e {max} caracteres.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,20}$",
-            message = "Deve conter ao menos uma letra maiúscula, uma minúscula e um número.")
-    private String senha;
 
     public String getSenha() {
         return senha;
@@ -47,11 +75,6 @@ public class UsuarioDTO {
     }
 
 
-
-    @NotBlank
-    @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido.")
-    private String cpf;
-
     public String getCpf() {
         return cpf;
     }
@@ -61,10 +84,6 @@ public class UsuarioDTO {
     }
 
 
-    @NotBlank
-    @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Deve estar no formato: 'dd/MM/yyyy'.")
-    private String data_nasc;
-
     public String getData_nasc() {
         return data_nasc;
     }
@@ -73,9 +92,6 @@ public class UsuarioDTO {
         this.data_nasc = data_nasc;
     }
 
-    @NotBlank
-    @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro.")
-    private String sexo;
 
     public String getSexo() {
         return sexo;
@@ -85,9 +101,6 @@ public class UsuarioDTO {
         this.sexo = sexo;
     }
 
-    @NotBlank
-    @Pattern(regexp = "^\\(\\d{2}\\)\\d{5}\\-\\d{4}$", message = "Deve seguir o padrão, contendo DDD: (12)12345-1234.")
-    private String telefone;
 
     public String getTelefone() {
         return telefone;
@@ -97,10 +110,6 @@ public class UsuarioDTO {
         this.telefone = telefone;
     }
 
-    @NotBlank
-    @Email(message = "E-mail inválido.")
-    @Size(max = 50, message = "E-mail deve ter no máximo {max} caracteres.")
-    private String email;
 
     public String getEmail() {
         return email;
@@ -111,10 +120,6 @@ public class UsuarioDTO {
     }
 
 
-    @NotEmpty
-    @Pattern(regexp = "\\d{5}-\\d{3}", message = "Siga o padrão 12345-678.")
-    private String cep;
-
     public String getCep() {
         return cep;
     }
@@ -123,10 +128,6 @@ public class UsuarioDTO {
         this.cep = cep;
     }
 
-
-    @NotBlank
-    @Pattern(regexp ="^[1-9]\\d{0,4}$", message = "Deve ser qualquer número entre 1 e 99999.")
-    private String  numero_rua;
 
     public String getNumero_rua() {
         return numero_rua;
