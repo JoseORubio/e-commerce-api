@@ -93,6 +93,46 @@ public class UsuarioService {
         return usuarioModel;
     }
 
+    private Object validaPorRegrasDeNegocio(List<List<String>> listaErros, UsuarioDTO usuarioDTO) {
+
+        ValidatorUtils validatorUtils = new ValidatorUtils(listaErros);
+        UsuarioModel usuarioModel = new UsuarioModel();
+        BeanUtils.copyProperties(usuarioDTO, usuarioModel);
+
+        if (usuarioModel.getLogin() != null
+                && existsByLogin(usuarioModel.getLogin())) {
+            validatorUtils.adicionarErros("login", "Login já utilizado.");
+        }
+        if (usuarioModel.getCpf() != null
+                && existsByCpf(usuarioModel.getCpf())) {
+            validatorUtils.adicionarErros("cpf", "CPF já utilizado.");
+        }
+        if (usuarioModel.getEmail() != null
+                && existsByEmail(usuarioModel.getEmail())) {
+            validatorUtils.adicionarErros("email", "Email já utilizado.");
+        }
+
+        if (usuarioModel.getCep() != null) {
+            try {
+                usuarioModel = new CEPUtils().retornaCep(usuarioModel);
+            } catch (RuntimeException e) {
+                validatorUtils.adicionarErros("cep", "CEP não existe.");
+            }
+        }
+
+        if (usuarioDTO.getData_nasc() != null) {
+            try {
+                usuarioModel.setData_nasc(LocalDate.parse(usuarioDTO.getData_nasc()
+                        , DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT)));
+            } catch (DateTimeParseException e) {
+                validatorUtils.adicionarErros("data_nasc", "Data inválida.");
+            }
+        }
+
+        if (!validatorUtils.getListaErros().isEmpty()) return validatorUtils.getListaErros();
+        return usuarioModel;
+    }
+
     @Transactional
     public void delete(UsuarioModel usuarioModel) {
         usuarioRepository.delete(usuarioModel);
@@ -142,44 +182,5 @@ public class UsuarioService {
         return usuarioRepository.existsByEmail(email);
     }
 
-    private Object validaPorRegrasDeNegocio(List<List<String>> listaErros, UsuarioDTO usuarioDTO) {
-
-        ValidatorUtils validatorUtils = new ValidatorUtils(listaErros);
-        UsuarioModel usuarioModel = new UsuarioModel();
-        BeanUtils.copyProperties(usuarioDTO, usuarioModel);
-
-        if (usuarioModel.getLogin() != null
-                && existsByLogin(usuarioModel.getLogin())) {
-            validatorUtils.adicionarErros("login", "Login já utilizado.");
-        }
-        if (usuarioModel.getCpf() != null
-                && existsByCpf(usuarioModel.getCpf())) {
-            validatorUtils.adicionarErros("cpf", "CPF já utilizado.");
-        }
-        if (usuarioModel.getEmail() != null
-                && existsByEmail(usuarioModel.getEmail())) {
-            validatorUtils.adicionarErros("email", "Email já utilizado.");
-        }
-
-        if (usuarioModel.getCep() != null) {
-            try {
-                usuarioModel = new CEPUtils().retornaCep(usuarioModel);
-            } catch (RuntimeException e) {
-                validatorUtils.adicionarErros("cep", "CEP não existe.");
-            }
-        }
-
-        if (usuarioDTO.getData_nasc() != null) {
-            try {
-                usuarioModel.setData_nasc(LocalDate.parse(usuarioDTO.getData_nasc()
-                        , DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT)));
-            } catch (DateTimeParseException e) {
-                validatorUtils.adicionarErros("data_nasc", "Data inválida.");
-            }
-        }
-
-        if (!validatorUtils.getListaErros().isEmpty()) return validatorUtils.getListaErros();
-        return usuarioModel;
-    }
 
 }

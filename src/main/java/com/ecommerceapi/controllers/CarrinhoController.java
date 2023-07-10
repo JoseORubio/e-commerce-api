@@ -33,49 +33,49 @@ public class CarrinhoController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto,
-                                                 @RequestParam("quantidade") String quantidadeString) {
-        UUID id = ConversorUUID.converteUUID(id_produto);
-        if (id_produto.equals("") || id == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id do produto inválida");
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-        if (!produtoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
-
-        int quantidade;
-        try {
-            quantidade = Integer.parseInt(quantidadeString);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-        }
-
-        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-
-        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
-                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
-
-        if (carrinhoExistente.isPresent()) {
-            if (carrinhoExistente.get().getQuantidade() + quantidade > produtoOptional.get().getQuantidade_estoque()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
-            } else {
-                carrinhoExistente.get().setQuantidade(carrinhoExistente.get().getQuantidade() + quantidade);
-                carrinhoService.inserirCarrinho(carrinhoExistente.get());
-                return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
-            }
-
-        }
-
-        if (quantidade > produtoOptional.get().getQuantidade_estoque()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
-        }
-
-        CarrinhoModel carrinho = new CarrinhoModel(usuarioService.pegarUsuarioLogado(), produtoOptional.get(), quantidade);
-        carrinhoService.inserirCarrinho(carrinho);
-        return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
-    }
+//    @PostMapping
+//    public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto,
+//                                                 @RequestParam("quantidade") String quantidadeString) {
+//        UUID id = ConversorUUID.converteUUID(id_produto);
+//        if (id_produto.equals("") || id == null)
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id do produto inválida");
+//        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
+//        if (!produtoOptional.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+//        }
+//
+//        int quantidade;
+//        try {
+//            quantidade = Integer.parseInt(quantidadeString);
+//        } catch (NumberFormatException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
+//        }
+//
+//        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
+//
+//        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
+//        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
+//                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
+//
+//        if (carrinhoExistente.isPresent()) {
+//            if (carrinhoExistente.get().getQuantidade() + quantidade > produtoOptional.get().getQuantidade_estoque()) {
+//                return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
+//            } else {
+//                carrinhoExistente.get().setQuantidade(carrinhoExistente.get().getQuantidade() + quantidade);
+//                carrinhoService.inserirCarrinho(carrinhoExistente.get());
+//                return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
+//            }
+//
+//        }
+//
+//        if (quantidade > produtoOptional.get().getQuantidade_estoque()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
+//        }
+//
+//        CarrinhoModel carrinho = new CarrinhoModel(usuarioService.pegarUsuarioLogado(), produtoOptional.get(), quantidade);
+//        carrinhoService.inserirCarrinho(carrinho);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
+//    }
 
     @GetMapping
     public ResponseEntity<Object> verCarrinho() {
@@ -100,29 +100,29 @@ public class CarrinhoController {
     }
 
 
-    @DeleteMapping("/{id_produto}")
-    public ResponseEntity<Object> removeItemCarrinho(@PathVariable(value = "id_produto") String id_produto) {
-
-        UUID id = ConversorUUID.converteUUID(id_produto);
-        if (id_produto.equals("") || id == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-        if (produtoOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
-
-        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
-                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
-
-        if (carrinhoExistente.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body("Produto não encontrado neste carrinho.");
-        }
-
-        carrinhoService.apagarItemCarrinho(carrinhoExistente.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Item " + carrinhoExistente.get().getProduto().getNome() + " removido.");
-
-    }
+//    @DeleteMapping("/{id_produto}")
+//    public ResponseEntity<Object> removeItemCarrinho(@PathVariable(value = "id_produto") String id_produto) {
+//
+//        UUID id = ConversorUUID.converteUUID(id_produto);
+//        if (id_produto.equals("") || id == null)
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+//        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
+//        if (produtoOptional.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+//        }
+//
+//        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
+//        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
+//                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
+//
+//        if (carrinhoExistente.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.OK).body("Produto não encontrado neste carrinho.");
+//        }
+//
+//        carrinhoService.apagarItemCarrinho(carrinhoExistente.get());
+//        return ResponseEntity.status(HttpStatus.OK).body("Item " + carrinhoExistente.get().getProduto().getNome() + " removido.");
+//
+//    }
 
     @DeleteMapping
     public ResponseEntity<Object> cancelaCarrinho() {
@@ -138,77 +138,77 @@ public class CarrinhoController {
         return ResponseEntity.status(HttpStatus.OK).body("Carrinho cancelado.");
     }
 
-    @PutMapping("/{id_produto}/{quantidade}")
-    public ResponseEntity<Object> alteraItemCarrinho(@PathVariable(value = "id_produto") String id_produto,
-                                                     @PathVariable(value = "quantidade") String quantidadeString) {
+//    @PutMapping("/{id_produto}/{quantidade}")
+//    public ResponseEntity<Object> alteraItemCarrinho(@PathVariable(value = "id_produto") String id_produto,
+//                                                     @PathVariable(value = "quantidade") String quantidadeString) {
+//
+//        UUID id = ConversorUUID.converteUUID(id_produto);
+//        if (id_produto.equals("") || id == null)
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+//        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
+//        if (produtoOptional.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+//        }
+//        int quantidade;
+//        try {
+//            quantidade = Integer.parseInt(quantidadeString);
+//        } catch (NumberFormatException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
+//        }
+//        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
+//
+//        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
+//        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
+//                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
+//
+//        if (carrinhoExistente.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.OK).body("Produto não encontrado neste carrinho.");
+//        }
+//
+//        if (quantidade > carrinhoExistente.get().getProduto().getQuantidade_estoque()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
+//        }
+//        carrinhoExistente.get().setQuantidade(quantidade);
+//        carrinhoService.inserirCarrinho(carrinhoExistente.get());
+//        return ResponseEntity.status(HttpStatus.OK).body(String.format("Item %s alterado.",
+//                carrinhoExistente.get().getProduto().getNome()));
+//
+//    }
 
-        UUID id = ConversorUUID.converteUUID(id_produto);
-        if (id_produto.equals("") || id == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
-        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-        if (produtoOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-        }
-        int quantidade;
-        try {
-            quantidade = Integer.parseInt(quantidadeString);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-        }
-        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-
-        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
-                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
-
-        if (carrinhoExistente.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body("Produto não encontrado neste carrinho.");
-        }
-
-        if (quantidade > carrinhoExistente.get().getProduto().getQuantidade_estoque()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
-        }
-        carrinhoExistente.get().setQuantidade(quantidade);
-        carrinhoService.inserirCarrinho(carrinhoExistente.get());
-        return ResponseEntity.status(HttpStatus.OK).body(String.format("Item %s alterado.",
-                carrinhoExistente.get().getProduto().getNome()));
-
-    }
-
-    @PostMapping("/venda")
-    public ResponseEntity<Object> confirmaVenda() {
-        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-        Optional<List<CarrinhoModel>> carrinhoExistente = carrinhoService.buscarCarrinhoDoUsuario(usuario);
-
-        if (carrinhoExistente.get().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário " + usuario.getNome() + " não possui carrinho ativo.");
-        }
-
-        for (CarrinhoModel itens : carrinhoExistente.get()) {
-            if (itens.getQuantidade() >
-                    produtoService.buscarProdutoPorId(itens.getProduto().getId()).get().getQuantidade_estoque()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Quantidade de "+ itens.getProduto().getNome() +" indisponível no estoque.");
-            }
-        }
-
-        VendaModel venda = vendaService.salvarVenda(new VendaModel(usuario.getId()));
-
-        for (CarrinhoModel itens : carrinhoExistente.get()) {
-            ProdutoDaVendaModel produtoDaVendaModel = new ProdutoDaVendaModel();
-            produtoDaVendaModel.setId_venda(venda.getId());
-            produtoDaVendaModel.setId_produto(itens.getProduto().getId());
-            produtoDaVendaModel.setQuantidade(itens.getQuantidade());
-            produtoDaVendaService.inserirProduto(produtoDaVendaModel);
-
-            ProdutoModel produtoModel = itens.getProduto();
-            produtoModel.setQuantidade_estoque(produtoModel.getQuantidade_estoque() - itens.getQuantidade());
-            produtoService.salvarProduto(produtoModel);
-        }
-
-        cancelaCarrinho();
-        return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
-    }
+//    @PostMapping("/venda")
+//    public ResponseEntity<Object> confirmaVenda() {
+//        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
+//        Optional<List<CarrinhoModel>> carrinhoExistente = carrinhoService.buscarCarrinhoDoUsuario(usuario);
+//
+//        if (carrinhoExistente.get().isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário " + usuario.getNome() + " não possui carrinho ativo.");
+//        }
+//
+//        for (CarrinhoModel itens : carrinhoExistente.get()) {
+//            if (itens.getQuantidade() >
+//                    produtoService.buscarProdutoPorId(itens.getProduto().getId()).get().getQuantidade_estoque()) {
+//                return ResponseEntity.status(HttpStatus.CONFLICT)
+//                        .body("Quantidade de "+ itens.getProduto().getNome() +" indisponível no estoque.");
+//            }
+//        }
+//
+//        VendaModel venda = vendaService.salvarVenda(new VendaModel(usuario.getId()));
+//
+//        for (CarrinhoModel itens : carrinhoExistente.get()) {
+//            ProdutoDaVendaModel produtoDaVendaModel = new ProdutoDaVendaModel();
+//            produtoDaVendaModel.setId_venda(venda.getId());
+//            produtoDaVendaModel.setId_produto(itens.getProduto().getId());
+//            produtoDaVendaModel.setQuantidade(itens.getQuantidade());
+//            produtoDaVendaService.inserirProduto(produtoDaVendaModel);
+//
+//            ProdutoModel produtoModel = itens.getProduto();
+//            produtoModel.setQuantidade_estoque(produtoModel.getQuantidade_estoque() - itens.getQuantidade());
+//            produtoService.salvarProduto(produtoModel);
+//        }
+//
+//        cancelaCarrinho();
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
+//    }
 
 
 }

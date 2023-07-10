@@ -25,6 +25,7 @@ public class UsuarioDTO {
     @NotBlank
     @CPF(message = "Número do registro de contribuinte individual brasileiro (CPF) inválido.")
     private String cpf;
+
     @NotBlank
     @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Deve estar no formato: 'dd/MM/yyyy'.")
     private String data_nasc;
