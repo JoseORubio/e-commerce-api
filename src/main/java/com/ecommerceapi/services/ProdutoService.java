@@ -55,14 +55,14 @@ public class ProdutoService {
         if (produtoDTO.getNome() != null
                 && produtoDTO.getNome().equals(produtoModel.getNome()))
             produtoDTO.setNome(null);
-        Object validacaoProduto = validaPorRegrasDeNegocio(listaErros,produtoDTO);
+        Object validacaoProduto = validaPorRegrasDeNegocio(listaErros, produtoDTO);
         if (validacaoProduto instanceof List<?>) {
             return ValidatorUtils.converteListaErrosParaMap((List<List<String>>) validacaoProduto);
         }
 
         ProdutoModel produtoValidadoModel = (ProdutoModel) validacaoProduto;
 
-        if(produtoValidadoModel.getNome() == null)
+        if (produtoValidadoModel.getNome() == null)
             produtoValidadoModel.setNome(produtoModel.getNome());
 
         produtoValidadoModel.setId(produtoModel.getId());
@@ -85,6 +85,11 @@ public class ProdutoService {
         return produtoModel;
     }
 
+    @Transactional
+    public void apagarProduto(ProdutoModel produtoModel) {
+        produtoRepository.delete(produtoModel);
+    }
+
     public boolean existsByNome(String nome) {
         return produtoRepository.existsByNome(nome);
     }
@@ -102,11 +107,6 @@ public class ProdutoService {
 
     public Optional<List<ProdutoModel>> pesquisarProdutos(String nome) {
         return produtoRepository.pesquisarProdutos(nome);
-    }
-
-    @Transactional
-    public void apagarProduto(ProdutoModel produtoModel) {
-        produtoRepository.delete(produtoModel);
     }
 
 

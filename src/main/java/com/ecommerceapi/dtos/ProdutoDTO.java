@@ -8,7 +8,7 @@ public class ProdutoDTO {
 
     @NotBlank
     @Pattern(regexp = "[\\w\\u00C0-\\u00FF\\/\\\\#%&()\\-']+(\\s([\\w\\u00C0-\\u00FF\\/\\\\#(),.\\-'])+)*",
-            message = "Pode conter qualquer letra, número e os seguintes caracteres: , . / \\ # ( ) - .")
+            message = "Pode conter qualquer letra, número e os seguintes caracteres: , . /  # ( ) -")
     @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres.")
     private String nome;
 
@@ -17,7 +17,7 @@ public class ProdutoDTO {
     private String quantidade_estoque;
 
     @NotBlank
-    @Pattern(regexp ="^\\d{1,6}([,|.]\\d{1,2})?$", message = "Deve ser qualquer valor monetário até 9999,99, com dois dígitos após , ou .")
+    @Pattern(regexp ="^\\d{1,6}([,|.]\\d{1,2})?$", message = "Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .")
     private String preco;
 
     public String getNome() {
