@@ -14,7 +14,7 @@ public class ProdutoDaVendaService {
     }
 
     @Transactional
-    public ProdutoDaVendaModel inserirProduto(ProdutoDaVendaModel produtoDaVendaModel){
+    public ProdutoDaVendaModel salvarProdutoVendido(ProdutoDaVendaModel produtoDaVendaModel){
         return  produtoDaVendaRepository.save(produtoDaVendaModel);
     }
 }

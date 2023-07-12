@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-//@Entity @Table(name = "pdv_teste")
 @Entity @Table(name = "produtos_da_venda")
 public class ProdutoDaVendaModel implements Serializable {
     private final static long serialVersionUID = 1L;
@@ -18,28 +17,11 @@ public class ProdutoDaVendaModel implements Serializable {
     private int quantidade;
     private BigDecimal valor_total_produto;
 
-//    @ManyToOne
-//    @JoinColumn(name = "id_venda",referencedColumnName = "id" , updatable = false)
-//    private VendaModel venda;
-//    @ManyToOne
-//    @JoinColumn(name = "id_produto",referencedColumnName = "id",  updatable = false)
-//    private ProdutoModel produto;
-//
-//    public VendaModel getVenda() {
-//        return venda;
-//    }
-//
-//    public void setVenda(VendaModel venda) {
-//        this.venda = venda;
-//    }
-//
-//    public ProdutoModel getProduto() {
-//        return produto;
-//    }
-//
-//    public void setProduto(ProdutoModel produto) {
-//        this.produto = produto;
-//    }
+    public ProdutoDaVendaModel(UUID id_venda, UUID id_produto, int quantidade) {
+        this.id_venda = id_venda;
+        this.id_produto = id_produto;
+        this.quantidade = quantidade;
+    }
 
     public UUID getId_item_venda() {
         return id_item_venda;

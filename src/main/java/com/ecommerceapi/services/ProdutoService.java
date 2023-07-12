@@ -37,7 +37,6 @@ public class ProdutoService {
         Object validacaoProduto = validaPorRegrasDeNegocio(listaErros, produtoDTO);
 
         if (validacaoProduto instanceof List<?>) {
-//            return (List<List<String>>) validacaoProduto;
             return ValidatorUtils.converteListaErrosParaMap((List<List<String>>) validacaoProduto);
         }
 
@@ -90,6 +89,11 @@ public class ProdutoService {
         produtoRepository.delete(produtoModel);
     }
 
+    public void baixarEstoqueProduto(ProdutoModel produtoModel, int quantidade){
+        produtoModel.setQuantidade_estoque
+                (produtoModel.getQuantidade_estoque() - quantidade);
+        salvarProduto(produtoModel);
+    }
     public boolean existsByNome(String nome) {
         return produtoRepository.existsByNome(nome);
     }
