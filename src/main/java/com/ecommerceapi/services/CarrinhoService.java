@@ -29,8 +29,8 @@ public class CarrinhoService {
     }
 
     public Object validaInsercaoProduto(UsuarioModel usuarioModel, ProdutoModel produtoModel, String quantidadeString) {
-        Object validacaoCarrinho = validaPorRegrasDeNegocio(usuarioModel, produtoModel, quantidadeString);
 
+        Object validacaoCarrinho = validaPorRegrasDeNegocio(usuarioModel, produtoModel, quantidadeString);
         if (validacaoCarrinho instanceof String) {
             return validacaoCarrinho;
         }
@@ -39,7 +39,6 @@ public class CarrinhoService {
     }
 
     private Object validaPorRegrasDeNegocio(UsuarioModel usuarioModel, ProdutoModel produtoModel, String quantidadeString) {
-
 
         Integer quantidade = null;
         try {
@@ -50,19 +49,17 @@ public class CarrinhoService {
         } catch (NumberFormatException e) {
             return "Quantidade inválida.";
         }
-        Optional<CarrinhoModel> carrinhoExistente = buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel);
 
-        if (carrinhoExistente.isPresent()) {
-            if (carrinhoExistente.get().getQuantidade() + quantidade > produtoModel.getQuantidade_estoque()) {
-                return "Quantidade indisponível no estoque.";
-            } else {
-                carrinhoExistente.get().setQuantidade(carrinhoExistente.get().getQuantidade() + quantidade);
-                return carrinhoExistente.get();
-            }
-        }
         if (quantidade > produtoModel.getQuantidade_estoque()) {
             return "Quantidade indisponível no estoque.";
         }
+
+        Optional<CarrinhoModel> carrinhoExistente = buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel);
+        if (carrinhoExistente.isPresent()) {
+                carrinhoExistente.get().setQuantidade(quantidade);
+                return carrinhoExistente.get();
+            }
+
         return new CarrinhoModel(usuarioModel, produtoModel, quantidade);
     }
 

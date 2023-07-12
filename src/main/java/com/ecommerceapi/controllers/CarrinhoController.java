@@ -33,7 +33,7 @@ public class CarrinhoController {
     }
 
 
-    @PostMapping
+    @RequestMapping(method = {RequestMethod.POST,RequestMethod.PUT})
     public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto,
                                                  @RequestParam("quantidade") String quantidadeString) {
 
@@ -50,94 +50,15 @@ public class CarrinhoController {
 
         UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
         Object validador = carrinhoService.validaInsercaoProduto(usuario, produtoOptional.get(), quantidadeString);
-
         if (validador instanceof String) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
         }
 
-        CarrinhoModel carrinhoModel = (CarrinhoModel) validador;
-        carrinhoService.inserirCarrinho(carrinhoModel);
+        carrinhoService.inserirCarrinho((CarrinhoModel) validador);
 
-//        UUID id = ConversorUUID.converteUUID(id_produto);
-//        if (id_produto.equals("") || id == null)
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id do produto inválida");
-//        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-//        if (!produtoOptional.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-//        }
-
-//        int quantidade;
-//        try {
-//            quantidade = Integer.parseInt(quantidadeString);
-//        } catch (NumberFormatException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-//        }
-//
-//        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-//
-//        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-//        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
-//                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
-//
-//        if (carrinhoExistente.isPresent()) {
-//            if (carrinhoExistente.get().getQuantidade() + quantidade > produtoOptional.get().getQuantidade_estoque()) {
-//                return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
-//            } else {
-//                carrinhoExistente.get().setQuantidade(carrinhoExistente.get().getQuantidade() + quantidade);
-//                carrinhoService.inserirCarrinho(carrinhoExistente.get());
-//                return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
-//            }
-//
-//        }
-//
-//        if (quantidade > produtoOptional.get().getQuantidade_estoque()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
-//        }
-
-//        CarrinhoModel carrinho = new CarrinhoModel(usuarioService.pegarUsuarioLogado(), produtoOptional.get(), quantidade);
-//        carrinhoService.inserirCarrinho(carrinho);
         return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
     }
 
-
-    //PENSAR EM REMOVER O PUT E FAZER O POST SER PUT TBM
-//    @PutMapping("/{id_produto}/{quantidade}")
-//    public ResponseEntity<Object> alteraItemCarrinho(@PathVariable(value = "id_produto") String id_produto,
-//                                                     @PathVariable(value = "quantidade") String quantidadeString) {
-//
-//        UUID id = ConversorUUID.converteUUID(id_produto);
-//        if (id_produto.equals("") || id == null)
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
-//        Optional<ProdutoModel> produtoOptional = produtoService.buscarProdutoPorId(id);
-//        if (produtoOptional.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
-//        }
-//        int quantidade;
-//        try {
-//            quantidade = Integer.parseInt(quantidadeString);
-//        } catch (NumberFormatException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-//        }
-//        if (quantidade < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantidade inválida.");
-//
-//        UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-//        Optional<CarrinhoModel> carrinhoExistente = carrinhoService
-//                .buscarProdutoDoUsuarioNoCarrinho(usuario, produtoOptional.get());
-//
-//        if (carrinhoExistente.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.OK).body("Produto não encontrado neste carrinho.");
-//        }
-//
-//        if (quantidade > carrinhoExistente.get().getProduto().getQuantidade_estoque()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Quantidade indisponível no estoque.");
-//        }
-//        carrinhoExistente.get().setQuantidade(quantidade);
-//        carrinhoService.inserirCarrinho(carrinhoExistente.get());
-//        return ResponseEntity.status(HttpStatus.OK).body(String.format("Item %s alterado.",
-//                carrinhoExistente.get().getProduto().getNome()));
-//
-//    }
-//
     @GetMapping
     public ResponseEntity<Object> verCarrinho() {
         UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
@@ -150,7 +71,6 @@ public class CarrinhoController {
         List<Map<String, String>> listaItens = new ArrayList<Map<String, String>>();
         for (CarrinhoModel item : carrinhoExistente.get()) {
             Map<String, String> infoItens = new LinkedHashMap<>();
-//            infoItens.put("Id do Produto", String.valueOf(item.getProdutoModel().getId()));
             infoItens.put("Produto", String.valueOf(item.getProduto().getNome()));
             infoItens.put("Preço do produto", String.valueOf(item.getProduto().getPreco()));
             infoItens.put("Quantidade", String.valueOf(item.getQuantidade()));
@@ -184,8 +104,8 @@ public class CarrinhoController {
         }
 
         carrinhoService.apagarItemCarrinho(carrinhoExistente.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Item " + carrinhoExistente.get().getProduto().getNome() + " removido.");
 
+        return ResponseEntity.status(HttpStatus.OK).body("Item " + carrinhoExistente.get().getProduto().getNome() + " removido.");
     }
 
     @DeleteMapping
@@ -220,8 +140,7 @@ public class CarrinhoController {
         }
 
         cancelaCarrinho();
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
     }
-
-
 }
