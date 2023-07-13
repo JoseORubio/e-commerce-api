@@ -8,7 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/produtos")
@@ -51,7 +55,7 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
 
-        Object validador = produtoService.validaAtualizacaoProduto(produtoOptional.get(),produtoDTO, errosDeValidacao);
+        Object validador = produtoService.validaAtualizacaoProduto(produtoOptional.get(), produtoDTO, errosDeValidacao);
 
         if (validador instanceof List<?>) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
@@ -82,7 +86,15 @@ public class ProdutoController {
 
     @GetMapping
     public ResponseEntity<List<ProdutoModel>> buscarProdutos() {
-        return ResponseEntity.status(HttpStatus.OK).body(produtoService.buscarProdutos());
+        List<ProdutoModel> listaProdutos = produtoService.buscarProdutos();
+        if (!listaProdutos.isEmpty()) {
+            for (ProdutoModel produto : listaProdutos) {
+                produto.add(linkTo(
+                        methodOn(ProdutoController.class).buscarProdutoPorId(produto.getId().toString()))
+                        .withSelfRel());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(listaProdutos);
     }
 
     @GetMapping("/id/{id_produto}")
@@ -99,6 +111,10 @@ public class ProdutoController {
         if (produtoOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
+
+        produtoOptional.get().add(linkTo(methodOn(ProdutoController.class).buscarProdutos())
+                .withRel("Lista de Produtos"));
+
         return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
     }
 

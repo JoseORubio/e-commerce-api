@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Table(name = "produtos")
-public class ProdutoModel implements Serializable {
+public class ProdutoModel extends RepresentationModel<ProdutoModel>  implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
