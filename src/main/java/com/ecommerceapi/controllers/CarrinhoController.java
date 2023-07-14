@@ -2,15 +2,12 @@ package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.models.*;
 import com.ecommerceapi.services.*;
-import com.ecommerceapi.utils.ConversorUUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+
 
 
 @RestController
@@ -33,7 +30,7 @@ public class CarrinhoController {
     }
 
 
-    @RequestMapping(method = {RequestMethod.POST,RequestMethod.PUT})
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<Object> inserirProduto(@RequestParam("id_produto") String id_produto,
                                                  @RequestParam("quantidade") String quantidadeString) {
 
@@ -61,6 +58,7 @@ public class CarrinhoController {
 
     @GetMapping
     public ResponseEntity<Object> verCarrinho() {
+
         UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
         Optional<List<CarrinhoModel>> carrinhoExistente = carrinhoService.buscarCarrinhoDoUsuario(usuario);
 
@@ -68,16 +66,9 @@ public class CarrinhoController {
             return ResponseEntity.status(HttpStatus.OK).body("Carrinho vazio");
         }
 
-        List<Map<String, String>> listaItens = new ArrayList<Map<String, String>>();
-        for (CarrinhoModel item : carrinhoExistente.get()) {
-            Map<String, String> infoItens = new LinkedHashMap<>();
-            infoItens.put("Produto", String.valueOf(item.getProduto().getNome()));
-            infoItens.put("Preço do produto", String.valueOf(item.getProduto().getPreco()));
-            infoItens.put("Quantidade", String.valueOf(item.getQuantidade()));
-            infoItens.put("Preço total", String.valueOf(item.getValorTotalProduto()));
-            listaItens.add(infoItens);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(listaItens);
+        List<Object> listaCarrinhoView = carrinhoService.gerarVisualizacaoCarrinho(carrinhoExistente.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body( listaCarrinhoView);
     }
 
 

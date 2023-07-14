@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -42,7 +45,7 @@ public class UsuarioController {
         papelDoUsuarioService.salvarPapelDoUsuario(
                 new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
 
-        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioModel);
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuarioLogado(usuarioModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioViewDTO);
     }
 
@@ -61,7 +64,7 @@ public class UsuarioController {
         usuarioService.salvarUsuario(usuarioModel);
         papelDoUsuarioService.salvarPapelDoUsuario(
                 new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
-        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioModel);
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuarioLogado(usuarioModel);
         return ResponseEntity.status(HttpStatus.OK).body(usuarioViewDTO);
     }
 
@@ -95,13 +98,23 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<UsuarioViewDTO> buscarUsuarioLogado() {
-        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuario(usuarioService.pegarUsuarioLogado());
+        UsuarioViewDTO usuarioViewDTO = usuarioService.mostrarUsuarioLogado(usuarioService.pegarUsuarioLogado());
         return ResponseEntity.status(HttpStatus.OK).body(usuarioViewDTO);
     }
 
     @GetMapping("/todos")
     public ResponseEntity<List<UsuarioModel>> buscarUsuarios() {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.buscarUsuarios());
+
+        List<UsuarioModel> listaUsuarios = usuarioService.buscarUsuarios();
+        if (!listaUsuarios.isEmpty()) {
+            for (UsuarioModel usuario : listaUsuarios) {
+                usuario.add(linkTo(
+                        methodOn(UsuarioController.class).buscarUsuarioPorId(usuario.getId().toString()))
+                        .withSelfRel());
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(listaUsuarios);
     }
 
     @GetMapping("/id/{id_usuario}")
@@ -118,6 +131,10 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
         }
 
+        usuarioOptional.get().add(linkTo(
+                methodOn(UsuarioController.class).buscarUsuarios())
+                .withRel("Lista de Usuários"));
+
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());
     }
 
@@ -127,6 +144,12 @@ public class UsuarioController {
         Optional<List<UsuarioModel>> usuarioOptional = usuarioService.pesquisarUsuariosPorNome(nome);
         if (usuarioOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuário encontrado.");
+        }
+
+        for (UsuarioModel usuario : usuarioOptional.get()) {
+            usuario.add(linkTo(
+                    methodOn(UsuarioController.class).buscarUsuarioPorId(usuario.getId().toString()))
+                    .withSelfRel());
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());

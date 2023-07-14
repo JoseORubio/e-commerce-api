@@ -124,6 +124,11 @@ public class ProdutoController {
         if (produtoOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
+        for (ProdutoModel produto : produtoOptional.get()) {
+            produto.add(linkTo(
+                            methodOn(ProdutoController.class).buscarProdutoPorId(produto.getId().toString()))
+                        .withSelfRel());
+        }
         return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
     }
 

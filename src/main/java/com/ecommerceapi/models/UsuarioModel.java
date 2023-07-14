@@ -3,6 +3,7 @@ package com.ecommerceapi.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "usuarios")
 @DynamicUpdate
-public class UsuarioModel implements UserDetails, Serializable {
+public class UsuarioModel extends RepresentationModel<UsuarioModel> implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

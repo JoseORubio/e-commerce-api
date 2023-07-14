@@ -143,7 +143,7 @@ public class UsuarioService {
         return usuarioRepository.findByOrderByNome();
     }
 
-    public UsuarioViewDTO mostrarUsuario(UsuarioModel usuarioModel) {
+    public UsuarioViewDTO mostrarUsuarioLogado(UsuarioModel usuarioModel) {
         UsuarioViewDTO usuarioViewDTO = new UsuarioViewDTO();
         BeanUtils.copyProperties(usuarioModel, usuarioViewDTO);
         return usuarioViewDTO;
