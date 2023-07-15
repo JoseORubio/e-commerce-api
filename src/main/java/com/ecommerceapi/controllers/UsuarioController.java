@@ -8,6 +8,10 @@ import com.ecommerceapi.services.PapelDoUsuarioService;
 import com.ecommerceapi.services.PapelService;
 import com.ecommerceapi.services.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -103,9 +107,10 @@ public class UsuarioController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<UsuarioModel>> buscarUsuarios() {
+    public ResponseEntity<Page<UsuarioModel>> buscarUsuarios(
+            @PageableDefault(page = 0, size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        List<UsuarioModel> listaUsuarios = usuarioService.buscarUsuarios();
+        Page<UsuarioModel> listaUsuarios = usuarioService.buscarUsuarios(pageable);
         if (!listaUsuarios.isEmpty()) {
             for (UsuarioModel usuario : listaUsuarios) {
                 usuario.add(linkTo(
@@ -113,7 +118,6 @@ public class UsuarioController {
                         .withSelfRel());
             }
         }
-
         return ResponseEntity.status(HttpStatus.OK).body(listaUsuarios);
     }
 
@@ -132,16 +136,18 @@ public class UsuarioController {
         }
 
         usuarioOptional.get().add(linkTo(
-                methodOn(UsuarioController.class).buscarUsuarios())
+                methodOn(UsuarioController.class).buscarUsuarios(Pageable.unpaged()))
                 .withRel("Lista de Usuários"));
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<Object> buscarUsuariosPorNome(@PathVariable(value = "nome") String nome) {
+    public ResponseEntity<Object> buscarUsuariosPorNome(
+            @PathVariable(value = "nome") String nome,
+            @PageableDefault(page = 0, size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Optional<List<UsuarioModel>> usuarioOptional = usuarioService.pesquisarUsuariosPorNome(nome);
+        Optional<Page<UsuarioModel>> usuarioOptional = usuarioService.pesquisarUsuarios(nome, pageable);
         if (usuarioOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuário encontrado.");
         }

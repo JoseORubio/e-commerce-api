@@ -8,6 +8,8 @@ import com.ecommerceapi.utils.ValidatorUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -98,8 +100,9 @@ public class ProdutoService {
         return produtoRepository.existsByNome(nome);
     }
 
-    public List<ProdutoModel> buscarProdutos() {
-        return produtoRepository.findByOrderByNome();
+    public Page<ProdutoModel> buscarProdutos(Pageable pageable) {
+        return produtoRepository.findAll(pageable);
+//        return produtoRepository.findByOrderByNome();
     }
 
     public Optional<ProdutoModel> buscarProdutoPorId(String id_produto) {
@@ -109,8 +112,8 @@ public class ProdutoService {
         return produtoRepository.findById(id);
     }
 
-    public Optional<List<ProdutoModel>> pesquisarProdutos(String nome) {
-        return produtoRepository.pesquisarProdutos(nome);
+    public Optional<Page<ProdutoModel>> pesquisarProdutos(String nome,Pageable pageable ) {
+        return produtoRepository.pesquisarProdutos(nome, pageable);
     }
 
 

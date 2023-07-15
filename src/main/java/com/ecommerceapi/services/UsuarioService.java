@@ -10,6 +10,8 @@ import com.ecommerceapi.utils.ValidatorUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -138,15 +140,14 @@ public class UsuarioService {
         usuarioRepository.delete(usuarioModel);
     }
 
-
-    public List<UsuarioModel> buscarUsuarios() {
-        return usuarioRepository.findByOrderByNome();
-    }
-
     public UsuarioViewDTO mostrarUsuarioLogado(UsuarioModel usuarioModel) {
         UsuarioViewDTO usuarioViewDTO = new UsuarioViewDTO();
         BeanUtils.copyProperties(usuarioModel, usuarioViewDTO);
         return usuarioViewDTO;
+    }
+
+    public Page<UsuarioModel> buscarUsuarios(Pageable pageable) {
+        return usuarioRepository.findAll( pageable);
     }
 
     public Optional<UsuarioModel> buscarUsuarioPorId(String id_usuario) {
@@ -156,8 +157,8 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Optional<List<UsuarioModel>> pesquisarUsuariosPorNome(String nome) {
-        return usuarioRepository.pesquisarUsuarios(nome);
+    public Optional<Page<UsuarioModel>> pesquisarUsuarios(String nome,Pageable pageable) {
+        return usuarioRepository.pesquisarUsuarios(nome, pageable);
     }
 
     public UsuarioModel pegarUsuarioLogado() {

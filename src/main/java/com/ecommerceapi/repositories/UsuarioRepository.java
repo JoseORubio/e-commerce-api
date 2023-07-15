@@ -1,6 +1,8 @@
 package com.ecommerceapi.repositories;
 
 import com.ecommerceapi.models.UsuarioModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,7 +17,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioModel, UUID> {
     boolean existsByCpf(String cpf);
     boolean existsByEmail(String email);
     Optional<UsuarioModel> findByLogin(String login);
-    List<UsuarioModel> findByOrderByNome();
     @Query(value = "select * from usuarios where nome like %?1% order by nome",nativeQuery = true)
-    Optional<List<UsuarioModel>> pesquisarUsuarios(String nome);
+    Optional<Page<UsuarioModel>> pesquisarUsuarios(String nome, Pageable pageable);
 }

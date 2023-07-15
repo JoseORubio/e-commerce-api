@@ -4,6 +4,11 @@ import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.ProdutoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -85,8 +90,9 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoModel>> buscarProdutos() {
-        List<ProdutoModel> listaProdutos = produtoService.buscarProdutos();
+    public ResponseEntity<Page<ProdutoModel>> buscarProdutos(
+            @PageableDefault(page = 0, size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ProdutoModel> listaProdutos = produtoService.buscarProdutos(pageable);
         if (!listaProdutos.isEmpty()) {
             for (ProdutoModel produto : listaProdutos) {
                 produto.add(linkTo(
@@ -112,15 +118,16 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
 
-        produtoOptional.get().add(linkTo(methodOn(ProdutoController.class).buscarProdutos())
+        produtoOptional.get().add(linkTo(methodOn(ProdutoController.class).buscarProdutos(Pageable.unpaged()))
                 .withRel("Lista de Produtos"));
 
         return ResponseEntity.status(HttpStatus.OK).body(produtoOptional.get());
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<Object> buscarProdutosPorNome(@PathVariable(value = "nome") String nome) {
-        Optional<List<ProdutoModel>> produtoOptional = produtoService.pesquisarProdutos(nome);
+    public ResponseEntity<Object> buscarProdutosPorNome(@PathVariable(value = "nome") String nome,
+    @PageableDefault(page = 0, size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
+        Optional<Page<ProdutoModel>> produtoOptional = produtoService.pesquisarProdutos(nome, pageable);
         if (produtoOptional.get().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
