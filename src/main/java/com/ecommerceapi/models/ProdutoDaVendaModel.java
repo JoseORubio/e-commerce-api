@@ -17,6 +17,7 @@ public class ProdutoDaVendaModel implements Serializable {
     private int quantidade;
     private BigDecimal valor_total_produto;
 
+
     public ProdutoDaVendaModel(UUID id_venda, UUID id_produto, int quantidade) {
         this.id_venda = id_venda;
         this.id_produto = id_produto;

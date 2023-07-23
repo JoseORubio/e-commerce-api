@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface ProdutoRepository extends JpaRepository<ProdutoModel, UUID> {
     boolean existsByNome(String nome);
-    @Query(value = "select * from produtos where nome like %?1% order by nome",nativeQuery = true)
+    @Query(value = "select * from produtos where nome like %?1% ",nativeQuery = true)
     Optional<Page<ProdutoModel>> pesquisarProdutos( String nome ,Pageable pageable );
 
 }
