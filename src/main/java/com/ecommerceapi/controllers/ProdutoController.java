@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -32,7 +33,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/produtos")
-@SecurityRequirement(name = "ecommerce")
 @Tag(name = "Produtos", description = "Gerencia os produtos")
 public class ProdutoController {
 
@@ -77,6 +77,7 @@ public class ProdutoController {
                             "    \"message\": \"Forbidden\",\n" +
                             "    \"path\": \"/produtos\"\n" +
                             "}")))})
+    @SecurityRequirement(name = "ecommerce")
     public ResponseEntity<Object> cadastrarProduto(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
@@ -100,6 +101,7 @@ public class ProdutoController {
 
     @PutMapping("/{id_produto}")
     @Operation(summary = "Atualiza os produtos", method = "PUT")
+    @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualização de produto realizado com sucesso",
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
@@ -173,6 +175,7 @@ public class ProdutoController {
 
     @DeleteMapping("/{id_produto}")
     @Operation(summary = "Remove o produto", method = "DELETE")
+    @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Remoção de produto realizado com sucesso",
                     content = @Content(examples = @ExampleObject("Produto Calça apagado com sucesso."))),
@@ -211,7 +214,7 @@ public class ProdutoController {
 
     @GetMapping
     @Operation(summary = "Busca os produtos", method = "GET")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Busca de produtos realizado com sucesso",
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Busca de produtos realizada com sucesso",
             content = @Content(mediaType = "application/json", examples = {@ExampleObject(
                     value = "{\n" +
                             "    \"content\": [\n" +
@@ -323,7 +326,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/id/{id_produto}")
-    @Operation(summary = "Busca os produtos por ID", method = "GET")
+    @Operation(summary = "Busca um produtos por ID", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",
             content = @Content(mediaType = "application/json", examples = {@ExampleObject(
                     value = "{\n" +

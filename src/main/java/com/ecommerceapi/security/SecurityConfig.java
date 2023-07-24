@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -17,7 +19,7 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic()
-                .and()
+                .and().csrf().disable()
                 .authorizeHttpRequests()
 
                 .requestMatchers("/swagger-ui/**").permitAll()
@@ -27,7 +29,7 @@ public class SecurityConfig  {
                 .requestMatchers(HttpMethod.PUT, "/produtos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/produtos/**").hasRole("ADMIN")
 
-                .requestMatchers( HttpMethod.POST,"/usuarios").anonymous()
+                .requestMatchers( HttpMethod.POST,"/usuarios").permitAll()
                 .requestMatchers( HttpMethod.GET,"/usuarios").hasAnyRole("ADMIN","USER")
                 .requestMatchers( HttpMethod.PUT,"/usuarios").hasRole("USER")
                 .requestMatchers( HttpMethod.DELETE,"/usuarios").hasRole("USER")
@@ -36,8 +38,17 @@ public class SecurityConfig  {
                 .requestMatchers( "/itens-carrinho/**").hasRole("USER")
 
                 .anyRequest().authenticated()
-                .and()
-                .csrf().disable();
+//                .and().logout().logoutSuccessUrl("/produtos").clearAuthentication(true)
+//                .invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll()
+        ;
+
+//                .and()
+//                .logout().logoutSuccessUrl("/produtos").invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID").permitAll()
+//                .and()
+//                .logout().logoutUrl("/logout").logoutRequestMatcher( new AntPathRequestMatcher("/logout","GET"))
+//                .and()
+//                .csrf().disable() ;
         return http.build();
     }
 

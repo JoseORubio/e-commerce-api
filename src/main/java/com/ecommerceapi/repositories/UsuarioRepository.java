@@ -17,6 +17,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioModel, UUID> {
     boolean existsByCpf(String cpf);
     boolean existsByEmail(String email);
     Optional<UsuarioModel> findByLogin(String login);
-    @Query(value = "select * from usuarios where nome like %?1% order by nome",nativeQuery = true)
+    @Query(value = "select * from usuarios where nome like %?1%",nativeQuery = true)
     Optional<Page<UsuarioModel>> pesquisarUsuarios(String nome, Pageable pageable);
 }
