@@ -310,7 +310,7 @@ public class ProdutoController {
     @Parameter(in = ParameterIn.QUERY, description = "Resultados por página", name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "5")))
     @Parameter(in = ParameterIn.QUERY, description = "Critério de ordenação. Padronizado pelo campo \"nome\" ascendente. É possível adicionar múltiplos critérios."
-            , name = "sort", content = @Content(array = @ArraySchema(schema = @Schema(type = "string", example = "nome,ASC"))), example = "nome,ASC")
+            , name = "sort")
     public ResponseEntity<Page<ProdutoModel>> buscarProdutos(
             @ParameterObject
             @PageableDefault(page = 0, size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -431,7 +431,7 @@ public class ProdutoController {
     @Parameter(in = ParameterIn.QUERY, description = "Resultados por página", name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "5")))
     @Parameter(in = ParameterIn.QUERY, description = "Critério de ordenação. Padronizado pelo campo \"nome\" ascendente. É possível adicionar múltiplos critérios."
-            , name = "sort", content = @Content(array = @ArraySchema(schema = @Schema(type = "string", example = "nome,ASC"))), example = "nome,ASC")
+            , name = "sort")
     public ResponseEntity<Object> buscarProdutosPorNome(
             @Parameter(example = "Bermuda")
             @PathVariable(value = "nome") String nome,

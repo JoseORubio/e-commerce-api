@@ -57,9 +57,9 @@ public class CarrinhoService {
 
         Optional<CarrinhoModel> carrinhoExistente = buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel);
         if (carrinhoExistente.isPresent()) {
-                carrinhoExistente.get().setQuantidade(quantidade);
-                return carrinhoExistente.get();
-            }
+            carrinhoExistente.get().setQuantidade(quantidade);
+            return carrinhoExistente.get();
+        }
 
         return new CarrinhoModel(usuarioModel, produtoModel, quantidade);
     }
@@ -77,23 +77,26 @@ public class CarrinhoService {
         return carrinhoRepository.findByUsuarioAndProduto(usuario, produto);
     }
 
-    public List<Object> gerarVisualizacaoCarrinho(List<CarrinhoModel> carrinho){
+    public List<Object> gerarVisualizacaoCarrinho(List<CarrinhoModel> carrinhoTotal) {
 
         BigDecimal valorTotalCarrinho = BigDecimal.ZERO;
         List<Object> listaCarrinhoView = new ArrayList<>();
 
-        for (CarrinhoModel carrinhoModel : carrinho) {
-            valorTotalCarrinho = valorTotalCarrinho.add(carrinhoModel.getValorTotalProduto());
+        int quantidadeItens = 0;
+        for (CarrinhoModel produtoIndividual : carrinhoTotal) {
+            valorTotalCarrinho = valorTotalCarrinho.add(produtoIndividual.getValorTotalProduto());
             CarrinhoViewDTO carrinhoViewDTO = new CarrinhoViewDTO();
-            BeanUtils.copyProperties(carrinhoModel, carrinhoViewDTO);
+            BeanUtils.copyProperties(produtoIndividual, carrinhoViewDTO);
             carrinhoViewDTO.getProduto().add((linkTo(
                     methodOn(ProdutoController.class).buscarProdutoPorId(carrinhoViewDTO.getProduto().getId().toString()))
                     .withSelfRel()));
+            quantidadeItens+= produtoIndividual.getQuantidade();
             listaCarrinhoView.add(carrinhoViewDTO);
         }
 
         Map<String, Object> infoItens = new LinkedHashMap<>();
-        infoItens.put("Quantidade de itens", carrinho.size());
+        infoItens.put("Quantidade de itens",quantidadeItens );
+        infoItens.put("Quantidade de produtos", carrinhoTotal.size());
         infoItens.put("Valor total do carrinho", valorTotalCarrinho);
         listaCarrinhoView.add(infoItens);
 

@@ -562,7 +562,7 @@ public class UsuarioController {
     @Parameter(in = ParameterIn.QUERY, description = "Resultados por página", name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "5")))
     @Parameter(in = ParameterIn.QUERY, description = "Critério de ordenação. Padronizado pelo campo \"nome\" ascendente. É possível adicionar múltiplos critérios."
-            , name = "sort", content = @Content(array = @ArraySchema(schema = @Schema(type = "string", example = "nome,ASC"))), example = "nome,ASC")
+            , name = "sort")
     public ResponseEntity<Page<UsuarioModel>> buscarUsuarios(
             @ParameterObject
             @PageableDefault(page = 0, size = 5, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -663,7 +663,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
                     content = @Content(examples = @ExampleObject("Usuário não encontrado.")))})
     public ResponseEntity<Object> buscarUsuarioPorId(
-            @Parameter(content = @Content(examples = @ExampleObject("f9c473bf-afb8-4eb2-9d32-d1c2b9498408")))
+            @Parameter(content = @Content(examples = @ExampleObject("dceeba4a-b80c-42ac-8511-fae017a42bd5")))
             @PathVariable(value = "id_usuario") String id_usuario) {
 
         Optional<UsuarioModel> usuarioOptional = null;
@@ -771,7 +771,7 @@ public class UsuarioController {
     @Parameter(in = ParameterIn.QUERY, description = "Resultados por página", name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "5")))
     @Parameter(in = ParameterIn.QUERY, description = "Critério de ordenação. Padronizado pelo campo \"nome\" ascendente. É possível adicionar múltiplos critérios."
-            , name = "sort", content = @Content(array = @ArraySchema(schema = @Schema(type = "string", example = "nome,ASC"))), example = "nome,ASC")
+            , name = "sort")
     public ResponseEntity<Object> buscarUsuariosPorNome(
             @Parameter(content = @Content(examples = @ExampleObject("Artur")))
             @PathVariable(value = "nome") String nome,

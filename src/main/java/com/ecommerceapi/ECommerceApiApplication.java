@@ -15,7 +15,8 @@ import java.util.List;
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "E-Commerce Swagger", version = "1"
 		, description = "API desenvolvida para sistema de E-Commerce"))
-@SecurityScheme(name = "ecommerce", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "ecommerce", scheme = "basic", type = SecuritySchemeType.HTTP)
+//@SecurityScheme(name = "ecommerce", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class ECommerceApiApplication {
 
 	public static void main(String[] args) {
