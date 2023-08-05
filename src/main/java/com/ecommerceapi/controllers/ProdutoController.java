@@ -3,6 +3,10 @@ package com.ecommerceapi.controllers;
 import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.ProdutoService;
+import com.ecommerceapi.utils.ManipuladorListaErros;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -69,14 +73,7 @@ public class ProdutoController {
                                     "    }\n" +
                                     "]")})),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/produtos\"\n" +
-                            "}")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content)})
     @SecurityRequirement(name = "ecommerce")
     public ResponseEntity<Object> cadastrarProduto(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -85,16 +82,17 @@ public class ProdutoController {
                                     "    \"quantidade_estoque\" : \"76\",\n" +
                                     "    \"preco\": \"38,99\"}")
                     }))
-            @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
+            @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult errosDeValidacao)  {
 
-        Object validador = produtoService.validaCadastroProduto(produtoDTO, errosDeValidacao);
-
-        if (validador instanceof List<?>) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
+        ProdutoModel produtoModel = null;
+        try {
+            produtoModel = produtoService.validaCadastroProduto(produtoDTO, errosDeValidacao);
+        } catch (IllegalArgumentException e){
+            JsonNode mensagensErros = ManipuladorListaErros.converteStringJsonParaJsonNode(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagensErros);
         }
-        ProdutoModel produtoModel = (ProdutoModel) validador;
-        produtoService.salvarProduto(produtoModel);
 
+        produtoService.salvarProduto(produtoModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoModel);
     }
 
@@ -128,16 +126,8 @@ public class ProdutoController {
                                     "    }\n" +
                                     "]")})),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/produtos\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
-                    content = @Content(examples = @ExampleObject("Produto não encontrado.")))
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
     })
     public ResponseEntity<Object> atualizarProduto(
             @Parameter(content = @Content(examples = @ExampleObject("bc4c0129-e190-4d5c-bf42-780585b74edf")))
@@ -162,14 +152,16 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
 
-        Object validador = produtoService.validaAtualizacaoProduto(produtoOptional.get(), produtoDTO, errosDeValidacao);
+        ProdutoModel produtoModel = null;
 
-        if (validador instanceof List<?>) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
+        try {
+            produtoModel = produtoService.validaAtualizacaoProduto(produtoOptional.get(), produtoDTO, errosDeValidacao);
+        } catch (IllegalArgumentException e){
+            JsonNode mensagensErros = ManipuladorListaErros.converteStringJsonParaJsonNode(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagensErros);
         }
-        ProdutoModel produtoModel = (ProdutoModel) validador;
-        produtoService.salvarProduto(produtoModel);
 
+        produtoService.salvarProduto(produtoModel);
         return ResponseEntity.status(HttpStatus.OK).body(produtoModel);
     }
 
@@ -179,19 +171,10 @@ public class ProdutoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Remoção de produto realizado com sucesso",
                     content = @Content(examples = @ExampleObject("Produto Calça apagado com sucesso."))),
-            @ApiResponse(responseCode = "400", description = "Id inválida",
-                    content = @Content(examples = @ExampleObject("Id inválida"))),
+            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/produtos\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
-                    content = @Content(examples = @ExampleObject("Produto não encontrado.")))
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
     })
     public ResponseEntity<Object> removerProduto(
             @Parameter(content = @Content(examples = @ExampleObject("bc4c0129-e190-4d5c-bf42-780585b74edf")))
@@ -340,10 +323,8 @@ public class ProdutoController {
                             "    }\n" +
                             "  }\n" +
                             "}")})),
-            @ApiResponse(responseCode = "400", description = "Id inválida",
-                    content = @Content(examples = @ExampleObject("Id inválida"))),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
-                    content = @Content(examples = @ExampleObject("Produto não encontrado.")))
+            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
     })
     public ResponseEntity<Object> buscarProdutoPorId(
             @Parameter(content = @Content(examples = @ExampleObject("f9c473bf-afb8-4eb2-9d32-d1c2b9498408")))
@@ -423,8 +404,7 @@ public class ProdutoController {
                             "  \"numberOfElements\": 2,\n" +
                             "  \"empty\": false\n" +
                             "}")})),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
-                    content = @Content(examples = @ExampleObject("Produto não encontrado.")))
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
     })
     @Parameter(in = ParameterIn.QUERY, description = "Página", name = "page"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "0")))

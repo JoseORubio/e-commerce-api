@@ -66,19 +66,11 @@ public class CarrinhoController {
                                     "    \"Valor total do carrinho\": 25.76\n" +
                                     "  }\n" +
                                     "]")})),
-            @ApiResponse(responseCode = "400", description = "Id inválida",
-                    content = @Content(examples = @ExampleObject("Id inválida"))),
+            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
-                    content = @Content(examples = @ExampleObject("Produto não encontrado.")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
+    })
     public ResponseEntity<Object> inserirProduto(
             @Parameter(content = @Content(examples = @ExampleObject("8fcfe445-864c-4d96-b8c0-7d75acb45dc5")))
             @RequestParam("id_produto") String id_produto,
@@ -113,19 +105,11 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "200", description = "Remoção do item realizado com sucesso",
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
                             value = "Item Tênis B removido.")})),
-            @ApiResponse(responseCode = "400", description = "Id inválida",
-                    content = @Content(examples = @ExampleObject("Id inválida"))),
+            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Produto não encontrado",
-                    content = @Content(examples = @ExampleObject("Produto não encontrado.")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
+    })
     public ResponseEntity<Object> removeItemCarrinho(
             @Parameter(content = @Content(examples = @ExampleObject("8fcfe445-864c-4d96-b8c0-7d75acb45dc5")))
             @PathVariable(value = "id_produto") String id_produto) {
@@ -162,14 +146,8 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "400", description = "Carrinho inexistente.",
                     content = @Content(examples = @ExampleObject("Usuário Bernardo Kauê da Silva não possui carrinho ativo."))),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios\"\n" +
-                            "}")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content)
+    })
     public ResponseEntity<Object> cancelaCarrinho() {
         UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
         Optional<List<CarrinhoModel>> carrinhoExistente = carrinhoService.buscarCarrinhoDoUsuario(usuario);
@@ -246,14 +224,8 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "400", description = "Carrinho inexistente.",
                     content = @Content(examples = @ExampleObject("Usuário Bernardo Kauê da Silva não possui carrinho ativo."))),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios\"\n" +
-                            "}")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content)
+    })
     public ResponseEntity<Object> verCarrinho() {
 
         UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
@@ -276,14 +248,7 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "400", description = "Carrinho inexistente.",
                     content = @Content(examples = @ExampleObject("Usuário Bernardo Kauê da Silva não possui carrinho ativo."))),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios/venda\"\n" +
-                            "}"))),
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
             @ApiResponse(responseCode = "409", description = "Quantidade do produto no carrinho tornou-se maior que a disponível no estoque " +
                     "entre a inserção no carrinho e a efetivação da venda.",
                     content = @Content(examples = @ExampleObject("Quantidade de Tênis B indisponível no estoque.")))})

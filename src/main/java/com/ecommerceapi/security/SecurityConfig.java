@@ -8,10 +8,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES;
 
 @Configuration
 public class SecurityConfig  {
@@ -19,7 +22,8 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic()
-                .and().csrf().disable()
+                .and()
+                .csrf().disable()
                 .authorizeHttpRequests()
 
                 .requestMatchers("/swagger-ui/**").permitAll()
@@ -37,18 +41,9 @@ public class SecurityConfig  {
 
                 .requestMatchers( "/itens-carrinho/**").hasRole("USER")
 
-                .anyRequest().authenticated()
-//                .and().logout().logoutSuccessUrl("/produtos").clearAuthentication(true)
-//                .invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll()
+                .anyRequest().permitAll()
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
         ;
-
-//                .and()
-//                .logout().logoutSuccessUrl("/produtos").invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID").permitAll()
-//                .and()
-//                .logout().logoutUrl("/logout").logoutRequestMatcher( new AntPathRequestMatcher("/logout","GET"))
-//                .and()
-//                .csrf().disable() ;
         return http.build();
     }
 

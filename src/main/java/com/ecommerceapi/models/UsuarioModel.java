@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +32,7 @@ public class UsuarioModel extends RepresentationModel<UsuarioModel> implements U
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_nasc;
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
+    @JsonFormat( pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
     private LocalDateTime data_cadastro;
     private char sexo;
     private String telefone;

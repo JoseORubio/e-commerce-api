@@ -39,7 +39,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/usuarios")
 //@SecurityRequirement(name = "ecommerce")
-@Tag(name = "Usuarios", description = "Gerencia os usuarios")
+@Tag(name = "Usuários", description = "Gerencia os usuários")
 public class UsuarioController {
 
     final UsuarioService usuarioService;
@@ -254,20 +254,10 @@ public class UsuarioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Remoção de usuário realizado com sucesso",
                     content = @Content(examples = @ExampleObject("Usuário Heloisa Yasmin Costa apagado com sucesso."))),
-            @ApiResponse(responseCode = "400", description = "Id inválida",
-                    content = @Content(examples = @ExampleObject("Id inválida"))),
+            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-                    content = @Content(examples = @ExampleObject("Usuário não encontrado.")))})
-
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)})
     public ResponseEntity<Object> deletarUsuarioPorId(
             @Parameter(content = @Content(examples = @ExampleObject("f9c473bf-afb8-4eb2-9d32-d1c2b9498408")))
             @PathVariable(value = "id_usuario") String id_usuario) {
@@ -549,14 +539,8 @@ public class UsuarioController {
                                     "  \"empty\": false\n" +
                                     "}")})),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios/todos\"\n" +
-                            "}")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content)
+    })
     @Parameter(in = ParameterIn.QUERY, description = "Página", name = "page"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "0")))
     @Parameter(in = ParameterIn.QUERY, description = "Resultados por página", name = "size"
@@ -649,19 +633,11 @@ public class UsuarioController {
                                     "  \"numberOfElements\": 1,\n" +
                                     "  \"empty\": false\n" +
                                     "}")})),
-            @ApiResponse(responseCode = "400", description = "Id inválida",
-                    content = @Content(examples = @ExampleObject("Id inválida"))),
+            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios/id\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-                    content = @Content(examples = @ExampleObject("Usuário não encontrado.")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+    })
     public ResponseEntity<Object> buscarUsuarioPorId(
             @Parameter(content = @Content(examples = @ExampleObject("dceeba4a-b80c-42ac-8511-fae017a42bd5")))
             @PathVariable(value = "id_usuario") String id_usuario) {
@@ -756,16 +732,9 @@ public class UsuarioController {
                                     "  \"empty\": false\n" +
                                     "}")})),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Acesso proibido",
-                    content = @Content(examples = @ExampleObject("{\n" +
-                            "    \"timestamp\": \"2023-07-22T18:36:58.114+00:00\",\n" +
-                            "    \"status\": 403,\n" +
-                            "    \"error\": \"Forbidden\",\n" +
-                            "    \"message\": \"Forbidden\",\n" +
-                            "    \"path\": \"/usuarios/nome\"\n" +
-                            "}"))),
-            @ApiResponse(responseCode = "404", description = "Nenhum Usuário encontrado",
-                    content = @Content(examples = @ExampleObject("Nenhum Usuário encontrado.")))})
+            @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Nenhum Usuário encontrado", content = @Content)
+    })
     @Parameter(in = ParameterIn.QUERY, description = "Página", name = "page"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "0")))
     @Parameter(in = ParameterIn.QUERY, description = "Resultados por página", name = "size"

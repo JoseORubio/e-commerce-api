@@ -4,7 +4,7 @@ import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.repositories.ProdutoRepository;
 import com.ecommerceapi.utils.ConversorUUID;
-import com.ecommerceapi.utils.ValidatorUtils;
+import com.ecommerceapi.utils.ManipuladorListaErros;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,57 +31,61 @@ public class ProdutoService {
         return produtoRepository.save(produtoModel);
     }
 
-    public Object validaCadastroProduto(ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
-        ValidatorUtils validatorUtils = new ValidatorUtils(errosDeValidacao);
-        List<List<String>> listaErros = validatorUtils.getListaErros();
+    public ProdutoModel validaCadastroProduto(ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
 
-        Object validacaoProduto = validaPorRegrasDeNegocio(listaErros, produtoDTO);
+        ManipuladorListaErros manipuladorListaErros = new ManipuladorListaErros(errosDeValidacao);
 
-        if (validacaoProduto instanceof List<?>) {
-            return ValidatorUtils.converteListaErrosParaMap((List<List<String>>) validacaoProduto);
+        ProdutoModel produtoModel = null;
+        try {
+            produtoModel = validaPorRegrasDeNegocio(manipuladorListaErros, produtoDTO);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
 
-        ProdutoModel produtoModel = (ProdutoModel) validacaoProduto;
         produtoModel.setQuantidade_estoque(Integer.parseInt(produtoDTO.getQuantidade_estoque()));
         produtoModel.setPreco(BigDecimal.valueOf(
                 Double.parseDouble(produtoDTO.getPreco().replace(',', '.'))));
         return produtoModel;
     }
 
-    public Object validaAtualizacaoProduto(ProdutoModel produtoModel, ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
-        ValidatorUtils validatorUtils = new ValidatorUtils(errosDeValidacao);
-        List<List<String>> listaErros = validatorUtils.getListaErros();
+    public ProdutoModel validaAtualizacaoProduto(ProdutoModel produtoSalvo, ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
+
+        ManipuladorListaErros manipuladorListaErros = new ManipuladorListaErros(errosDeValidacao);
 
         if (produtoDTO.getNome() != null
-                && produtoDTO.getNome().equals(produtoModel.getNome()))
+                && produtoDTO.getNome().equals(produtoSalvo.getNome()))
             produtoDTO.setNome(null);
-        Object validacaoProduto = validaPorRegrasDeNegocio(listaErros, produtoDTO);
-        if (validacaoProduto instanceof List<?>) {
-            return ValidatorUtils.converteListaErrosParaMap((List<List<String>>) validacaoProduto);
+
+        ProdutoModel produtoAtualizado = null;
+        try {
+            produtoAtualizado = validaPorRegrasDeNegocio(manipuladorListaErros, produtoDTO);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
 
-        ProdutoModel produtoValidadoModel = (ProdutoModel) validacaoProduto;
+        if (produtoAtualizado.getNome() == null)
+            produtoAtualizado.setNome(produtoSalvo.getNome());
 
-        if (produtoValidadoModel.getNome() == null)
-            produtoValidadoModel.setNome(produtoModel.getNome());
-
-        produtoValidadoModel.setId(produtoModel.getId());
-        produtoValidadoModel.setQuantidade_estoque(Integer.parseInt(produtoDTO.getQuantidade_estoque()));
-        produtoValidadoModel.setPreco(BigDecimal.valueOf(
+        produtoAtualizado.setId(produtoSalvo.getId());
+        produtoAtualizado.setQuantidade_estoque(Integer.parseInt(produtoDTO.getQuantidade_estoque()));
+        produtoAtualizado.setPreco(BigDecimal.valueOf(
                 Double.parseDouble(produtoDTO.getPreco().replace(',', '.'))));
-        return produtoValidadoModel;
+        return produtoAtualizado;
     }
 
-    private Object validaPorRegrasDeNegocio(List<List<String>> listaErros, ProdutoDTO produtoDTO) {
-        ValidatorUtils validatorUtils = new ValidatorUtils(listaErros);
+    private ProdutoModel validaPorRegrasDeNegocio(ManipuladorListaErros manipuladorListaErros, ProdutoDTO produtoDTO) {
+
         ProdutoModel produtoModel = new ProdutoModel();
         BeanUtils.copyProperties(produtoDTO, produtoModel);
 
         if (produtoModel.getNome() != null
                 && existsByNome(produtoDTO.getNome())) {
-            validatorUtils.adicionarErros("nome", "Nome já utilizado.");
+            manipuladorListaErros.adicionarErros("nome", "Nome já utilizado.");
         }
-        if (!validatorUtils.getListaErros().isEmpty()) return validatorUtils.getListaErros();
+        if (manipuladorListaErros.temErros()) {
+            String erros = manipuladorListaErros.converteListaErrosParaStringJson();
+            throw new IllegalArgumentException(erros);
+        }
         return produtoModel;
     }
 
@@ -91,11 +94,12 @@ public class ProdutoService {
         produtoRepository.delete(produtoModel);
     }
 
-    public void baixarEstoqueProduto(ProdutoModel produtoModel, int quantidade){
+    public void baixarEstoqueProduto(ProdutoModel produtoModel, int quantidade) {
         produtoModel.setQuantidade_estoque
                 (produtoModel.getQuantidade_estoque() - quantidade);
         salvarProduto(produtoModel);
     }
+
     public boolean existsByNome(String nome) {
         return produtoRepository.existsByNome(nome);
     }
@@ -112,7 +116,7 @@ public class ProdutoService {
         return produtoRepository.findById(id);
     }
 
-    public Optional<Page<ProdutoModel>> pesquisarProdutos(String nome,Pageable pageable ) {
+    public Optional<Page<ProdutoModel>> pesquisarProdutos(String nome, Pageable pageable) {
         return produtoRepository.pesquisarProdutos(nome, pageable);
     }
 

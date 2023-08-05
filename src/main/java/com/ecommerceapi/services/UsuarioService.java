@@ -131,7 +131,8 @@ public class UsuarioService {
             }
         }
 
-        if (!validatorUtils.getListaErros().isEmpty()) return validatorUtils.getListaErros();
+        if (!validatorUtils.getListaErros().isEmpty())
+            return validatorUtils.getListaErros();
         return usuarioModel;
     }
 

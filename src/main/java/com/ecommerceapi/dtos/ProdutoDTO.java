@@ -7,8 +7,8 @@ import jakarta.validation.constraints.Size;
 public class ProdutoDTO {
 
     @NotBlank
-    @Pattern(regexp = "[\\w\\u00C0-\\u00FF\\/\\\\#%&()\\-']+(\\s([\\w\\u00C0-\\u00FF\\/\\\\#(),.\\-'])+)*",
-            message = "Pode conter qualquer letra, número e os seguintes caracteres: , . /  # ( ) -")
+    @Pattern(regexp = "[\\w\\u00C0-\\u00FF\\/\\\\#,.()\\-']+(\\s([\\w\\u00C0-\\u00FF\\/\\\\#(),.\\-'])+)*",
+            message = "Pode conter qualquer letra, número e os seguintes caracteres: , . / # ( ) -")
     @Size(max = 80, message = "Nome deve ter no máximo {max} caracteres.")
     private String nome;
 

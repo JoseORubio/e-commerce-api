@@ -39,10 +39,10 @@ public class ValidatorUtils {
             }
         }
         if (!campoRepetido) {
-            List<String> camposEMensagens = new ArrayList<>();
-            camposEMensagens.add(campoErro);
-            camposEMensagens.add(msgErro);
-            listaErros.add(camposEMensagens);
+            List<String> listaErrosCampo = new ArrayList<>();
+            listaErrosCampo.add(campoErro);
+            listaErrosCampo.add(msgErro);
+            listaErros.add(listaErrosCampo);
         }
     }
 
@@ -56,7 +56,7 @@ public class ValidatorUtils {
             String mensagensErro = "";
             for (String valoresErro : erro) {
                 if (chaveCampo) {
-                    infoItens.put("Campo", valoresErro);
+                    infoItens.put("\"Campo\"", "\""+ valoresErro + "\"");
                     chaveCampo = false;
                 } else {
                     mensagensErro = String.format(mensagensErro
@@ -66,9 +66,44 @@ public class ValidatorUtils {
                             + " ");
                 }
             }
-            infoItens.put("Erros", mensagensErro.substring(0, mensagensErro.length() - 1));
+            infoItens.put("\"Erros\"", "\""+ mensagensErro.substring(0, mensagensErro.length() - 1) + "\"");
             listaErrosMap.add(infoItens);
         }
         return listaErrosMap;
+    }
+
+    public static String converteListaErrosParaStringJson(List<List<String>> listaErros) {
+
+//        List<Map<String, String>> listaErrosMap = new ArrayList<>();
+        StringBuilder stringJSON = new StringBuilder();
+        stringJSON.append("[");
+        for (List<String> erro : listaErros) {
+//            Map<String, String> infoItens = new LinkedHashMap<>();
+
+            String mensagensErro = "";
+            stringJSON.append("{");
+            boolean chaveCampo = true;
+
+            for (String valoresErro : erro) {
+                if (chaveCampo) {
+                    stringJSON.append("\"Campo\"" + ":" + "\""+ valoresErro + "\",");
+//                    infoItens.put("\"Campo\"", "\""+ valoresErro + "\"");
+                    chaveCampo = false;
+                } else {
+                    mensagensErro = String.format(mensagensErro
+                            + valoresErro.toUpperCase().charAt(0)
+                            + valoresErro.substring(1)
+                            + (valoresErro.charAt(valoresErro.length() - 1) != '.' ? "." : "")
+                            + " ");
+                }
+            }
+            stringJSON.append("\"Erros\""+ ":" + "\""+ mensagensErro.substring(0, mensagensErro.length() - 1) + "\"},");
+//            infoItens.put("\"Erros\"", "\""+ mensagensErro.substring(0, mensagensErro.length() - 1) + "\"");
+//            listaErrosMap.add(infoItens);
+//            if (erro.)
+        }
+        stringJSON.deleteCharAt(stringJSON.length()-1);
+        stringJSON.append("]");
+        return stringJSON.toString();
     }
 }
