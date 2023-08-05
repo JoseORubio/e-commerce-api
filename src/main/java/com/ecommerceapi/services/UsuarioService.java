@@ -6,7 +6,7 @@ import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.repositories.UsuarioRepository;
 import com.ecommerceapi.utils.CEPUtils;
 import com.ecommerceapi.utils.ConversorUUID;
-import com.ecommerceapi.utils.ValidatorUtils;
+import com.ecommerceapi.utils.ManipuladorListaErros;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,17 +43,17 @@ public class UsuarioService {
     }
 
 
-    public Object validaCadastroUsuario(UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
+    public UsuarioModel validaCadastroUsuario(UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
 
-        ValidatorUtils validatorUtils = new ValidatorUtils(errosDeValidacao);
-        List<List<String>> listaErros = validatorUtils.getListaErros();
+        ManipuladorListaErros manipuladorListaErros = new ManipuladorListaErros(errosDeValidacao);
 
-        Object validacaoUsuario = validaPorRegrasDeNegocio(listaErros, usuarioDTO);
-
-        if (validacaoUsuario instanceof List<?>) {
-            return ValidatorUtils.converteListaErrosParaMap((List<List<String>>) validacaoUsuario);
+        UsuarioModel usuarioModel = null;
+        try {
+            usuarioModel = validaPorRegrasDeNegocio(manipuladorListaErros, usuarioDTO);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
-        UsuarioModel usuarioModel = (UsuarioModel) validacaoUsuario;
+
         usuarioModel.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
         usuarioModel.setSexo(usuarioDTO.getSexo().charAt(0));
         usuarioModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
@@ -62,63 +62,62 @@ public class UsuarioService {
         return usuarioModel;
     }
 
-    public Object validaAtualizacaoUsuario(UsuarioModel usuarioLogado, UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
+    public UsuarioModel validaAtualizacaoUsuario(UsuarioModel usuarioLogado, UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
 
-        ValidatorUtils validatorUtils = new ValidatorUtils(errosDeValidacao);
-        List<List<String>> listaErros = validatorUtils.getListaErros();
+        ManipuladorListaErros manipuladorListaErros = new ManipuladorListaErros(errosDeValidacao);
 
         if (usuarioDTO.getLogin() != null && usuarioDTO.getLogin().equals(usuarioLogado.getLogin()))
             usuarioDTO.setLogin(null);
-        if (usuarioDTO.getCpf() != null && usuarioDTO.getCpf().equals(usuarioLogado.getCpf())) usuarioDTO.setCpf(null);
+        if (usuarioDTO.getCpf() != null && usuarioDTO.getCpf().equals(usuarioLogado.getCpf()))
+            usuarioDTO.setCpf(null);
         if (usuarioDTO.getEmail() != null && usuarioDTO.getEmail().equals(usuarioLogado.getEmail()))
             usuarioDTO.setEmail(null);
 
-        Object validacaoUsuario = validaPorRegrasDeNegocio(listaErros, usuarioDTO);
 
-        if (validacaoUsuario instanceof List<?>) {
-            return ValidatorUtils.converteListaErrosParaMap((List<List<String>>) validacaoUsuario);
+        UsuarioModel usuarioAtualizado = null;
+        try {
+            usuarioAtualizado = validaPorRegrasDeNegocio(manipuladorListaErros, usuarioDTO);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
 
-        UsuarioModel usuarioModel = (UsuarioModel) validacaoUsuario;
+        if (usuarioAtualizado.getLogin() == null) usuarioAtualizado.setLogin(usuarioLogado.getLogin());
+        if (usuarioAtualizado.getCpf() == null) usuarioAtualizado.setCpf(usuarioLogado.getCpf());
+        if (usuarioAtualizado.getEmail() == null) usuarioAtualizado.setEmail(usuarioLogado.getEmail());
 
-        if (usuarioModel.getLogin() == null) usuarioModel.setLogin(usuarioLogado.getLogin());
-        if (usuarioModel.getCpf() == null) usuarioModel.setCpf(usuarioLogado.getCpf());
-        if (usuarioModel.getEmail() == null) usuarioModel.setEmail(usuarioLogado.getEmail());
+        usuarioAtualizado.setId(usuarioLogado.getId());
+        usuarioAtualizado.setData_cadastro(usuarioLogado.getData_cadastro());
 
-        usuarioModel.setId(usuarioLogado.getId());
-        usuarioModel.setData_cadastro(usuarioLogado.getData_cadastro());
+        usuarioAtualizado.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
+        usuarioAtualizado.setSexo(usuarioDTO.getSexo().charAt(0));
+        usuarioAtualizado.setSenha(new BCryptPasswordEncoder().encode(usuarioAtualizado.getSenha()));
 
-        usuarioModel.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
-        usuarioModel.setSexo(usuarioDTO.getSexo().charAt(0));
-        usuarioModel.setSenha(new BCryptPasswordEncoder().encode(usuarioModel.getSenha()));
-
-        return usuarioModel;
+        return usuarioAtualizado;
     }
 
-    private Object validaPorRegrasDeNegocio(List<List<String>> listaErros, UsuarioDTO usuarioDTO) {
+    private UsuarioModel validaPorRegrasDeNegocio(ManipuladorListaErros manipuladorListaErros, UsuarioDTO usuarioDTO) {
 
-        ValidatorUtils validatorUtils = new ValidatorUtils(listaErros);
         UsuarioModel usuarioModel = new UsuarioModel();
         BeanUtils.copyProperties(usuarioDTO, usuarioModel);
 
         if (usuarioModel.getLogin() != null
                 && existsByLogin(usuarioModel.getLogin())) {
-            validatorUtils.adicionarErros("login", "Login já utilizado.");
+            manipuladorListaErros.adicionarErros("login", "Login já utilizado.");
         }
         if (usuarioModel.getCpf() != null
                 && existsByCpf(usuarioModel.getCpf())) {
-            validatorUtils.adicionarErros("cpf", "CPF já utilizado.");
+            manipuladorListaErros.adicionarErros("cpf", "CPF já utilizado.");
         }
         if (usuarioModel.getEmail() != null
                 && existsByEmail(usuarioModel.getEmail())) {
-            validatorUtils.adicionarErros("email", "Email já utilizado.");
+            manipuladorListaErros.adicionarErros("email", "Email já utilizado.");
         }
 
         if (usuarioModel.getCep() != null) {
             try {
                 usuarioModel = new CEPUtils().retornaCep(usuarioModel);
             } catch (RuntimeException e) {
-                validatorUtils.adicionarErros("cep", "CEP não existe.");
+                manipuladorListaErros.adicionarErros("cep", "CEP não existe.");
             }
         }
 
@@ -127,12 +126,15 @@ public class UsuarioService {
                 usuarioModel.setData_nasc(LocalDate.parse(usuarioDTO.getData_nasc()
                         , DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT)));
             } catch (DateTimeParseException e) {
-                validatorUtils.adicionarErros("data_nasc", "Data inválida.");
+                manipuladorListaErros.adicionarErros("data_nasc", "Data inválida.");
             }
         }
 
-        if (!validatorUtils.getListaErros().isEmpty())
-            return validatorUtils.getListaErros();
+        if (manipuladorListaErros.temErros()) {
+            String erros = manipuladorListaErros.converteListaErrosParaStringJson();
+            throw new IllegalArgumentException(erros);
+        }
+
         return usuarioModel;
     }
 
@@ -148,7 +150,7 @@ public class UsuarioService {
     }
 
     public Page<UsuarioModel> buscarUsuarios(Pageable pageable) {
-        return usuarioRepository.findAll( pageable);
+        return usuarioRepository.findAll(pageable);
     }
 
     public Optional<UsuarioModel> buscarUsuarioPorId(String id_usuario) {
@@ -158,7 +160,7 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Optional<Page<UsuarioModel>> pesquisarUsuarios(String nome,Pageable pageable) {
+    public Optional<Page<UsuarioModel>> pesquisarUsuarios(String nome, Pageable pageable) {
         return usuarioRepository.pesquisarUsuarios(nome, pageable);
     }
 

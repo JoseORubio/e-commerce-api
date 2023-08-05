@@ -7,6 +7,8 @@ import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.PapelDoUsuarioService;
 import com.ecommerceapi.services.PapelService;
 import com.ecommerceapi.services.UsuarioService;
+import com.ecommerceapi.utils.ManipuladorListaErros;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -135,13 +137,15 @@ public class UsuarioController {
                     }))
             @RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
 
-        Object validador = usuarioService.validaCadastroUsuario(usuarioDTO, errosDeValidacao);
 
-        if (validador instanceof List<?>) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
+        UsuarioModel usuarioModel = null;
+        try {
+            usuarioModel = usuarioService.validaCadastroUsuario(usuarioDTO, errosDeValidacao);
+        } catch (IllegalArgumentException e) {
+            JsonNode mensagensErros = ManipuladorListaErros.converteStringJsonParaJsonNode(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagensErros);
         }
 
-        UsuarioModel usuarioModel = (UsuarioModel) validador;
         usuarioService.salvarUsuario(usuarioModel);
         papelDoUsuarioService.salvarPapelDoUsuario(
                 new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
@@ -233,13 +237,14 @@ public class UsuarioController {
 
         UsuarioModel usuarioLogado = usuarioService.pegarUsuarioLogado();
 
-        Object validador = usuarioService.validaAtualizacaoUsuario(usuarioLogado, usuarioDTO, errosDeValidacao);
-
-        if (validador instanceof List<?>) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
+        UsuarioModel usuarioModel = null;
+        try {
+            usuarioModel = usuarioService.validaAtualizacaoUsuario(usuarioLogado, usuarioDTO, errosDeValidacao);
+        } catch (IllegalArgumentException e) {
+            JsonNode mensagensErros = ManipuladorListaErros.converteStringJsonParaJsonNode(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagensErros);
         }
 
-        UsuarioModel usuarioModel = (UsuarioModel) validador;
         usuarioService.salvarUsuario(usuarioModel);
         papelDoUsuarioService.salvarPapelDoUsuario(
                 new PapelDoUsuarioModel(usuarioModel.getId(), papelService.pegarIdPapelUsuario()));
