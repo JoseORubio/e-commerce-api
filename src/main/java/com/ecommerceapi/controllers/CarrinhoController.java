@@ -2,6 +2,7 @@ package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.models.*;
 import com.ecommerceapi.services.*;
+import com.ecommerceapi.utils.ManipuladorListaErros;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -39,17 +40,17 @@ public class CarrinhoController {
     }
 
 
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
-    @Operation(summary = "Insere e altera itens no carrinho")
+    @RequestMapping(method = { RequestMethod.PUT})
+    @Operation(summary = "Insere ou altera itens no carrinho")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Inserção do item realizada com sucesso",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+                    content = @Content( examples = {@ExampleObject(
                             value = "[\n" +
                                     "  {\n" +
                                     "    \"produto\": {\n" +
                                     "      \"id\": \"8fcfe445-864c-4d96-b8c0-7d75acb45dc5\",\n" +
                                     "      \"nome\": \"Tênis B\",\n" +
-                                    "      \"quantidade_estoque\": 91,\n" +
+                                    "      \"quantidade_estoque\": 87,\n" +
                                     "      \"preco\": 6.44,\n" +
                                     "      \"links\": [\n" +
                                     "        {\n" +
@@ -58,12 +59,13 @@ public class CarrinhoController {
                                     "        }\n" +
                                     "      ]\n" +
                                     "    },\n" +
-                                    "    \"quantidade\": 4,\n" +
-                                    "    \"valorTotalProduto\": 25.76\n" +
+                                    "    \"quantidade\": 3,\n" +
+                                    "    \"valorTotalProduto\": 19.32\n" +
                                     "  },\n" +
                                     "  {\n" +
-                                    "    \"Quantidade de itens\": 1,\n" +
-                                    "    \"Valor total do carrinho\": 25.76\n" +
+                                    "    \"Quantidade de itens\": 3,\n" +
+                                    "    \"Quantidade de produtos\": 1,\n" +
+                                    "    \"Valor total do carrinho\": 19.32\n" +
                                     "  }\n" +
                                     "]")})),
             @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
@@ -103,7 +105,7 @@ public class CarrinhoController {
     @Operation(summary = "Remove um item do carrinho por ID", method = "DELETE")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Remoção do item realizado com sucesso",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+                    content = @Content(examples = {@ExampleObject(
                             value = "Item Tênis B removido.")})),
             @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
@@ -142,7 +144,7 @@ public class CarrinhoController {
     @Operation(summary = "Remove todos os itens do carrinho", method = "DELETE")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Carrinho cancelado.",
-                    content = @Content(examples = @ExampleObject("Carrinho cancelado."))),
+                    content = @Content),
             @ApiResponse(responseCode = "400", description = "Carrinho inexistente.",
                     content = @Content(examples = @ExampleObject("Usuário Bernardo Kauê da Silva não possui carrinho ativo."))),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
@@ -165,7 +167,7 @@ public class CarrinhoController {
     @Operation(summary = "Exibe os itens do carrinho", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Exibição dos itens realizado com sucesso",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+                    content = @Content( examples = {@ExampleObject(
                             value = "[\n" +
                                     "  {\n" +
                                     "    \"produto\": {\n" +

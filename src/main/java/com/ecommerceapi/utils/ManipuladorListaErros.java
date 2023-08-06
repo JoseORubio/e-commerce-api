@@ -80,4 +80,11 @@ public class ManipuladorListaErros {
         }
         return jsonNode;
     }
+
+    public static Map<String ,String > mapErroUnitario(String campoErro, String msgErro ){
+        Map<String ,String > map = new HashMap<>(1);
+        map.put(campoErro,msgErro);
+        return map;
+
+    }
 }

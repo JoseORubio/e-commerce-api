@@ -98,11 +98,11 @@ public class ProdutoController {
 
 
     @PutMapping("/{id_produto}")
-    @Operation(summary = "Atualiza os produtos", method = "PUT")
+    @Operation(summary = "Atualiza o produto", method = "PUT")
     @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Atualização de produto realizado com sucesso",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+            @ApiResponse(responseCode = "200", description = "Atualização do produto realizada com sucesso",
+                    content = @Content( examples = {@ExampleObject(
                             value = "{\n" +
                                     "    \"id\": \"9da57f64-dc4b-4d6d-b39b-426ffea66e3b\",\n" +
                                     "    \"nome\": \"Blusa C\",\n" +
@@ -110,7 +110,7 @@ public class ProdutoController {
                                     "    \"preco\": 87.5\n" +
                                     "}")})),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já cadastrados",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+                    content = @Content( examples = {@ExampleObject(
                             value = "[\n" +
                                     "    {\n" +
                                     "        \"Campo\": \"preco\",\n" +
@@ -130,7 +130,7 @@ public class ProdutoController {
             @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
     })
     public ResponseEntity<Object> atualizarProduto(
-            @Parameter(content = @Content(examples = @ExampleObject("bc4c0129-e190-4d5c-bf42-780585b74edf")))
+            @Parameter(content = @Content(examples = @ExampleObject("9da57f64-dc4b-4d6d-b39b-426ffea66e3b")))
             @PathVariable(value = "id_produto") String id_produto,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
@@ -311,7 +311,7 @@ public class ProdutoController {
     @GetMapping("/id/{id_produto}")
     @Operation(summary = "Busca um produtos por ID", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",
-            content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+            content = @Content( examples = {@ExampleObject(
                     value = "{\n" +
                             "  \"id\": \"f9c473bf-afb8-4eb2-9d32-d1c2b9498408\",\n" +
                             "  \"nome\": \"Blusa B\",\n" +
@@ -350,7 +350,7 @@ public class ProdutoController {
     @GetMapping("/nome/{nome}")
     @Operation(summary = "Busca os produtos por nome", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",
-            content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+            content = @Content( examples = {@ExampleObject(
                     value = "{\n" +
                             "  \"content\": [\n" +
                             "    {\n" +

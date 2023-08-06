@@ -572,7 +572,7 @@ public class UsuarioController {
     @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca do usuário realizado com sucesso",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+                    content = @Content( examples = {@ExampleObject(
                             value = "{\n" +
                                     "  \"content\": [\n" +
                                     "    {\n" +
@@ -670,7 +670,7 @@ public class UsuarioController {
     @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Busca dos usuários realizada com sucesso",
-                    content = @Content(mediaType = "application/json", examples = {@ExampleObject(
+                    content = @Content( examples = {@ExampleObject(
                             value = "{\n" +
                                     "  \"content\": [\n" +
                                     "    {\n" +
