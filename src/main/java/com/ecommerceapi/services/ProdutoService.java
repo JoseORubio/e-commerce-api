@@ -106,13 +106,12 @@ public class ProdutoService {
 
     public Page<ProdutoModel> buscarProdutos(Pageable pageable) {
         return produtoRepository.findAll(pageable);
-//        return produtoRepository.findByOrderByNome();
     }
 
     public Optional<ProdutoModel> buscarProdutoPorId(String id_produto) {
         UUID id = ConversorUUID.converteUUID(id_produto);
         if (id_produto.equals("") || id == null)
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         return produtoRepository.findById(id);
     }
 

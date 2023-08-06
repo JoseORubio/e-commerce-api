@@ -29,30 +29,32 @@ public class CarrinhoService {
         return carrinhoRepository.save(carrinhoModel);
     }
 
-    public Object validaInsercaoProduto(UsuarioModel usuarioModel, ProdutoModel produtoModel, String quantidadeString) {
+    public CarrinhoModel validaInsercaoProduto(UsuarioModel usuarioModel, ProdutoModel produtoModel, String quantidadeString) {
 
-        Object validacaoCarrinho = validaPorRegrasDeNegocio(usuarioModel, produtoModel, quantidadeString);
-        if (validacaoCarrinho instanceof String) {
-            return validacaoCarrinho;
+        CarrinhoModel carrinhoModel = null;
+        try {
+            carrinhoModel =validaPorRegrasDeNegocio(usuarioModel, produtoModel, quantidadeString);
+        } catch (IllegalArgumentException e){
+            throw e;
         }
-        CarrinhoModel carrinho = (CarrinhoModel) validacaoCarrinho;
-        return carrinho;
+
+        return carrinhoModel;
     }
 
-    private Object validaPorRegrasDeNegocio(UsuarioModel usuarioModel, ProdutoModel produtoModel, String quantidadeString) {
+    private CarrinhoModel validaPorRegrasDeNegocio(UsuarioModel usuarioModel, ProdutoModel produtoModel, String quantidadeString) {
 
         Integer quantidade = null;
         try {
             quantidade = Integer.parseInt(quantidadeString);
             if (quantidade < 1) {
-                return "Quantidade inválida.";
+                throw new IllegalArgumentException("Quantidade inválida.");
             }
         } catch (NumberFormatException e) {
-            return "Quantidade inválida.";
+            throw new IllegalArgumentException("Quantidade inválida.");
         }
 
         if (quantidade > produtoModel.getQuantidade_estoque()) {
-            return "Quantidade indisponível no estoque.";
+            throw new IllegalArgumentException("Quantidade indisponível no estoque.");
         }
 
         Optional<CarrinhoModel> carrinhoExistente = buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel);

@@ -156,7 +156,7 @@ public class UsuarioService {
     public Optional<UsuarioModel> buscarUsuarioPorId(String id_usuario) {
         UUID id = ConversorUUID.converteUUID(id_usuario);
         if (id_usuario.equals("") || id == null)
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         return usuarioRepository.findById(id);
     }
 

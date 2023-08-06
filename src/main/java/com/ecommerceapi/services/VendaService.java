@@ -28,11 +28,11 @@ public class VendaService {
         return vendaRepository.save(vendaModel);
     }
 
-    public Object efetivaVendaCompleta(UsuarioModel usuario, List<CarrinhoModel> carrinhoModel) {
+    public void efetivaVendaCompleta(UsuarioModel usuario, List<CarrinhoModel> carrinhoModel) {
 
         for (CarrinhoModel itens : carrinhoModel) {
             if (itens.getQuantidade() > itens.getProduto().getQuantidade_estoque()) {
-                return String.format("Quantidade de " + itens.getProduto().getNome() + " indisponível no estoque.");
+                throw new IllegalArgumentException("Quantidade de " + itens.getProduto().getNome() + " indisponível no estoque.");
             }
         }
 
@@ -43,7 +43,6 @@ public class VendaService {
             produtoDaVendaService.salvarProdutoVendido(produtoDaVendaModel);
             produtoService.baixarEstoqueProduto(itens.getProduto(), itens.getQuantidade());
         }
-        return null;
     }
 
     @Transactional

@@ -144,7 +144,7 @@ public class ProdutoController {
         Optional<ProdutoModel> produtoOptional = null;
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         }
 
@@ -183,7 +183,7 @@ public class ProdutoController {
         Optional<ProdutoModel> produtoOptional = null;
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         }
 
@@ -333,7 +333,7 @@ public class ProdutoController {
         Optional<ProdutoModel> produtoOptional = null;
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         }
 

@@ -82,7 +82,7 @@ public class CarrinhoController {
         Optional<ProdutoModel> produtoOptional = null;
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         }
 
@@ -91,13 +91,14 @@ public class CarrinhoController {
         }
 
         UsuarioModel usuario = usuarioService.pegarUsuarioLogado();
-        Object validador = carrinhoService.validaInsercaoProduto(usuario, produtoOptional.get(), quantidadeString);
-        if (validador instanceof String) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validador);
+        CarrinhoModel carrinhoModel = null;
+        try {
+            carrinhoModel =carrinhoService.validaInsercaoProduto(usuario, produtoOptional.get(), quantidadeString);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
-        carrinhoService.inserirCarrinho((CarrinhoModel) validador);
-
+        carrinhoService.inserirCarrinho(carrinhoModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(verCarrinho().getBody());
     }
 
@@ -119,7 +120,7 @@ public class CarrinhoController {
         Optional<ProdutoModel> produtoOptional = null;
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
         }
 
@@ -263,14 +264,13 @@ public class CarrinhoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário " + usuario.getNome() + " não possui carrinho ativo.");
         }
 
-        Object validador = vendaService.efetivaVendaCompleta(usuario, carrinhoExistente.get());
-
-        if (validador instanceof String) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(validador);
+        try {
+            vendaService.efetivaVendaCompleta(usuario, carrinhoExistente.get());
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
 
         cancelaCarrinho();
-
         return ResponseEntity.status(HttpStatus.CREATED).body("Venda confirmada.");
     }
 }

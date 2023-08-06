@@ -270,7 +270,7 @@ public class UsuarioController {
         Optional<UsuarioModel> usuarioOptional = null;
         try {
             usuarioOptional = usuarioService.buscarUsuarioPorId(id_usuario);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
@@ -650,7 +650,7 @@ public class UsuarioController {
         Optional<UsuarioModel> usuarioOptional = null;
         try {
             usuarioOptional = usuarioService.buscarUsuarioPorId(id_usuario);
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
