@@ -35,8 +35,8 @@ public class SecurityConfig  {
 
                 .requestMatchers( HttpMethod.POST,"/usuarios").permitAll()
                 .requestMatchers( HttpMethod.GET,"/usuarios").hasAnyRole("ADMIN","USER")
-                .requestMatchers( HttpMethod.PUT,"/usuarios").hasRole("USER")
-                .requestMatchers( HttpMethod.DELETE,"/usuarios").hasRole("USER")
+                .requestMatchers( HttpMethod.PUT,"/usuarios").hasAnyRole("ADMIN","USER")
+                .requestMatchers( HttpMethod.DELETE,"/usuarios").hasAnyRole("ADMIN","USER")
                 .requestMatchers( "/usuarios/**").hasRole("ADMIN")
 
                 .requestMatchers( "/itens-carrinho/**").hasRole("USER")
