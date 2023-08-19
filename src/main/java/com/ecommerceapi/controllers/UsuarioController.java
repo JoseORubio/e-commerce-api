@@ -56,7 +56,7 @@ public class UsuarioController {
 
 
     @PostMapping
-    @Operation(summary = "Cadastra os usuários", method = "POST")
+    @Operation(summary = "Cadastra um usuário", method = "POST")
     @SecurityRequirements()
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cadastro do usuário realizado com sucesso",

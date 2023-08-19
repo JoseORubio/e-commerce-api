@@ -47,7 +47,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    @Operation(summary = "Cadastra os produtos", method = "POST")
+    @Operation(summary = "Cadastra um produto", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cadastro do produto realizado com sucesso",
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
@@ -98,7 +98,7 @@ public class ProdutoController {
 
 
     @PutMapping("/{id_produto}")
-    @Operation(summary = "Atualiza o produto", method = "PUT")
+    @Operation(summary = "Atualiza um produto", method = "PUT")
     @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualização do produto realizada com sucesso",
@@ -166,7 +166,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id_produto}")
-    @Operation(summary = "Remove o produto", method = "DELETE")
+    @Operation(summary = "Remove um produto", method = "DELETE")
     @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Remoção de produto realizado com sucesso",
@@ -309,7 +309,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/id/{id_produto}")
-    @Operation(summary = "Busca um produtos por ID", method = "GET")
+    @Operation(summary = "Busca um produto por ID", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",
             content = @Content( examples = {@ExampleObject(
                     value = "{\n" +

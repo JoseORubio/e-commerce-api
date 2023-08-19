@@ -1,0 +1,800 @@
+{
+	"info": {
+		"_postman_id": "d0cf785d-d37d-48aa-be59-0c3bf9d2da1f",
+		"name": "E-Commerce",
+		"description": "API desenvolvida para sistema de E-Commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26546997"
+	},
+	"item": [
+		{
+			"name": "Usuários",
+			"item": [
+				{
+					"name": "/usuarios",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Heloisa Yasmin Costa\",\r\n  \"login\": \"heloi123\",\r\n  \"senha\": \"asd123aaD\",\r\n  \"cpf\": \"70181125404\",\r\n  \"data_nasc\": \"06/03/1945\",\r\n  \"sexo\": \"F\",\r\n  \"telefone\": \"(85)98981-2256\",\r\n  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\r\n  \"cep\": \"61604-270\",\r\n  \"numero_rua\": \"981\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Cadastra um usuário"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "heloi123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Heloisa Yasmin Costa\",\r\n  \"login\": \"heloi123\",\r\n  \"senha\": \"asd123aaD\",\r\n  \"cpf\": \"70181125404\",\r\n  \"data_nasc\": \"06/03/1945\",\r\n  \"sexo\": \"F\",\r\n  \"telefone\": \"(85)98981-2256\",\r\n  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\r\n  \"cep\": \"61604-270\",\r\n  \"numero_rua\": \"981\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Atualiza o usuário logado"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "heloi123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Remoção da própria conta pelo usuário"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios/{id_usuario}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/fae38d48-3e5a-484a-8cbf-d486a614a67f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"fae38d48-3e5a-484a-8cbf-d486a614a67f"
+							]
+						},
+						"description": "Remove um usuário por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "heloi123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						},
+						"description": "Exibe dados do usuário logado"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios/todos",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/todos?page=0&size=5&sort=nome,ASC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sort",
+									"value": "nome,ASC"
+								}
+							]
+						},
+						"description": "Busca os usuários"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios/nome/{nome}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/nome/ar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"nome",
+								"ar"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "nome,ASC",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Busca os usuários por nome"
+					},
+					"response": []
+				},
+				{
+					"name": "/usuarios/id/{id_usuario}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/usuarios/id/dceeba4a-b80c-42ac-8511-fae017a42bd5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios",
+								"id",
+								"dceeba4a-b80c-42ac-8511-fae017a42bd5"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "nome,ASC",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Busca um usuário por ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Gerencia os usuários"
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "/produtos",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Blusa C\",\r\n  \"quantidade_estoque\": \"76\",\r\n  \"preco\": \"38,99\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Cadastra um produto"
+					},
+					"response": []
+				},
+				{
+					"name": "/produtos/{id_produto}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Blusa C\",\r\n  \"quantidade_estoque\": \"36\",\r\n  \"preco\": \"87,50\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos/c39350f8-23d9-4dd1-a333-72e2af01a484",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"c39350f8-23d9-4dd1-a333-72e2af01a484"
+							]
+						},
+						"description": "Atualiza um produto"
+					},
+					"response": []
+				},
+				{
+					"name": "/produtos/{id_produto}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "berna123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/produtos/c39350f8-23d9-4dd1-a333-72e2af01a484",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"c39350f8-23d9-4dd1-a333-72e2af01a484"
+							]
+						},
+						"description": "Remove um produto"
+					},
+					"response": []
+				},
+				{
+					"name": "/produtos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/produtos?page=0&size=5&sort=nome,asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sort",
+									"value": "nome,asc"
+								}
+							]
+						},
+						"description": "Busca os produtos"
+					},
+					"response": []
+				},
+				{
+					"name": "/produtos/nome/{nome}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos/nome/ia?page=0&size=5&sort=nome,asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"nome",
+								"ia"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "sort",
+									"value": "nome,asc"
+								}
+							]
+						},
+						"description": "Busca os produtos por nome"
+					},
+					"response": []
+				},
+				{
+					"name": "/produtos/id/{id_produto}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/produtos/id/6bb93022-563a-4e01-ac6f-9752559447b7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"produtos",
+								"id",
+								"6bb93022-563a-4e01-ac6f-9752559447b7"
+							]
+						},
+						"description": "Busca um produto por ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Gerencia os produtos"
+		},
+		{
+			"name": "Carrinho",
+			"item": [
+				{
+					"name": "/itens-carrinho/venda",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "artur123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/itens-carrinho/venda",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"itens-carrinho",
+								"venda"
+							]
+						},
+						"description": "Efetiva a venda ao usuário"
+					},
+					"response": []
+				},
+				{
+					"name": "/itens-carrinho",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "aurora123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/itens-carrinho?id_produto=8fcfe445-864c-4d96-b8c0-7d75acb45dc5&quantidade=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"itens-carrinho"
+							],
+							"query": [
+								{
+									"key": "id_produto",
+									"value": "8fcfe445-864c-4d96-b8c0-7d75acb45dc5"
+								},
+								{
+									"key": "quantidade",
+									"value": "4"
+								}
+							]
+						},
+						"description": "Insere ou altera um item no carrinho"
+					},
+					"response": []
+				},
+				{
+					"name": "/itens-carrinho",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "artur123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/itens-carrinho",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"itens-carrinho"
+							]
+						},
+						"description": "Remove todos os itens do carrinho"
+					},
+					"response": []
+				},
+				{
+					"name": "/itens-carrinho/{id_produto}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "artur123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/itens-carrinho/8fcfe445-864c-4d96-b8c0-7d75acb45dc5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"itens-carrinho",
+								"8fcfe445-864c-4d96-b8c0-7d75acb45dc5"
+							]
+						},
+						"description": "Remove um item do carrinho por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "/itens-carrinho",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "artur123",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "asd123aaD",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/itens-carrinho",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"itens-carrinho"
+							]
+						},
+						"description": "Exibe os itens do carrinho"
+					},
+					"response": []
+				}
+			],
+			"description": "Gerencia o carrinho"
+		}
+	]
+}

@@ -25,15 +25,13 @@ import java.util.*;
 public class CarrinhoController {
 
     final VendaService vendaService;
-    final ProdutoDaVendaService produtoDaVendaService;
     final ProdutoService produtoService;
     final UsuarioService usuarioService;
     final CarrinhoService carrinhoService;
 
 
-    public CarrinhoController(VendaService vendaService, ProdutoDaVendaService produtoDaVendaService, ProdutoService produtoService, UsuarioService usuarioService, CarrinhoService carrinhoService) {
+    public CarrinhoController(VendaService vendaService,  ProdutoService produtoService, UsuarioService usuarioService, CarrinhoService carrinhoService) {
         this.vendaService = vendaService;
-        this.produtoDaVendaService = produtoDaVendaService;
         this.produtoService = produtoService;
         this.usuarioService = usuarioService;
         this.carrinhoService = carrinhoService;
@@ -41,7 +39,7 @@ public class CarrinhoController {
 
 
     @RequestMapping(method = { RequestMethod.PUT})
-    @Operation(summary = "Insere ou altera itens no carrinho")
+    @Operation(summary = "Insere ou altera um item no carrinho")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Inserção do item realizada com sucesso",
                     content = @Content( examples = {@ExampleObject(
