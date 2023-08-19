@@ -12,13 +12,13 @@
  
 - [Diagrama de entidade-relacionamento](#diagrama-de-entidade-relacionamento)
  
-- [Tecnologias, dependências e ferramentas utilizadas](#tecnologias,-dependências-e-ferramentas-utilizadas)
+- [Tecnologias, dependências e ferramentas utilizadas](#tecnologias-dependências-e-ferramentas-utilizadas)
  
 - [Acesso ao projeto](#acesso-ao-projeto)
  
 - [Abrir e rodar o projeto](#abrir-e-rodar-o-projeto)
  
-- [Próximos Passos](#próximos-Passos)
+- [Próximos Passos](#próximos-passos)
 
 ## Descrição do projeto 
 
