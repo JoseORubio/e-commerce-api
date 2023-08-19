@@ -1,0 +1,1210 @@
+openapi: 3.0.1
+info:
+  title: E-Commerce Swagger
+  description: API desenvolvida para sistema de E-Commerce
+  version: '1'
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: Produtos
+    description: Gerencia os produtos
+  - name: Usuários
+    description: Gerencia os usuários
+  - name: Carrinho
+    description: Gerencia o carrinho
+paths:
+  /usuarios:
+    get:
+      tags:
+        - Usuários
+      summary: Exibe dados do usuário logado
+      operationId: buscarUsuarioLogado
+      responses:
+        '200':
+          description: Exibição do usuário realizada com sucesso
+          content:
+            application/json:
+              example:
+                nome: Bernardo Kauê da Silva
+                login: berna123
+                cpf: '59105639042'
+                data_nasc: 16/01/1975
+                sexo: M
+                telefone: (45)12345-1234
+                email: bernardo-dasilva98@hotmail.co.jp
+                cep: 80210-140
+                uf: PR
+                cidade: Curitiba
+                rua: Jardinete Rutílio de Sá Ribas
+                numero_rua: 252
+        '401':
+          description: Não autorizado
+      security:
+        - ecommerce: []
+    put:
+      tags:
+        - Usuários
+      summary: Atualiza o usuário logado
+      operationId: atualizarUsuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioDTO'
+            example:
+              nome: Heloisa Yasmin Costa
+              login: heloi123
+              senha: asd123aaD
+              cpf: '70181125404'
+              data_nasc: 06/03/1945
+              sexo: F
+              telefone: (85)98981-2256
+              email: heloisa_costa@ciaimoveissjc.com
+              cep: 61604-270
+              numero_rua: '981'
+        required: true
+      responses:
+        '200':
+          description: Atualização do usuário realizada com sucesso
+          content:
+            application/json:
+              example:
+                nome: Heloisa Yasmin Costa
+                login: heloi123
+                senha: asd123aaD
+                cpf: '70181125404'
+                data_nasc: 06/03/1945
+                sexo: F
+                telefone: (85)98981-2256
+                email: heloisa_costa@ciaimoveissjc.com
+                cep: 61604-270
+                numero_rua: '981'
+        '400':
+          description: Parametros inválidos ou já cadastrados
+          content:
+            application/json:
+              example:
+                - Campo: sexo
+                  Erros: Apenas 'M' para masculino, 'F' para feminino e 'O' para outro. Não deve estar em branco.
+                - Campo: telefone
+                  Erros: 'Deve seguir o padrão, contendo DDD: (12)12345-1234. Não deve estar em branco.'
+                - Campo: nome
+                  Erros: Não deve estar em branco. Deve conter apenas letras e obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula.
+                - Campo: cep
+                  Erros: Siga o padrão 12345-678. Não deve estar vazio. CEP não existe.
+                - Campo: login
+                  Erros: Deve conter apenas números ou '_', e pelo menos uma letra minúscula. Não deve estar em branco. Login deve ter entre 8 e 20 caracteres.
+                - Campo: numero_rua
+                  Erros: Deve ser qualquer número entre 1 e 99999. Não deve estar em branco.
+                - Campo: cpf
+                  Erros: Não deve estar em branco. Número do registro de contribuinte individual brasileiro (CPF) inválido.
+                - Campo: email
+                  Erros: Não deve estar em branco.
+                - Campo: senha
+                  Erros: Senha deve ter entre 8 e 20 caracteres. Não deve estar em branco. Deve conter ao menos uma letra maiúscula, uma minúscula e um número.
+                - Campo: data_nasc
+                  Erros: 'Não deve estar em branco. Deve estar no formato: ''dd/MM/yyyy''. Data inválida.'
+        '401':
+          description: Não autorizado
+      security:
+        - ecommerce: []
+    post:
+      tags:
+        - Usuários
+      summary: Cadastra um usuário
+      operationId: cadastrarUsuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioDTO'
+            example:
+              nome: Heloisa Yasmin Costa
+              login: heloi123
+              senha: asd123aaD
+              cpf: '70181125404'
+              data_nasc: 06/03/1945
+              sexo: F
+              telefone: (85)98981-2256
+              email: heloisa_costa@ciaimoveissjc.com
+              cep: 61604-270
+              numero_rua: '981'
+        required: true
+      responses:
+        '201':
+          description: Cadastro do usuário realizado com sucesso
+          content:
+            application/json:
+              example:
+                nome: Heloisa Yasmin Costa
+                login: heloi123
+                cpf: '70181125404'
+                data_nasc: 06/03/1945
+                sexo: F
+                telefone: (85)98981-2256
+                email: heloisa_costa@ciaimoveissjc.com
+                cep: 61604-270
+                uf: CE
+                cidade: Caucaia
+                rua: Rua Sargento Feitosa
+                numero_rua: 981
+        '400':
+          description: Parametros inválidos ou já cadastrados
+          content:
+            application/json:
+              example:
+                - Campo: sexo
+                  Erros: Apenas 'M' para masculino, 'F' para feminino e 'O' para outro. Não deve estar em branco.
+                - Campo: telefone
+                  Erros: 'Deve seguir o padrão, contendo DDD: (12)12345-1234. Não deve estar em branco.'
+                - Campo: nome
+                  Erros: Não deve estar em branco. Deve conter apenas letras e obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula.
+                - Campo: cep
+                  Erros: Siga o padrão 12345-678. Não deve estar vazio. CEP não existe.
+                - Campo: login
+                  Erros: Deve conter apenas números ou '_', e pelo menos uma letra minúscula. Não deve estar em branco. Login deve ter entre 8 e 20 caracteres.
+                - Campo: numero_rua
+                  Erros: Deve ser qualquer número entre 1 e 99999. Não deve estar em branco.
+                - Campo: cpf
+                  Erros: Não deve estar em branco. Número do registro de contribuinte individual brasileiro (CPF) inválido.
+                - Campo: email
+                  Erros: Não deve estar em branco.
+                - Campo: senha
+                  Erros: Senha deve ter entre 8 e 20 caracteres. Não deve estar em branco. Deve conter ao menos uma letra maiúscula, uma minúscula e um número.
+                - Campo: data_nasc
+                  Erros: 'Não deve estar em branco. Deve estar no formato: ''dd/MM/yyyy''. Data inválida.'
+      security: []
+    delete:
+      tags:
+        - Usuários
+      summary: Remoção da própria conta pelo usuário
+      operationId: deletarUsuarioLogado
+      responses:
+        '200':
+          description: Remoção de usuário realizado com sucesso
+          content:
+            '*/*':
+              example: Usuário Heloisa Yasmin Costa apagado com sucesso.
+        '401':
+          description: Não autorizado
+      security:
+        - ecommerce: []
+  /produtos/{id_produto}:
+    put:
+      tags:
+        - Produtos
+      summary: Atualiza um produto
+      operationId: atualizarProduto
+      parameters:
+        - name: id_produto
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: 9da57f64-dc4b-4d6d-b39b-426ffea66e3b
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoDTO'
+            example:
+              nome: Blusa C
+              quantidade_estoque: '36'
+              preco: 87,50
+        required: true
+      responses:
+        '200':
+          description: Atualização do produto realizada com sucesso
+          content:
+            '*/*':
+              example:
+                id: 9da57f64-dc4b-4d6d-b39b-426ffea66e3b
+                nome: Blusa C
+                quantidade_estoque: 36
+                preco: 87.5
+        '400':
+          description: Parametros inválidos ou já cadastrados
+          content:
+            '*/*':
+              example:
+                - Campo: preco
+                  Erros: Não deve estar em branco. Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .
+                - Campo: quantidade_estoque
+                  Erros: Não deve estar em branco. Deve ser qualquer número entre 0 e 999999.
+                - Campo: nome
+                  Erros: 'Pode conter qualquer letra, número e os seguintes caracteres: , . /  # ( ) -. Não deve estar em branco.'
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Produto não encontrado
+      security:
+        - ecommerce: []
+    delete:
+      tags:
+        - Produtos
+      summary: Remove um produto
+      operationId: removerProduto
+      parameters:
+        - name: id_produto
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: bc4c0129-e190-4d5c-bf42-780585b74edf
+      responses:
+        '200':
+          description: Remoção de produto realizado com sucesso
+          content:
+            '*/*':
+              example: Produto Calça apagado com sucesso.
+        '400':
+          description: Id inválida
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Produto não encontrado
+      security:
+        - ecommerce: []
+  /itens-carrinho:
+    get:
+      tags:
+        - Carrinho
+      summary: Exibe os itens do carrinho
+      operationId: verCarrinho
+      responses:
+        '200':
+          description: Exibição dos itens realizado com sucesso
+          content:
+            '*/*':
+              example:
+                - produto:
+                    id: f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+                    nome: Blusa B
+                    quantidade_estoque: 326
+                    preco: 87.5
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+                  quantidade: 2
+                  valorTotalProduto: 175
+                - produto:
+                    id: b7545abe-eec2-4537-88fc-63667782789c
+                    nome: Meia B
+                    quantidade_estoque: 56
+                    preco: 6.44
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/b7545abe-eec2-4537-88fc-63667782789c
+                  quantidade: 7
+                  valorTotalProduto: 45.08
+                - produto:
+                    id: 8fcfe445-864c-4d96-b8c0-7d75acb45dc5
+                    nome: Tênis B
+                    quantidade_estoque: 91
+                    preco: 6.44
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/8fcfe445-864c-4d96-b8c0-7d75acb45dc5
+                  quantidade: 4
+                  valorTotalProduto: 25.76
+                - Quantidade de itens: 13
+                  Quantidade de produtos: 3
+                  Valor total do carrinho: 245.84
+        '400':
+          description: Carrinho inexistente.
+          content:
+            '*/*':
+              example: Usuário Bernardo Kauê da Silva não possui carrinho ativo.
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+      security:
+        - ecommerce: []
+    put:
+      tags:
+        - Carrinho
+      summary: Insere ou altera um item no carrinho
+      operationId: inserirProduto
+      parameters:
+        - name: id_produto
+          in: query
+          required: true
+          content:
+            '*/*':
+              example: 8fcfe445-864c-4d96-b8c0-7d75acb45dc5
+        - name: quantidade
+          in: query
+          required: true
+          content:
+            '*/*':
+              example: 4
+      responses:
+        '201':
+          description: Inserção do item realizada com sucesso
+          content:
+            '*/*':
+              example:
+                - produto:
+                    id: 8fcfe445-864c-4d96-b8c0-7d75acb45dc5
+                    nome: Tênis B
+                    quantidade_estoque: 87
+                    preco: 6.44
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/8fcfe445-864c-4d96-b8c0-7d75acb45dc5
+                  quantidade: 3
+                  valorTotalProduto: 19.32
+                - Quantidade de itens: 3
+                  Quantidade de produtos: 1
+                  Valor total do carrinho: 19.32
+        '400':
+          description: Id inválida
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Produto não encontrado
+      security:
+        - ecommerce: []
+    delete:
+      tags:
+        - Carrinho
+      summary: Remove todos os itens do carrinho
+      operationId: cancelaCarrinho
+      responses:
+        '200':
+          description: Carrinho cancelado.
+        '400':
+          description: Carrinho inexistente.
+          content:
+            '*/*':
+              example: Usuário Bernardo Kauê da Silva não possui carrinho ativo.
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+      security:
+        - ecommerce: []
+  /produtos:
+    get:
+      tags:
+        - Produtos
+      summary: Busca os produtos
+      operationId: buscarProdutos
+      parameters:
+        - name: page
+          in: query
+          description: Página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '0'
+        - name: size
+          in: query
+          description: Resultados por página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '5'
+        - name: sort
+          in: query
+          description: Critério de ordenação. Padronizado pelo campo "nome" ascendente. É possível adicionar múltiplos critérios.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+            default:
+              - nome,ASC
+      responses:
+        '200':
+          description: Busca de produtos realizada com sucesso
+          content:
+            application/json:
+              example:
+                content:
+                  - id: b47861f2-5ae0-4771-9d52-8d45bfec6acb
+                    nome: Bermuda A
+                    quantidade_estoque: 410
+                    preco: 900
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/b47861f2-5ae0-4771-9d52-8d45bfec6acb
+                  - id: 6bb93022-563a-4e01-ac6f-9752559447b7
+                    nome: Bermuda B
+                    quantidade_estoque: 84
+                    preco: 6.44
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/6bb93022-563a-4e01-ac6f-9752559447b7
+                  - id: 02e177c8-1d32-4ffb-984f-63e3e8a4e966
+                    nome: Blusa A
+                    quantidade_estoque: 495
+                    preco: 10
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/02e177c8-1d32-4ffb-984f-63e3e8a4e966
+                  - id: f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+                    nome: Blusa B
+                    quantidade_estoque: 500
+                    preco: 10
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+                  - id: 9da57f64-dc4b-4d6d-b39b-426ffea66e3b
+                    nome: Blusa C
+                    quantidade_estoque: 36
+                    preco: 87.5
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/9da57f64-dc4b-4d6d-b39b-426ffea66e3b
+                pageable:
+                  sort:
+                    empty: false
+                    unsorted: false
+                    sorted: true
+                  offset: 0
+                  pageSize: 5
+                  pageNumber: 0
+                  paged: true
+                  unpaged: false
+                last: false
+                totalPages: 4
+                totalElements: 18
+                size: 5
+                number: 0
+                sort:
+                  empty: false
+                  unsorted: false
+                  sorted: true
+                first: true
+                numberOfElements: 5
+                empty: false
+    post:
+      tags:
+        - Produtos
+      summary: Cadastra um produto
+      operationId: cadastrarProduto
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoDTO'
+            example:
+              nome: Blusa C
+              quantidade_estoque: '76'
+              preco: 38,99
+        required: true
+      responses:
+        '201':
+          description: Cadastro do produto realizado com sucesso
+          content:
+            application/json:
+              example:
+                id: 9da57f64-dc4b-4d6d-b39b-426ffea66e3b
+                nome: Blusa C
+                quantidade_estoque: 76
+                preco: 38.99
+        '400':
+          description: Parametros inválidos ou já cadastrados
+          content:
+            application/json:
+              example:
+                - Campo: preco
+                  Erros: Não deve estar em branco. Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .
+                - Campo: quantidade_estoque
+                  Erros: Não deve estar em branco. Deve ser qualquer número entre 0 e 999999.
+                - Campo: nome
+                  Erros: 'Pode conter qualquer letra, número e os seguintes caracteres: , . /  # ( ) -. Não deve estar em branco.'
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+      security:
+        - ecommerce: []
+  /itens-carrinho/venda:
+    post:
+      tags:
+        - Carrinho
+      summary: Efetiva a venda ao usuário
+      operationId: confirmaVenda
+      responses:
+        '201':
+          description: Efetivação da venda realizada com sucesso
+          content:
+            '*/*':
+              example: Venda confirmada.
+        '400':
+          description: Carrinho inexistente.
+          content:
+            '*/*':
+              example: Usuário Bernardo Kauê da Silva não possui carrinho ativo.
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '409':
+          description: Quantidade do produto no carrinho tornou-se maior que a disponível no estoque entre a inserção no carrinho e a efetivação da venda.
+          content:
+            '*/*':
+              example: Quantidade de Tênis B indisponível no estoque.
+      security:
+        - ecommerce: []
+  /usuarios/todos:
+    get:
+      tags:
+        - Usuários
+      summary: Busca os usuários
+      operationId: buscarUsuarios
+      parameters:
+        - name: page
+          in: query
+          description: Página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '0'
+        - name: size
+          in: query
+          description: Resultados por página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '5'
+        - name: sort
+          in: query
+          description: Critério de ordenação. Padronizado pelo campo "nome" ascendente. É possível adicionar múltiplos critérios.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+            default:
+              - nome,ASC
+      responses:
+        '200':
+          description: Busca do usuário realizada com sucesso
+          content:
+            application/json:
+              example:
+                content:
+                  - id: dceeba4a-b80c-42ac-8511-fae017a42bd5
+                    nome: Andrea Simone Raquel Cardoso
+                    login: andrea123
+                    senha: $2a$10$1nsF8HaOjqB7lh3fgTA0wOow62WMWJsl6k5sZYMshihTDVFM/zuoq
+                    cpf: '20259721808'
+                    data_nasc: 22/02/1970
+                    data_cadastro: 15/07/2023 às 18:34:59 UTC
+                    sexo: F
+                    telefone: (67)99156-1981
+                    email: andrea_simone_cardoso@hp.com
+                    cep: 79604-030
+                    uf: MS
+                    cidade: Três Lagoas
+                    rua: Rua João de Almeida Barros
+                    numero_rua: 2884
+                    enabled: true
+                    password: $2a$10$1nsF8HaOjqB7lh3fgTA0wOow62WMWJsl6k5sZYMshihTDVFM/zuoq
+                    authorities:
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: andrea123
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/dceeba4a-b80c-42ac-8511-fae017a42bd5
+                  - id: 7e14f00c-ab42-4ad3-a052-091e996132a9
+                    nome: Artur Ferraz
+                    login: artur123
+                    senha: $2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW
+                    cpf: '68497813081'
+                    data_nasc: 26/02/2002
+                    data_cadastro: 24/05/2023 às 12:50:05 UTC
+                    sexo: F
+                    telefone: (45)12345-1234
+                    email: artur@pibnet.com.br
+                    cep: 63010-010
+                    uf: CE
+                    cidade: Juazeiro do Norte
+                    rua: Rua São Pedro
+                    numero_rua: 22
+                    enabled: true
+                    password: $2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW
+                    authorities:
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: artur123
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/7e14f00c-ab42-4ad3-a052-091e996132a9
+                  - id: 836f431f-6e12-412e-a170-ac6d39081293
+                    nome: Aurora Antonella Yasmin de Paula
+                    login: aurora123
+                    senha: $2a$10$R6YIwkfUj2HUO0a.kbaJXurLI8eoCHRy7c7OWoeR3HWqyQfriLLiC
+                    cpf: '87773610240'
+                    data_nasc: 13/06/1963
+                    data_cadastro: 15/07/2023 às 18:25:54 UTC
+                    sexo: F
+                    telefone: (21)98620-6951
+                    email: aurora_depaula@gustavoscoelho.com.br
+                    cep: 21725-270
+                    uf: RJ
+                    cidade: Rio de Janeiro
+                    rua: Rua Sândalo
+                    numero_rua: 981
+                    enabled: true
+                    password: $2a$10$R6YIwkfUj2HUO0a.kbaJXurLI8eoCHRy7c7OWoeR3HWqyQfriLLiC
+                    authorities:
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: aurora123
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/836f431f-6e12-412e-a170-ac6d39081293
+                  - id: 8f0ca30d-9066-4245-a962-4f0086926e3c
+                    nome: Benedito Juan Felipe Sales
+                    login: bened123
+                    senha: $2a$10$K3UzNbc7TAdIiozqlOJHZe9leli3wefvke88JoFNvK/FSwNthDcAW
+                    cpf: '98153379470'
+                    data_nasc: 30/11/2034
+                    data_cadastro: 09/07/2023 às 14:16:17 UTC
+                    sexo: M
+                    telefone: (69)98856-5123
+                    email: benedito.juan.sales@gerj.com.br
+                    cep: 80210-140
+                    uf: PR
+                    cidade: Curitiba
+                    rua: Jardinete Rutílio de Sá Ribas
+                    numero_rua: 22
+                    enabled: true
+                    password: $2a$10$K3UzNbc7TAdIiozqlOJHZe9leli3wefvke88JoFNvK/FSwNthDcAW
+                    authorities:
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: bened123
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/8f0ca30d-9066-4245-a962-4f0086926e3c
+                  - id: 2eb8d460-2ac3-48f0-bb2e-72cbd20c206c
+                    nome: Bernardo Kauê da Silva
+                    login: berna123
+                    senha: $2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW
+                    cpf: '59105639042'
+                    data_nasc: 16/01/1975
+                    data_cadastro: 24/05/2023 às 12:51:44 UTC
+                    sexo: M
+                    telefone: (45)12345-1234
+                    email: bernardo-dasilva98@hotmail.co.jp
+                    cep: 80210-140
+                    uf: PR
+                    cidade: Curitiba
+                    rua: Jardinete Rutílio de Sá Ribas
+                    numero_rua: 252
+                    enabled: true
+                    password: $2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW
+                    authorities:
+                      - id: 10f90c00-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_ADMIN
+                        authority: ROLE_ADMIN
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: berna123
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/2eb8d460-2ac3-48f0-bb2e-72cbd20c206c
+                pageable:
+                  sort:
+                    empty: false
+                    unsorted: false
+                    sorted: true
+                  offset: 0
+                  pageSize: 5
+                  pageNumber: 0
+                  unpaged: false
+                  paged: true
+                last: false
+                totalPages: 3
+                totalElements: 13
+                size: 5
+                number: 0
+                sort:
+                  empty: false
+                  unsorted: false
+                  sorted: true
+                first: true
+                numberOfElements: 5
+                empty: false
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+      security:
+        - ecommerce: []
+  /usuarios/nome/{nome}:
+    get:
+      tags:
+        - Usuários
+      summary: Busca os usuários por nome
+      operationId: buscarUsuariosPorNome
+      parameters:
+        - name: nome
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: Artur
+        - name: page
+          in: query
+          description: Página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '0'
+        - name: size
+          in: query
+          description: Resultados por página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '5'
+        - name: sort
+          in: query
+          description: Critério de ordenação. Padronizado pelo campo "nome" ascendente. É possível adicionar múltiplos critérios.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+            default:
+              - nome,ASC
+      responses:
+        '200':
+          description: Busca dos usuários realizada com sucesso
+          content:
+            '*/*':
+              example:
+                content:
+                  - id: 7e14f00c-ab42-4ad3-a052-091e996132a9
+                    nome: Artur Ferraz
+                    login: artur123
+                    senha: $2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW
+                    cpf: '68497813081'
+                    data_nasc: 26/02/2002
+                    data_cadastro: 24/05/2023 às 12:50:05 UTC
+                    sexo: F
+                    telefone: (45)12345-1234
+                    email: artur@pibnet.com.br
+                    cep: 63010-010
+                    uf: CE
+                    cidade: Juazeiro do Norte
+                    rua: Rua São Pedro
+                    numero_rua: 22
+                    enabled: true
+                    password: $2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    authorities:
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: artur123
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/7e14f00c-ab42-4ad3-a052-091e996132a9
+                pageable:
+                  sort:
+                    empty: false
+                    sorted: true
+                    unsorted: false
+                  offset: 0
+                  pageNumber: 0
+                  pageSize: 5
+                  paged: true
+                  unpaged: false
+                last: true
+                totalElements: 1
+                totalPages: 1
+                size: 5
+                number: 0
+                sort:
+                  empty: false
+                  sorted: true
+                  unsorted: false
+                first: true
+                numberOfElements: 1
+                empty: false
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Nenhum Usuário encontrado
+      security:
+        - ecommerce: []
+  /usuarios/id/{id_usuario}:
+    get:
+      tags:
+        - Usuários
+      summary: Busca um usuário por ID
+      operationId: buscarUsuarioPorId
+      parameters:
+        - name: id_usuario
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: dceeba4a-b80c-42ac-8511-fae017a42bd5
+      responses:
+        '200':
+          description: Busca do usuário realizado com sucesso
+          content:
+            '*/*':
+              example:
+                content:
+                  - id: f94ea127-c9cd-4ac2-99cb-aa84ae84500b
+                    nome: Heloisa Yasmin Costa
+                    login: heloi123
+                    senha: $2a$10$HhxGI2Ic8SkNNRU3vsq9m.3kJjzxRtik.uePu3WSjm3PxZeyS5VFC
+                    cpf: '70181125404'
+                    data_nasc: 06/03/1945
+                    data_cadastro: 24/07/2023 às 16:58:49 UTC
+                    sexo: F
+                    telefone: (85)98981-2256
+                    email: heloisa_costa@ciaimoveissjc.com
+                    cep: 61604-270
+                    uf: CE
+                    cidade: Caucaia
+                    rua: Rua Sargento Feitosa
+                    numero_rua: 981
+                    enabled: true
+                    password: $2a$10$HhxGI2Ic8SkNNRU3vsq9m.3kJjzxRtik.uePu3WSjm3PxZeyS5VFC
+                    authorities:
+                      - id: 15124cfe-15bc-11ee-9769-94c6914cb639
+                        nome: ROLE_USER
+                        authority: ROLE_USER
+                    username: heloi123
+                    accountNonExpired: true
+                    credentialsNonExpired: true
+                    accountNonLocked: true
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/usuarios/id/f94ea127-c9cd-4ac2-99cb-aa84ae84500b
+                pageable:
+                  sort:
+                    empty: false
+                    unsorted: false
+                    sorted: true
+                  offset: 0
+                  pageSize: 1
+                  pageNumber: 0
+                  unpaged: false
+                  paged: true
+                last: true
+                totalPages: 1
+                totalElements: 1
+                size: 1
+                number: 0
+                sort:
+                  empty: false
+                  unsorted: false
+                  sorted: true
+                first: true
+                numberOfElements: 1
+                empty: false
+        '400':
+          description: Id inválida
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Usuário não encontrado
+      security:
+        - ecommerce: []
+  /produtos/nome/{nome}:
+    get:
+      tags:
+        - Produtos
+      summary: Busca os produtos por nome
+      operationId: buscarProdutosPorNome
+      parameters:
+        - name: nome
+          in: path
+          required: true
+          schema:
+            type: string
+          example: Bermuda
+        - name: page
+          in: query
+          description: Página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '0'
+        - name: size
+          in: query
+          description: Resultados por página
+          required: false
+          content:
+            '*/*':
+              schema:
+                type: integer
+                default: '5'
+        - name: sort
+          in: query
+          description: Critério de ordenação. Padronizado pelo campo "nome" ascendente. É possível adicionar múltiplos critérios.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+            default:
+              - nome,ASC
+      responses:
+        '200':
+          description: Busca de produto realizado com sucesso
+          content:
+            '*/*':
+              example:
+                content:
+                  - id: b47861f2-5ae0-4771-9d52-8d45bfec6acb
+                    nome: Bermuda A
+                    quantidade_estoque: 410
+                    preco: 900
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/b47861f2-5ae0-4771-9d52-8d45bfec6acb
+                  - id: 6bb93022-563a-4e01-ac6f-9752559447b7
+                    nome: Bermuda B
+                    quantidade_estoque: 84
+                    preco: 6.44
+                    links:
+                      - rel: self
+                        href: http://localhost:8080/produtos/id/6bb93022-563a-4e01-ac6f-9752559447b7
+                pageable:
+                  sort:
+                    empty: false
+                    sorted: true
+                    unsorted: false
+                  offset: 0
+                  pageSize: 5
+                  pageNumber: 0
+                  paged: true
+                  unpaged: false
+                last: true
+                totalElements: 2
+                totalPages: 1
+                size: 5
+                number: 0
+                sort:
+                  empty: false
+                  sorted: true
+                  unsorted: false
+                first: true
+                numberOfElements: 2
+                empty: false
+        '404':
+          description: Produto não encontrado
+  /produtos/id/{id_produto}:
+    get:
+      tags:
+        - Produtos
+      summary: Busca um produto por ID
+      operationId: buscarProdutoPorId
+      parameters:
+        - name: id_produto
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+      responses:
+        '200':
+          description: Busca de produto realizado com sucesso
+          content:
+            '*/*':
+              example:
+                id: f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+                nome: Blusa B
+                quantidade_estoque: 500
+                preco: 10
+                _links:
+                  Lista de Produtos:
+                    href: http://localhost:8080/produtos
+        '400':
+          description: Id inválida
+        '404':
+          description: Produto não encontrado
+  /usuarios/{id_usuario}:
+    delete:
+      tags:
+        - Usuários
+      summary: Remove um usuário por ID
+      operationId: deletarUsuarioPorId
+      parameters:
+        - name: id_usuario
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: f9c473bf-afb8-4eb2-9d32-d1c2b9498408
+      responses:
+        '200':
+          description: Remoção de usuário realizado com sucesso
+          content:
+            '*/*':
+              example: Usuário Heloisa Yasmin Costa apagado com sucesso.
+        '400':
+          description: Id inválida
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Usuário não encontrado
+      security:
+        - ecommerce: []
+  /itens-carrinho/{id_produto}:
+    delete:
+      tags:
+        - Carrinho
+      summary: Remove um item do carrinho por ID
+      operationId: removeItemCarrinho
+      parameters:
+        - name: id_produto
+          in: path
+          required: true
+          content:
+            '*/*':
+              example: 8fcfe445-864c-4d96-b8c0-7d75acb45dc5
+      responses:
+        '200':
+          description: Remoção do item realizado com sucesso
+          content:
+            '*/*':
+              example: Item Tênis B removido.
+        '400':
+          description: Id inválida
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso proibido
+        '404':
+          description: Produto não encontrado
+      security:
+        - ecommerce: []
+components:
+  schemas:
+    UsuarioDTO:
+      required:
+        - cep
+        - cpf
+        - data_nasc
+        - email
+        - login
+        - nome
+        - numero_rua
+        - senha
+        - sexo
+        - telefone
+      type: object
+      properties:
+        nome:
+          maxLength: 80
+          minLength: 0
+          pattern: '[A-Z\u00C0-\u00FF][a-zA-Z\u00C0-\u00FF]+(\s([a-zA-Z\u00C0-\u00FF])+)*'
+          type: string
+        login:
+          maxLength: 20
+          minLength: 8
+          pattern: ^(?=.*[a-z])[a-z\d_]+$
+          type: string
+        senha:
+          maxLength: 20
+          minLength: 8
+          pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$
+          type: string
+        cpf:
+          type: string
+        data_nasc:
+          pattern: ^\d{2}/\d{2}/\d{4}$
+          type: string
+        sexo:
+          pattern: ^(?:M|F|O)$
+          type: string
+        telefone:
+          pattern: ^\(\d{2}\)\d{5}\-\d{4}$
+          type: string
+        email:
+          maxLength: 50
+          minLength: 0
+          type: string
+        cep:
+          pattern: \d{5}-\d{3}
+          type: string
+        numero_rua:
+          pattern: ^[1-9]\d{0,4}$
+          type: string
+    ProdutoDTO:
+      required:
+        - nome
+        - preco
+        - quantidade_estoque
+      type: object
+      properties:
+        nome:
+          maxLength: 80
+          minLength: 0
+          pattern: '[\w\u00C0-\u00FF\/\\#,.()\-'']+(\s([\w\u00C0-\u00FF\/\\#(),.\-''])+)*'
+          type: string
+        quantidade_estoque:
+          pattern: ^\d{1,6}$
+          type: string
+        preco:
+          pattern: ^\d{1,6}([,|.]\d{1,2})?$
+          type: string
+  securitySchemes:
+    ecommerce:
+      type: http
+      scheme: basic
