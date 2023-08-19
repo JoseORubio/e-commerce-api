@@ -12,7 +12,7 @@
  
 - [Diagrama de entidade-relacionamento](#diagrama-de-entidade-relacionamento)
  
-- [Tecnologias utilizadas](#tecnologias-utilizadas)
+- [Tecnologias, dependências e ferramentas utilizadas](#tecnologias,-dependências-e-ferramentas-utilizadas)
  
 - [Acesso ao projeto](#acesso-ao-projeto)
  
@@ -42,3 +42,76 @@ Este é meu projeto principal no momento, onde pretendo adicionar funcionalidade
 :heavy_check_mark: `Funcionalidade 2:` CRUD completo, com validação para os produtos.
 
 :heavy_check_mark: `Funcionalidade 3:` CRUD completo de um carrinho de compras.
+
+## Documentação
+
+Para visualizar a documentação copie o conteúdo deste [arquivo](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/Swagger%20doc.yaml) e cole neste [editor de documentação do Swagger](https://editor.swagger.io/)
+
+## Segurança
+
+As permissões ("ADMIN", "USER", anônimo) são gerenciadas da seguinte forma de acordo com cada endpoint:
+
+- Usuário POST: Todos
+
+- Usuário PUT, DELETE, GET: "ADMIN" e "USER"
+
+- Usuário GET (todos, por ID, por nome) : "ADMIN"
+
+- Produto POST, PUT, DELETE: "ADMIN"
+
+- Produto GET(todos, por ID, por nome): Todos
+
+- Carrinho POST, PUT, DELETE, GET: "USER". Apenas o próprio usuário tem acesso a seu carrinho.
+
+## Diagrama de entidade-relacionamento
+
+<div align="center">
+  <img src="Arquivos/Diagrama Entidade-Relacionamento.png">
+ </div>
+
+ ## Tecnologias, dependências e ferramentas utilizadas
+
+- Java 17
+- MySQL
+- Spring 3.0.6
+- - Spring Boot
+- - Spring Web MVC
+- - Spring Data JPA
+- - Spring Validation    
+- - Spring Security
+- - Spring HATEOAS
+- Maven 
+- Jackson 2.14.2
+- Springdoc-Openapi 2.1.0
+- InteliJ IDEA
+- Postman
+- Swagger
+ 
+## Acesso ao projeto
+Você pode [acessar o código fonte do projeto](https://github.com/JoseORubio/e-commerce-api) ou [baixá-lo](https://github.com/JoseORubio/e-commerce-api/archive/refs/heads/master.zip).
+
+## Abrir e rodar o projeto
+
+- É necessário importar no seu MySQL o arquivo dump de suas tabelas e dados disponibilizado. [link](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/e-commerce-dump20230819.sql)
+- Clone este projeto, importe as dependências com Maven e execute-o em sua IDE. Eu utilizei o IntelliJ IDEA Community Edition.
+- Exemplos úteis de logins com as autoridades: berna123 (ADMIN, USER), mayaf123 (ADMIN), artur123 (USER). Para todos a senha é "asd123aaD" .
+- Teste-o através do Postman, baixando o arquivo [E-Commerce.postman_collection.json](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/E-Commerce.postman_collection.json)  e importanto-o em suas coleções.
+- Também é possível testar via Swagger neste [LINK](http://localhost:8080/swagger-ui/index.html) 
+- Para obter outros detalhes de funcionamento da api existem algumas views no banco de dados que pretendo implementar futuramente  no serviço de administração. Apenas execute em seu MySQL "select * from nome_da_view", seguem os nomes das views:
+- - carrinho_view: exibe todos os carrinhos ativos no momento de todos os usuários.
+- - papeis_do_usuario_view: exibe os papéis de cada usuário.
+- - produtos_vendidos: exibe todos os produtos já vendidos com usuários.
+- - vendas_view: exibe todos as vendas já efetuadas com usuários.
+
+## Próximos Passos
+
+Ordenado por prioridade.
+
+- Criar testes unitários e de integração
+- Aprofundar a especificidade de produtos, com criação de sub-categorias, preço de compra, taxas, registro de imagem...
+- Utilizar o Lombok para limpar mais o código do programa.
+- Criar serviço de administração do sistema, aplicando ciclo vermelho-verde-refatora do TDD de 3 etapas desde o início
+- - Esta funcionalidade deverá permitir aos administradores gerenciar autoridades e acessar dados de histórico de vendas por usuário, produto e data.
+- Implementar a aplicação num docker e nuvem.
+
+Por fim seguirei agregando novas ideias de acordo com alguma ferramenta específica que eu estiver estudando.
