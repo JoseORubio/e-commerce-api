@@ -33,6 +33,7 @@ Todos os dados de entrada são validados, em alguns casos com o uso de expressõ
 É utilizado o uso do webservice ViaCep para consultar o CEP no momento do cadastro, bem como para auto completar os campos relacionados (Estado, Cidade, Rua) com os dados correspondentes.
 
 Cada endpoint possui uma regra de permissão específica que será exposto no tópico "Segurança".
+
 Este é meu projeto principal no momento, onde pretendo adicionar funcionalidades aliadas às novas tecnologias ou ferramentas que eu estiver estudando.
 
 ## Funcionalidades
@@ -92,7 +93,7 @@ Você pode [acessar o código fonte do projeto](https://github.com/JoseORubio/e-
 
 ## Abrir e rodar o projeto
 
-- É necessário importar no seu MySQL o arquivo dump de suas tabelas e dados disponibilizado. [link](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/e-commerce-dump20230819.sql)
+- É necessário importar no seu MySQL o arquivo dump contendo suas tabelas e dados, disponibilizado [aqui](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/e-commerce-dump20230819.sql).
 - Clone este projeto, importe as dependências com Maven e execute-o em sua IDE. Eu utilizei o IntelliJ IDEA Community Edition.
 - Exemplos úteis de logins com as autoridades: berna123 (ADMIN, USER), mayaf123 (ADMIN), artur123 (USER). Para todos a senha é "asd123aaD" .
 - Teste-o através do Postman, baixando o arquivo [E-Commerce.postman_collection.json](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/E-Commerce.postman_collection.json)  e importanto-o em suas coleções.
