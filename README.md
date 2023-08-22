@@ -46,7 +46,12 @@ Este é meu projeto principal no momento, onde pretendo adicionar funcionalidade
 
 ## Documentação
 
-Para visualizar a documentação copie o conteúdo deste [arquivo](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/Swagger%20doc.yaml) e cole neste [editor de documentação do Swagger](https://editor.swagger.io/)
+Para visualizar a documentação copie o conteúdo deste [arquivo](https://github.com/JoseORubio/e-commerce-api/blob/master/Arquivos/Swagger%20doc.yaml) e cole neste [editor de documentação do Swagger](https://editor.swagger.io/).
+
+Print da visualização no Swagger:
+<div align="center">
+  <img src="Arquivos/Print documentação.png">
+ </div>
 
 ## Segurança
 
@@ -108,10 +113,10 @@ Você pode [acessar o código fonte do projeto](https://github.com/JoseORubio/e-
 
 Ordenado por prioridade.
 
-- Criar testes unitários e de integração
+- Criar testes unitários e de integração.
 - Aprofundar a especificidade de produtos, com criação de sub-categorias, preço de compra, taxas, registro de imagem...
 - Utilizar o Lombok para limpar mais o código do programa.
-- Criar serviço de administração do sistema, aplicando ciclo vermelho-verde-refatora do TDD de 3 etapas desde o início
+- Criar serviço de administração do sistema, aplicando ciclo vermelho-verde-refatora do TDD  desde o início.
 - - Esta funcionalidade deverá permitir aos administradores gerenciar autoridades e acessar dados de histórico de vendas por usuário, produto e data.
 - Implementar a aplicação num docker e nuvem.
 
