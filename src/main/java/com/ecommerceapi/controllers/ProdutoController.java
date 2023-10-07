@@ -39,7 +39,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/produtos")
 @Tag(name = "Produtos", description = "Gerencia os produtos")
 public class ProdutoController {
-
     final ProdutoService produtoService;
 
     public ProdutoController(ProdutoService produtoService) {
@@ -307,6 +306,20 @@ public class ProdutoController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(listaProdutos);
     }
+
+
+//    @GetMapping
+//    public ResponseEntity<Page<ProdutoModel>> buscarProdutos2() {
+//        Page<ProdutoModel> listaProdutos = produtoService.buscarProdutos(Pageable.unpaged());
+//        if (!listaProdutos.isEmpty()) {
+//            for (ProdutoModel produto : listaProdutos) {
+//                produto.add(linkTo(
+//                        methodOn(ProdutoController.class).buscarProdutoPorId(produto.getId().toString()))
+//                        .withSelfRel());
+//            }
+//        }
+//        return ResponseEntity.status(HttpStatus.OK).body(listaProdutos);
+//    }
 
     @GetMapping("/id/{id_produto}")
     @Operation(summary = "Busca um produto por ID", method = "GET")

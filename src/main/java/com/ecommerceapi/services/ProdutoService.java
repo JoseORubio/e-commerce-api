@@ -100,6 +100,7 @@ public class ProdutoService {
         salvarProduto(produtoModel);
     }
 
+    //Pode se tornar private
     public boolean existsByNome(String nome) {
         return produtoRepository.existsByNome(nome);
     }
