@@ -308,19 +308,6 @@ public class ProdutoController {
     }
 
 
-//    @GetMapping
-//    public ResponseEntity<Page<ProdutoModel>> buscarProdutos2() {
-//        Page<ProdutoModel> listaProdutos = produtoService.buscarProdutos(Pageable.unpaged());
-//        if (!listaProdutos.isEmpty()) {
-//            for (ProdutoModel produto : listaProdutos) {
-//                produto.add(linkTo(
-//                        methodOn(ProdutoController.class).buscarProdutoPorId(produto.getId().toString()))
-//                        .withSelfRel());
-//            }
-//        }
-//        return ResponseEntity.status(HttpStatus.OK).body(listaProdutos);
-//    }
-
     @GetMapping("/id/{id_produto}")
     @Operation(summary = "Busca um produto por ID", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",

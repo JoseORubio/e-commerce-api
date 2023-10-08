@@ -4,7 +4,6 @@ package com.ecommerceapi;
 import com.ecommerceapi.controllers.ProdutoController;
 import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.models.ProdutoModel;
-import com.ecommerceapi.repositories.ProdutoRepository;
 import com.ecommerceapi.services.ProdutoService;
 import com.ecommerceapi.utils.ConversorUUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,11 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,32 +25,26 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(MockitoExtension.class)
-//@WebMvcTest(controllers = ProdutoController.class)
 public class TesteProdutosController {
 
     @InjectMocks
     ProdutoController produtoController;
     @Mock
     ProdutoService produtoService;
-    @Mock
-    Pageable pageable = mock(PageRequest.class);
+//    @Mock
+//    Pageable pageable = mock(PageRequest.class);
 
     @Autowired
     MockMvc mockMvc;
@@ -64,13 +54,9 @@ public class TesteProdutosController {
     Page<ProdutoModel> listaProdutos;
 
 
-    //    @Autowired
-//    private WebApplicationContext context;
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(produtoController)
-//        mockMvc = MockMvcBuilders.webAppContextSetup(context)
-//                .apply(springSecurity())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .alwaysDo(print())
                 .build();
@@ -101,7 +87,6 @@ public class TesteProdutosController {
         when(produtoService.buscarProdutos(any(Pageable.class))).thenReturn(listaProdutos);
         mockMvc.perform(get("/produtos")
                                 .contentType(MediaType.APPLICATION_JSON)
-//                        .with(anonymous())
                 ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         verify(produtoService).buscarProdutos(any(Pageable.class));
@@ -112,10 +97,12 @@ public class TesteProdutosController {
     public void deveBuscarProdutoscomPageable() throws Exception {
 
         when(produtoService.buscarProdutos(any(Pageable.class))).thenReturn(listaProdutos);
+//        mockMvc.perform(get("/produtos")
         mockMvc.perform(get("/produtos?page=1&size=10")
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
+//                .andReturn()
+        ;
         verify(produtoService).buscarProdutos(any(Pageable.class));
         verifyNoMoreInteractions(produtoService);
     }
@@ -130,7 +117,6 @@ public class TesteProdutosController {
         mockMvc.perform(post("/produtos")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(asJsonString(produtoDTO))
-//                        .with(anonymous())
                 ).andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
 
