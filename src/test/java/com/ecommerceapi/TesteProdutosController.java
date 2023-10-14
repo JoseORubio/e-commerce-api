@@ -110,7 +110,7 @@ public class TesteProdutosController {
     @Test
     public void deveCadastrarProduto() throws Exception {
 
-        BindException bindingResult = new BindException(produtoDTO, "prod");
+//        BindException bindingResult = new BindException(produtoDTO, "prod");
         when(produtoService.validaCadastroProduto(any(ProdutoDTO.class), any(BindingResult.class)))
                 .thenReturn(produtoModel);
 
@@ -118,7 +118,8 @@ public class TesteProdutosController {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(asJsonString(produtoDTO))
                 ).andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
+//                .andReturn()
+        ;
 
         verify(produtoService).salvarProduto(produtoModel);
         verifyNoMoreInteractions(produtoService);
