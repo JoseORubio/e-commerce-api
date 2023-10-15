@@ -5,7 +5,6 @@ import com.ecommerceapi.mockedmodels.ProdutoDTOMock;
 import com.ecommerceapi.mockedmodels.ProdutoModelMock;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.ProdutoService;
-import com.ecommerceapi.utils.ConversorUUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,20 +18,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -82,7 +77,7 @@ public class ProdutoControllerTest {
                 .thenReturn(produtoModel);
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO)))
+                .content(new ObjectMapper().writeValueAsString(produtoDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
@@ -92,7 +87,7 @@ public class ProdutoControllerTest {
                 .thenThrow(exception);
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO)))
+                        .content(new ObjectMapper().writeValueAsString(produtoDTO)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -105,7 +100,7 @@ public class ProdutoControllerTest {
                 .thenReturn(produtoModel);
         mockMvc.perform(put("/produtos/" + idProduto)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO)))
+                        .content(new ObjectMapper().writeValueAsString(produtoDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -115,7 +110,7 @@ public class ProdutoControllerTest {
                 .thenThrow(IllegalArgumentException.class);
         mockMvc.perform(put("/produtos/" + "123")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO)))
+                        .content(new ObjectMapper().writeValueAsString(produtoDTO)))
                 .andExpect(content().string("Id inválida."))
                 .andExpect(status().isBadRequest());
     }
@@ -126,7 +121,7 @@ public class ProdutoControllerTest {
                 .thenReturn(Optional.empty());
         mockMvc.perform(put("/produtos/" + idProduto)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO)))
+                        .content(new ObjectMapper().writeValueAsString(produtoDTO)))
                 .andExpect(content().string("Produto não encontrado."))
                 .andExpect(status().isNotFound());
     }
@@ -140,7 +135,7 @@ public class ProdutoControllerTest {
                 .thenThrow(exception);
         mockMvc.perform(put("/produtos/" + idProduto)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO)))
+                        .content(new ObjectMapper().writeValueAsString(produtoDTO)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -235,11 +230,5 @@ public class ProdutoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    private static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }

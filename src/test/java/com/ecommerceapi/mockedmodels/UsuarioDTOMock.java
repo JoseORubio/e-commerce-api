@@ -16,5 +16,6 @@ public class UsuarioDTOMock extends UsuarioDTO {
         this.setTelefone("(61)91236-1932");
         this.setEmail("tiagosilva@gmail.com");
         this.setCep("53240-685");
+        this.setNumero_rua("421");
     }
 }

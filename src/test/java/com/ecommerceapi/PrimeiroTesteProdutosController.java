@@ -114,9 +114,8 @@ public class PrimeiroTesteProdutosController {
 
         mockMvc.perform(post("/produtos")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(asJsonString(produtoDTO))
+                                .content(new ObjectMapper().writeValueAsString((produtoDTO)))
                 ).andExpect(MockMvcResultMatchers.status().isCreated())
-//                .andReturn()
         ;
 
         verify(produtoService).salvarProduto(produtoModel);
@@ -137,7 +136,7 @@ public class PrimeiroTesteProdutosController {
 
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(produtoDTO))
+                        .content(new ObjectMapper().writeValueAsString((produtoDTO)))
                 ).andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn();
 
@@ -185,13 +184,6 @@ public class PrimeiroTesteProdutosController {
     }
 
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
 }
