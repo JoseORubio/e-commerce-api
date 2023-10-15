@@ -81,12 +81,12 @@ public class ProdutoController {
                                     "    \"quantidade_estoque\" : \"76\",\n" +
                                     "    \"preco\": \"38,99\"}")
                     }))
-            @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult errosDeValidacao)  {
+            @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
 
         ProdutoModel produtoModel = null;
         try {
             produtoModel = produtoService.validaCadastroProduto(produtoDTO, errosDeValidacao);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             JsonNode mensagensErros = ManipuladorListaErros.converteStringJsonParaJsonNode(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagensErros);
         }
@@ -101,7 +101,7 @@ public class ProdutoController {
     @SecurityRequirement(name = "ecommerce")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualização do produto realizada com sucesso",
-                    content = @Content( examples = {@ExampleObject(
+                    content = @Content(examples = {@ExampleObject(
                             value = "{\n" +
                                     "    \"id\": \"9da57f64-dc4b-4d6d-b39b-426ffea66e3b\",\n" +
                                     "    \"nome\": \"Blusa C\",\n" +
@@ -109,7 +109,7 @@ public class ProdutoController {
                                     "    \"preco\": 87.5\n" +
                                     "}")})),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já cadastrados",
-                    content = @Content( examples = {@ExampleObject(
+                    content = @Content(examples = {@ExampleObject(
                             value = "[\n" +
                                     "    {\n" +
                                     "        \"Campo\": \"preco\",\n" +
@@ -144,7 +144,7 @@ public class ProdutoController {
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
         if (produtoOptional.isEmpty()) {
@@ -155,7 +155,7 @@ public class ProdutoController {
 
         try {
             produtoModel = produtoService.validaAtualizacaoProduto(produtoOptional.get(), produtoDTO, errosDeValidacao);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             JsonNode mensagensErros = ManipuladorListaErros.converteStringJsonParaJsonNode(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagensErros);
         }
@@ -183,7 +183,7 @@ public class ProdutoController {
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
         if (produtoOptional.isEmpty()) {
@@ -311,7 +311,7 @@ public class ProdutoController {
     @GetMapping("/id/{id_produto}")
     @Operation(summary = "Busca um produto por ID", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",
-            content = @Content( examples = {@ExampleObject(
+            content = @Content(examples = {@ExampleObject(
                     value = "{\n" +
                             "  \"id\": \"f9c473bf-afb8-4eb2-9d32-d1c2b9498408\",\n" +
                             "  \"nome\": \"Blusa B\",\n" +
@@ -328,13 +328,13 @@ public class ProdutoController {
     })
     public ResponseEntity<Object> buscarProdutoPorId(
             @Parameter(content = @Content(examples = @ExampleObject("f9c473bf-afb8-4eb2-9d32-d1c2b9498408")))
-            @PathVariable(value = "id_produto") String id_produto) {
+            @PathVariable(value = "id_produto") String idProduto) {
 
         Optional<ProdutoModel> produtoOptional = null;
         try {
-            produtoOptional = produtoService.buscarProdutoPorId(id_produto);
+            produtoOptional = produtoService.buscarProdutoPorId(idProduto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
         if (produtoOptional.isEmpty()) {
@@ -350,7 +350,7 @@ public class ProdutoController {
     @GetMapping("/nome/{nome}")
     @Operation(summary = "Busca os produtos por nome", method = "GET")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Busca de produto realizado com sucesso",
-            content = @Content( examples = {@ExampleObject(
+            content = @Content(examples = {@ExampleObject(
                     value = "{\n" +
                             "  \"content\": [\n" +
                             "    {\n" +
