@@ -2,13 +2,9 @@ package com.ecommerceapi.mockedmodels;
 
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.utils.ConversorUUID;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class UsuarioModelMock extends UsuarioModel {
 

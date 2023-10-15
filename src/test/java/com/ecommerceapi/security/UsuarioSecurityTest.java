@@ -1,14 +1,11 @@
 package com.ecommerceapi.security;
 
 
-import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.dtos.UsuarioDTO;
 import com.ecommerceapi.mockedmodels.*;
-import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.PapelDoUsuarioService;
 import com.ecommerceapi.services.PapelService;
-import com.ecommerceapi.services.ProdutoDaVendaService;
 import com.ecommerceapi.services.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

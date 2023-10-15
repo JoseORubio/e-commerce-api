@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,19 +37,6 @@ public class ProdutoSecurityTest {
 
     @MockBean
     ProdutoService produtoService;
-//    @MockBean
-//    VendaService vendaService;
-//    @MockBean
-//    CarrinhoService carrinhoService;
-//    @MockBean
-//    PapelService papelService;
-//    @MockBean
-//    PapelDoUsuarioService papelDoUsuarioService;
-//    @MockBean
-//    ProdutoDaVendaService produtoDaVendaService;
-//    @MockBean
-//    UsuarioService usuarioService;
-
 
     @Autowired
     private WebApplicationContext context;
