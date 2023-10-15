@@ -73,7 +73,7 @@ public class UsuarioSecurityTest {
     // BuscarUsuarioLogado
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveBuscarUsuarioLogadoStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveBuscarUsuarioLogadoStatusUnauthorized() throws Exception {
         mockMvc.perform(get("/usuarios"))
                 .andExpect(status().isUnauthorized());
     }
@@ -99,14 +99,14 @@ public class UsuarioSecurityTest {
     // BuscarUsuarios
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveBuscarUsuariosStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveBuscarUsuariosStatusUnauthorized() throws Exception {
         mockMvc.perform(get("/usuarios/todos"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void userNaoDeveBuscarUsuariosStatusProibido() throws Exception {
+    void userNaoDeveBuscarUsuariosStatusForbidden() throws Exception {
         mockMvc.perform(get("/usuarios/todos"))
                 .andExpect(status().isForbidden());
     }
@@ -123,14 +123,14 @@ public class UsuarioSecurityTest {
     // BuscarUsuarioPorID
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveBuscarUsuarioPorIDStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveBuscarUsuarioPorIDStatusUnauthorized() throws Exception {
         mockMvc.perform(get("/usuarios/id/" + idUsuario))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void userNaoDeveBuscarUsuarioPorIDStatusProibido() throws Exception {
+    void userNaoDeveBuscarUsuarioPorIDStatusForbidden() throws Exception {
         mockMvc.perform(get("/usuarios/id/" + idUsuario))
                 .andExpect(status().isForbidden());
     }
@@ -147,14 +147,14 @@ public class UsuarioSecurityTest {
     // BuscarUsuarioPorNome
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveBuscarUsuarioPornomeStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveBuscarUsuarioPornomeStatusUnauthorized() throws Exception {
         mockMvc.perform(get("/usuarios/nome/" + nome))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void userNaoDeveBuscarUsuarioPornomeStatusProibido() throws Exception {
+    void userNaoDeveBuscarUsuarioPornomeStatusForbidden() throws Exception {
         mockMvc.perform(get("/usuarios/nome/" + nome))
                 .andExpect(status().isForbidden());
     }
@@ -171,14 +171,14 @@ public class UsuarioSecurityTest {
     // DeletarUsuarios
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveDeletarUsuariosStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveDeletarUsuariosStatusUnauthorized() throws Exception {
         mockMvc.perform(delete("/usuarios/" + idUsuario))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void usuarioNaoDeveDeletarUsuariosStatusProibido() throws Exception {
+    void usuarioNaoDeveDeletarUsuariosStatusForbidden() throws Exception {
         mockMvc.perform(delete("/usuarios/" + idUsuario))
                 .andExpect(status().isForbidden());
     }
@@ -196,7 +196,7 @@ public class UsuarioSecurityTest {
     // DeletarUsuarioLogado
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveDeletarUsuarioLogadoStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveDeletarUsuarioLogadoStatusUnauthorized() throws Exception {
         mockMvc.perform(delete("/usuarios"))
                 .andExpect(status().isUnauthorized());
     }
@@ -258,7 +258,7 @@ public class UsuarioSecurityTest {
     // AtualizarUsuarios
     @Test
     @WithAnonymousUser
-    void anonimoDeveAtualizarUsuarioStatusNaoAutorizado() throws Exception {
+    void anonimoDeveAtualizarUsuarioStatusUnauthorized() throws Exception {
 
         mockMvc.perform(put("/usuarios"))
                 .andExpect(status().isUnauthorized());

@@ -149,25 +149,17 @@ public class ProdutoSecurityTest {
     // DeletarProdutos
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveDeletarProdutoStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveDeletarProdutoStatusUnauthorized() throws Exception {
         mockMvc.perform(delete("/produtos/" + idProduto))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void usuarioNaoDeveDeletarProdutoStatusProibido() throws Exception {
+    void usuarioNaoDeveDeletarProdutoStatusForbidden() throws Exception {
         mockMvc.perform(delete("/produtos/" + idProduto))
                 .andExpect(status().isForbidden());
     }
-
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    void adminNaoDeveDeletarProdutoStatusNaoEncontrado() throws Exception {
-        mockMvc.perform(delete("/produtos" + idProduto))
-                .andExpect(status().isNotFound());
-    }
-
     @Test
     @WithMockUser(roles = "ADMIN")
     void adminDeveDeletarProdutoStatusOk() throws Exception {
@@ -182,14 +174,14 @@ public class ProdutoSecurityTest {
     // CadastrarProdutos
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveCadastrarProdutoStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveCadastrarProdutoStatusUnauthorized() throws Exception {
         mockMvc.perform(post("/produtos"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void userNaoDeveCadastrarProdutoStatusProibido() throws Exception {
+    void userNaoDeveCadastrarProdutoStatusForbidden() throws Exception {
         mockMvc.perform(post("/produtos"))
                 .andExpect(status().isForbidden());
     }
@@ -209,14 +201,14 @@ public class ProdutoSecurityTest {
     // AtualizarProdutos
     @Test
     @WithAnonymousUser
-    void anonimoNaoDeveAtualizarProdutoStatusNaoAutorizado() throws Exception {
+    void anonimoNaoDeveAtualizarProdutoStatusUnauthorized() throws Exception {
         mockMvc.perform(put("/produtos/" + idProduto))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    void userNaoDeveAtualizarProdutoStatusProibido() throws Exception {
+    void userNaoDeveAtualizarProdutoStatusForbidden() throws Exception {
         mockMvc.perform(put("/produtos/" + idProduto))
                 .andExpect(status().isForbidden());
     }

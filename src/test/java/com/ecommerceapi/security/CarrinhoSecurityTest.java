@@ -58,7 +58,7 @@ public class CarrinhoSecurityTest {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
-        carrinhoModel = new CarrinhoModelMock().construir();
+        carrinhoModel = new CarrinhoModelMock();
         usuarioModel = new UsuarioModelMock();
         produtoModel = new ProdutoModelMock();
 
