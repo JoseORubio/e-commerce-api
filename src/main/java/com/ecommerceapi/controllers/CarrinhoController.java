@@ -66,7 +66,7 @@ public class CarrinhoController {
                                     "    \"Valor total do carrinho\": 19.32\n" +
                                     "  }\n" +
                                     "]")})),
-            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id inválida.", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
             @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
             @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
@@ -81,7 +81,7 @@ public class CarrinhoController {
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
         if (produtoOptional.isEmpty()) {
@@ -106,7 +106,7 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "200", description = "Remoção do item realizado com sucesso",
                     content = @Content(examples = {@ExampleObject(
                             value = "Item Tênis B removido.")})),
-            @ApiResponse(responseCode = "400", description = "Id inválida", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Id inválida.", content = @Content),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content),
             @ApiResponse(responseCode = "403", description = "Acesso proibido", content = @Content),
             @ApiResponse(responseCode = "404", description = "Produto não encontrado", content = @Content)
@@ -119,7 +119,7 @@ public class CarrinhoController {
         try {
             produtoOptional = produtoService.buscarProdutoPorId(id_produto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
 
         if (produtoOptional.isEmpty()) {

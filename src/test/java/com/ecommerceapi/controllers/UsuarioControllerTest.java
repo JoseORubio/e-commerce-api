@@ -2,12 +2,10 @@ package com.ecommerceapi.controllers;
 
 
 import com.ecommerceapi.dtos.UsuarioDTO;
-import com.ecommerceapi.dtos.UsuarioDTO;
 import com.ecommerceapi.dtos.UsuarioViewDTO;
 import com.ecommerceapi.mockedmodels.UsuarioDTOMock;
 import com.ecommerceapi.mockedmodels.UsuarioModelMock;
 import com.ecommerceapi.mockedmodels.UsuarioViewDTOMock;
-import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.PapelDoUsuarioService;
 import com.ecommerceapi.services.PapelService;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,7 +82,10 @@ public class UsuarioControllerTest {
                 "    \"Campo\": \"nome\",\n" +
                 "    \"Erros\": \"Não deve estar em branco. Deve conter apenas letras e obedeçer o padrão 'Ana da Silva Pereira' com ao menos a primeira letra maiúscula.\"\n" +
                 "  }]");
-
+        Mockito.lenient().when(usuarioService.pegarUsuarioLogado())
+                .thenReturn(usuarioModel);
+        Mockito.lenient().when(usuarioService.mostrarUsuarioLogado(usuarioModel))
+                .thenReturn(usuarioViewDTO);
     }
 
     //CadastrarUsuarios
@@ -91,8 +93,7 @@ public class UsuarioControllerTest {
     public void deveCadastrarUsuariosStatusCreated() throws Exception {
         when(usuarioService.validaCadastroUsuario(any(UsuarioDTO.class), any(BindingResult.class)))
                 .thenReturn(usuarioModel);
-        when(usuarioService.mostrarUsuarioLogado(usuarioModel))
-                .thenReturn(usuarioViewDTO);
+       
         mockMvc.perform(post("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(usuarioDTO)))
@@ -112,12 +113,10 @@ public class UsuarioControllerTest {
     //AtualizarUsuarios
     @Test
     public void deveAtualizarUsuariosStatusOk() throws Exception {
-        when(usuarioService.pegarUsuarioLogado())
-                .thenReturn(usuarioModel);
+        
         when(usuarioService.validaAtualizacaoUsuario(any(UsuarioModel.class), any(UsuarioDTO.class), any(BindingResult.class)))
                 .thenReturn(usuarioModel);
-        when(usuarioService.mostrarUsuarioLogado(usuarioModel))
-                .thenReturn(usuarioViewDTO);
+       
         mockMvc.perform(put("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(usuarioDTO)))
@@ -126,8 +125,7 @@ public class UsuarioControllerTest {
 
     @Test
     public void naoDeveAtualizarUsuariosDadosInvalidosStatusBadRequest() throws Exception {
-        when(usuarioService.pegarUsuarioLogado())
-                .thenReturn(usuarioModel);
+        
         when(usuarioService.validaAtualizacaoUsuario(any(UsuarioModel.class), any(UsuarioDTO.class), any(BindingResult.class)))
                 .thenThrow(exception);
         mockMvc.perform(put("/usuarios")
@@ -166,8 +164,7 @@ public class UsuarioControllerTest {
     //DeletarUsuarioLogado
     @Test
     void deveDeletarUsuarioLogadoStatusOk() throws Exception {
-        when(usuarioService.pegarUsuarioLogado())
-                .thenReturn(usuarioModel);
+        
         mockMvc.perform(delete("/usuarios"))
                 .andExpect(status().isOk());
     }
@@ -175,10 +172,8 @@ public class UsuarioControllerTest {
     //BuscarUsuarioLogado
     @Test
     public void deveBuscarUsuariosLogadoStatusOk() throws Exception {
-        when(usuarioService.pegarUsuarioLogado())
-                .thenReturn(usuarioModel);
-        when(usuarioService.mostrarUsuarioLogado(usuarioModel))
-                .thenReturn(usuarioViewDTO);
+        
+       
         mockMvc.perform(get("/usuarios"))
                 .andExpect(status().isOk());
     }
