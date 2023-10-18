@@ -1,36 +1,28 @@
 package com.ecommerceapi.services;
 
 import com.ecommerceapi.dtos.ProdutoDTO;
-import com.ecommerceapi.mockedmodels.ProdutoDTOMock;
 import com.ecommerceapi.mockedmodels.ProdutoDTOStaticBuilder;
-import com.ecommerceapi.mockedmodels.ProdutoModelMock;
+import com.ecommerceapi.mockedmodels.ProdutoModelStaticBuilder;
 import com.ecommerceapi.models.ProdutoModel;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.*;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.security.core.parameters.P;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ValidationUtils;
 
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 public class ProdutoServiceIntegrationTest {
@@ -42,59 +34,35 @@ public class ProdutoServiceIntegrationTest {
     private Validator validator;
 
     ProdutoModel produtoModel;
-    //    String idProduto, nomeProduto;
+    Page<ProdutoModel> listaProdutos;
     ProdutoDTO produtoDTO;
     BindException bindingResult;
-
     Set<ConstraintViolation<ProdutoDTO>> violations;
-
     Pageable pageable;
-    Page<ProdutoModel> listaProdutos;
     IllegalArgumentException exception;
 
     @BeforeEach
     public void setup() {
-        produtoModel = new ProdutoModel();
-        produtoModel.setNome("Blusa Z");
-        produtoModel.setQuantidade_estoque(10);
-        produtoModel.setPreco(BigDecimal.valueOf(15.4));
-//        idProduto = produtoModel.getId().toString();
-//        nomeProduto = produtoModel.getNome();
-//        produtoDTO = new ProdutoDTOMock();
+        produtoModel = ProdutoModelStaticBuilder.getProdutoModelSemId();
         int page = 0;
         int size = 50;
         pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "nome"));
-//        listaProdutos = new PageImpl<>(Collections.singletonList(produtoModel));
-
-        exception = new IllegalArgumentException("[\n" +
-                "  {\n" +
-                "    \"Campo\": \"preco\",\n" +
-                "    \"Erros\": \"Não deve estar em branco. Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .\"\n" +
-                "  }]");
     }
 
+    //SalvarEApagar
 
     @Test
     void deveSalvarProdutoEDepoisApagar() {
         produtoService.salvarProduto(produtoModel);
-        System.out.println(produtoModel.getId().toString());
-        System.out.println(produtoModel.getNome());
-
         Optional<ProdutoModel> produtoModelOptional = produtoService.buscarProdutoPorId(produtoModel.getId().toString());
         assertTrue(produtoModelOptional.isPresent());
-
-        deveApagarProduto();
-
+        produtoService.apagarProduto(produtoModelOptional.get());
         produtoModelOptional = produtoService.buscarProdutoPorId(produtoModel.getId().toString());
         assertTrue(produtoModelOptional.isEmpty());
     }
 
-    void deveApagarProduto() {
-        Optional<ProdutoModel> produtoModelOptional = produtoService.buscarProdutoPorId(produtoModel.getId().toString());
-        produtoService.apagarProduto(produtoModelOptional.get());
-    }
-
     //ValidarCadastro
+
     @Test
     void deveValidarCadastroProduto() {
         produtoDTO = ProdutoDTOStaticBuilder.getProdutoDto();
@@ -103,31 +71,69 @@ public class ProdutoServiceIntegrationTest {
         assertEquals(produtoModel.getNome(), produtoDTO.getNome());
     }
 
+    //NaoValidarCadastro
+
     @Test
-    void naoDeveValidarCadastroProdutoIllegalArgumentException() {
-        produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoPrecoInvalido();
+    void naoDeveValidarCadastroProdutoNomeInvalido() {
+        produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoNomeInvalido();
         validarDtoEPreencherBindingResult();
+        assertTrue(bindingResult.hasFieldErrors("nome"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     produtoService.validaCadastroProduto(produtoDTO, bindingResult);
                 });
     }
 
-    private void validarDtoEPreencherBindingResult() {
-        bindingResult = new BindException(produtoDTO, "prod");
-        violations = validator.validate(produtoDTO);
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<ProdutoDTO> constraintViolation : violations) {
-                String field = constraintViolation.getPropertyPath().toString();
-                String message = constraintViolation.getMessage();
-                FieldError fieldError = new FieldError("prod", field, message);
-                bindingResult.addError(fieldError);
-            }
-        }
+    @Test
+    void naoDeveValidarCadastroProdutoPrecoInvalido() {
+        produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoPrecoInvalido();
+        validarDtoEPreencherBindingResult();
+        assertTrue(bindingResult.hasFieldErrors("preco"));
+        assertThrows(IllegalArgumentException.class,
+                () -> {
+                    produtoService.validaCadastroProduto(produtoDTO, bindingResult);
+                });
     }
 
+    @Test
+    void naoDeveValidarCadastroProdutoQuantidadeEstoqueInvalido() {
+        produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoQuantidadeEstoqueInvalida();
+        validarDtoEPreencherBindingResult();
+        assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+        assertThrows(IllegalArgumentException.class,
+                () -> {
+                    produtoService.validaCadastroProduto(produtoDTO, bindingResult);
+                });
+    }
+
+    @Test
+    void naoDeveValidarCadastroProdutoAtributosNulos() {
+        produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoAtributosNulos();
+        validarDtoEPreencherBindingResult();
+        assertTrue(bindingResult.hasFieldErrors("nome"));
+        assertTrue(bindingResult.hasFieldErrors("preco"));
+        assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+        assertThrows(IllegalArgumentException.class,
+                () -> {
+                    produtoService.validaCadastroProduto(produtoDTO, bindingResult);
+                });
+    }
+
+    @Test
+    void naoDeveValidarCadastroProdutoStringsVazias() {
+        produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoStringsVazias();
+        validarDtoEPreencherBindingResult();
+        assertTrue(bindingResult.hasFieldErrors("nome"));
+        assertTrue(bindingResult.hasFieldErrors("preco"));
+        assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+        assertThrows(IllegalArgumentException.class,
+                () -> {
+                    produtoService.validaCadastroProduto(produtoDTO, bindingResult);
+                });
+    }
 
     //BuscarProdutos
+
     @Test
     void deveBuscarProdutos() {
         listaProdutos = produtoService.buscarProdutos(pageable);
@@ -138,6 +144,7 @@ public class ProdutoServiceIntegrationTest {
     }
 
     //BuscarProdutosPorId
+
     @Test
     void deveBuscarProdutosPorId() {
         Optional<ProdutoModel> produtoModelOptional = produtoService.buscarProdutoPorId("f9c473bf-afb8-4eb2-9d32-d1c2b9498408");
@@ -161,6 +168,7 @@ public class ProdutoServiceIntegrationTest {
     }
 
     //PesquisarProdutos
+
     @Test
     void devePesquisarProdutosPorNome() {
         Optional<Page<ProdutoModel>> produtoModelOptionalPage = produtoService.pesquisarProdutos("Blusa Z", pageable);
@@ -170,6 +178,166 @@ public class ProdutoServiceIntegrationTest {
             System.out.println(p.getId());
         }
         assertTrue(produtoModelOptionalPage.isPresent());
+    }
+
+    private void validarDtoEPreencherBindingResult() {
+        bindingResult = new BindException(produtoDTO, "prod");
+        violations = validator.validate(produtoDTO);
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<ProdutoDTO> constraintViolation : violations) {
+                String field = constraintViolation.getPropertyPath().toString();
+                String message = constraintViolation.getMessage();
+                FieldError fieldError = new FieldError("prod", field, message);
+                bindingResult.addError(fieldError);
+            }
+        }
+    }
+
+    @Nested
+    public class TestesQueNecessitamCriacaoERemocaoProduto {
+        @BeforeEach
+        void setupSalvaProduto() {
+            produtoService.salvarProduto(produtoModel);
+        }
+
+        @AfterEach
+        void setupApagaProduto() {
+            produtoService.apagarProduto(produtoModel);
+        }
+
+        //NaoValidarCadastro
+
+        @Test
+        void naoDeveValidarCadastroProdutoNomeDuplicado() {
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDto();
+            validarDtoEPreencherBindingResult();
+            exception = assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaCadastroProduto(produtoDTO, bindingResult);
+                    });
+            assertTrue(exception.getMessage().contains("Nome já utilizado."));
+        }
+
+        //ValidarAtualizacao
+
+        @Test
+        void deveValidarAtualizacaoProduto() {
+            String nomeProdutoModificado = produtoModel.getNome() + "ABC";
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDto();
+            produtoDTO.setNome(nomeProdutoModificado);
+            validarDtoEPreencherBindingResult();
+            produtoModel = produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+            assertEquals(produtoModel.getNome(), nomeProdutoModificado);
+
+        }
+
+        @Test
+        void deveValidarAtualizacaoProdutoComMesmosDados() {
+
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDto();
+            validarDtoEPreencherBindingResult();
+            ProdutoModel produtoModelDepoisDaValidacao = produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+            assertEquals(produtoModelDepoisDaValidacao, produtoModel);
+
+        }
+
+        //NaoValidarAtualizacao
+
+        @Test
+        void naoDeveValidarAtualizacaoProdutoNomeInvalido() {
+
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoNomeInvalido();
+            validarDtoEPreencherBindingResult();
+            assertTrue(bindingResult.hasFieldErrors("nome"));
+            assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+                    });
+
+        }
+
+        @Test
+        void naoDeveValidarAtualizacaoProdutoPrecoInvalido() {
+
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoPrecoInvalido();
+            validarDtoEPreencherBindingResult();
+            assertTrue(bindingResult.hasFieldErrors("preco"));
+            assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+                    });
+
+        }
+
+        @Test
+        void naoDeveValidarAtualizacaoProdutoQuantidadeEstoqueInvalido() {
+
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoQuantidadeEstoqueInvalida();
+            validarDtoEPreencherBindingResult();
+            assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+            assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+                    });
+
+        }
+
+        @Test
+        void naoDeveValidarAtualizacaoProdutoAtributosNulos() {
+
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoAtributosNulos();
+            validarDtoEPreencherBindingResult();
+            assertTrue(bindingResult.hasFieldErrors("nome"));
+            assertTrue(bindingResult.hasFieldErrors("preco"));
+            assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+            assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+                    });
+
+        }
+
+        @Test
+        void naoDeveValidarAtualizacaoProdutoStringsVazias() {
+
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDtoStringsVazias();
+            validarDtoEPreencherBindingResult();
+            assertTrue(bindingResult.hasFieldErrors("nome"));
+            assertTrue(bindingResult.hasFieldErrors("preco"));
+            assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+            assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+                    });
+
+        }
+
+        @Test
+        void naoDeveValidarAtualizacaoProdutoNomeDuplicado() {
+
+            String nomeProdutoExistente = produtoService.buscarProdutos(pageable).get().toList().get(0).getNome();
+            produtoDTO = ProdutoDTOStaticBuilder.getProdutoDto();
+            produtoDTO.setNome(nomeProdutoExistente);
+            validarDtoEPreencherBindingResult();
+            exception = assertThrows(IllegalArgumentException.class,
+                    () -> {
+                        produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
+                    });
+            assertTrue(exception.getMessage().contains("Nome já utilizado."));
+
+        }
+
+        //BaixarEstoqueProduto
+
+        @Test
+        void deveBaixarEstoqueProduto() {
+            int quantidadeCompra = produtoModel.getQuantidade_estoque() - 1;
+            produtoService.baixarEstoqueProduto(produtoModel, quantidadeCompra);
+            assertEquals(produtoModel.getQuantidade_estoque(), 1);
+
+        }
+
+
     }
 
 

@@ -79,7 +79,7 @@ public class ProdutoService {
         BeanUtils.copyProperties(produtoDTO, produtoModel);
 
         if (produtoModel.getNome() != null
-                && existsByNome(produtoDTO.getNome())) {
+                && produtoRepository.existsByNome(produtoDTO.getNome())) {
             manipuladorListaErros.adicionarErros("nome", "Nome já utilizado.");
         }
         if (manipuladorListaErros.temErros()) {
@@ -100,10 +100,10 @@ public class ProdutoService {
         salvarProduto(produtoModel);
     }
 
-    //Pode se tornar private
-    public boolean existsByNome(String nome) {
-        return produtoRepository.existsByNome(nome);
-    }
+    //Passado para private e apagado
+//    private boolean existsByNome(String nome) {
+//        return produtoRepository.existsByNome(nome);
+//    }
 
     public Page<ProdutoModel> buscarProdutos(Pageable pageable) {
         return produtoRepository.findAll(pageable);

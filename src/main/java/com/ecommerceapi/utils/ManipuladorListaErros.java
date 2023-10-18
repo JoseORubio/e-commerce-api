@@ -22,15 +22,6 @@ public class ManipuladorListaErros {
         }
     }
 
-//    public ManipuladorListaErros(List<List<String>> listaErros) {
-//        this.listaErros = listaErros;
-//    }
-
-    //Parece que não será usado
-//    public List<Map<String, StringBuilder>> getListaErros() {
-//        return listaErrosString;
-//    }
-
     public boolean temErros() {
         return !mapListaErros.isEmpty();
     }
