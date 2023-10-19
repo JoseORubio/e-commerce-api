@@ -139,7 +139,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void delete(UsuarioModel usuarioModel) {
+    public void apagarUsuario(UsuarioModel usuarioModel) {
         usuarioRepository.delete(usuarioModel);
     }
 

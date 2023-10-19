@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +20,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -278,7 +276,7 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
         }
 
-        usuarioService.delete(usuarioOptional.get());
+        usuarioService.apagarUsuario(usuarioOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Usuário " + usuarioOptional.get().getNome() + " apagado com sucesso.");
     }
 
@@ -292,7 +290,7 @@ public class UsuarioController {
     public ResponseEntity<Object> deletarUsuarioLogado() {
 
         UsuarioModel usuarioLogado = usuarioService.pegarUsuarioLogado();
-        usuarioService.delete(usuarioLogado);
+        usuarioService.apagarUsuario(usuarioLogado);
         return ResponseEntity.status(HttpStatus.OK).body("Usuario " + usuarioLogado.getNome() + " apagado com sucesso.");
     }
 
