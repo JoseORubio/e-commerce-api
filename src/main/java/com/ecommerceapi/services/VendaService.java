@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,21 +29,23 @@ public class VendaService {
         return vendaRepository.save(vendaModel);
     }
 
-    public void efetivaVendaCompleta(UsuarioModel usuario, List<CarrinhoModel> carrinhoModel) {
+    public List<Object> efetivaVendaCompleta(UsuarioModel usuario, List<CarrinhoModel> carrinhoModel) {
 
         for (CarrinhoModel itens : carrinhoModel) {
             if (itens.getQuantidade() > itens.getProduto().getQuantidade_estoque()) {
                 throw new IllegalArgumentException("Quantidade de " + itens.getProduto().getNome() + " indisponível no estoque.");
             }
         }
-
+        List<Object> vendaComProdutos = new ArrayList<>();
         VendaModel venda = salvarVenda(new VendaModel(usuario.getId()));
+        vendaComProdutos.add(venda);
         for (CarrinhoModel itens : carrinhoModel) {
             ProdutoDaVendaModel produtoDaVendaModel =
                     new ProdutoDaVendaModel(venda.getId(),itens.getProduto().getId(),itens.getQuantidade());
-            produtoDaVendaService.salvarProdutoVendido(produtoDaVendaModel);
+            vendaComProdutos.add(produtoDaVendaService.salvarProdutoVendido(produtoDaVendaModel));
             produtoService.baixarEstoqueProduto(itens.getProduto(), itens.getQuantidade());
         }
+        return vendaComProdutos;
     }
 
     @Transactional

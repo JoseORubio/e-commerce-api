@@ -17,4 +17,8 @@ public class ProdutoDaVendaService {
     public ProdutoDaVendaModel salvarProdutoVendido(ProdutoDaVendaModel produtoDaVendaModel){
         return  produtoDaVendaRepository.save(produtoDaVendaModel);
     }
+    @Transactional
+    public void apagarProdutoVendido(ProdutoDaVendaModel produtoDaVendaModel){
+         produtoDaVendaRepository.delete(produtoDaVendaModel);
+    }
 }

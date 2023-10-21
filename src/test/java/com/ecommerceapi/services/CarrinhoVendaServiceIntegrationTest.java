@@ -2,9 +2,7 @@ package com.ecommerceapi.services;
 
 import com.ecommerceapi.dtos.CarrinhoViewDTO;
 import com.ecommerceapi.mockedmodels.builders.ProdutoStaticBuilder;
-import com.ecommerceapi.models.CarrinhoModel;
-import com.ecommerceapi.models.ProdutoModel;
-import com.ecommerceapi.models.UsuarioModel;
+import com.ecommerceapi.models.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,13 +14,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CarrinhoServiceIntegrationTest {
+public class CarrinhoVendaServiceIntegrationTest {
     @Autowired
     CarrinhoService carrinhoService;
     @Autowired
     UsuarioService usuarioService;
     @Autowired
     ProdutoService produtoService;
+    @Autowired
+    VendaService vendaService;
+    @Autowired
+    ProdutoDaVendaService produtoDaVendaService;
 
     UsuarioModel usuarioModel;
     ProdutoModel produtoModel1, produtoModel2, produtoModel3;
@@ -179,37 +181,91 @@ public class CarrinhoServiceIntegrationTest {
             apagarCarrinhoBernardo();
         }
 
+        //BuscarCarrinho
         @Test
         void deveBuscarCarrinhoDoUsuario() {
             Optional<List<CarrinhoModel>> carrinho = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel);
-            assertTrue(carrinho.get().size()==3);
+            assertTrue(carrinho.get().size() == 3);
         }
+
         @Test
         void deveBuscarProdutoNoCarrinhoDoUsuario() {
             Optional<CarrinhoModel> carrinho = carrinhoService.buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel2);
             assertTrue(carrinho.isPresent());
         }
+
+        //ApagarCarrinho
         @Test
         void deveApagarProdutoNoCarrinhoDoUsuario() {
-            CarrinhoModel  itemCarrinho = carrinhoService.buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel2).get();
+            CarrinhoModel itemCarrinho = carrinhoService.buscarProdutoDoUsuarioNoCarrinho(usuarioModel, produtoModel2).get();
             carrinhoService.apagarItemCarrinho(itemCarrinho);
             Optional<List<CarrinhoModel>> carrinho = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel);
-            assertTrue(carrinho.get().size()==2);
+            assertTrue(carrinho.get().size() == 2);
         }
 
+        //GerarVisualizacaoCarrinho
         @Test
-        void deveGerarVisualizacaoCarrinho(){
+        void deveGerarVisualizacaoCarrinho() {
             Optional<List<CarrinhoModel>> carrinho = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel);
             List<Object> listaCarrinhoView = carrinhoService.gerarVisualizacaoCarrinho(carrinho.get());
-            assertTrue(listaCarrinhoView.get(0) instanceof CarrinhoViewDTO);
-            assertTrue(listaCarrinhoView.get(1) instanceof CarrinhoViewDTO);
-            assertTrue(listaCarrinhoView.get(2) instanceof CarrinhoViewDTO);
-            assertTrue(listaCarrinhoView.get(3) instanceof Map<?,?>);
+
+            for (int i = 0; i < listaCarrinhoView.size(); i++) {
+                if (i < (listaCarrinhoView.size() - 1)) {
+                    assertTrue(listaCarrinhoView.get(i) instanceof CarrinhoViewDTO);
+                } else
+
+                    assertTrue(listaCarrinhoView.get(i) instanceof Map<?, ?>);
+
+            }
         }
 
+        @Nested
+        public class TestesEfetivacaoVenda {
+
+            List<Object> vendaComProdutos;
+            @BeforeEach
+            void setup() {
+                vendaComProdutos = new ArrayList<>();
+            }
+
+            @AfterEach
+            void apagaVenda() {
+                apagarProdutosVendidosEVenda();
+                apagarCarrinhoBernardo();
+            }
+
+            //DeveEfetivarVenda
+            @Test
+            void deveEfetivarVendaCompleta() {
+                List<CarrinhoModel> carrinhoModelList = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel).get();
+                vendaComProdutos = vendaService.efetivaVendaCompleta(usuarioModel, carrinhoModelList);
+                assertFalse(vendaComProdutos.isEmpty());
+            }
+
+            //NaoDeveEfetivarVenda
+            @Test
+            void naoDeveEfetivarVendaCompletaQuantidadeCarrinhoMaiorEstoque() {
+                List<CarrinhoModel> carrinhoModelList = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel).get();
+                carrinhoModelList.get(0).setQuantidade(carrinhoModelList.get(0).getProduto().getQuantidade_estoque() +1);
+
+                exception = assertThrows(IllegalArgumentException.class,
+                        () -> {
+                            vendaService.efetivaVendaCompleta(usuarioModel, carrinhoModelList);
+                        });
+                assertTrue(exception.getMessage().contains("indisponível no estoque."));
+            }
+
+            private void apagarProdutosVendidosEVenda() {
+                for (int i = vendaComProdutos.size() - 1; i >= 0; i--) {
+                    if (i > 0) {
+                        produtoDaVendaService.apagarProdutoVendido((ProdutoDaVendaModel) vendaComProdutos.get(i));
+                    } else vendaService.apagarVenda((VendaModel) vendaComProdutos.get(i));
+                }
+            }
+        }
     }
 
-    void apagarCarrinhoBernardo() {
+    private void apagarCarrinhoBernardo() {
         Optional<List<CarrinhoModel>> carrinhoUsuario = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel);
         if (!carrinhoUsuario.get().isEmpty()) {
             for (CarrinhoModel carrinho : carrinhoUsuario.get()) {

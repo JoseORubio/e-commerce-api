@@ -23,7 +23,7 @@ public class VendaModel implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
     private LocalDateTime data_venda;
 
-
+    public VendaModel(){}
     public VendaModel(UUID id_usuario){
         this.id_usuario = id_usuario;
         this.valor_total= BigDecimal.ZERO;
