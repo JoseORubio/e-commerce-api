@@ -1,8 +1,7 @@
 package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.dtos.ProdutoDTO;
-import com.ecommerceapi.mockedmodels.ProdutoDTOMock;
-import com.ecommerceapi.mockedmodels.ProdutoModelMock;
+import com.ecommerceapi.modelsbuilders.ProdutoStaticBuilder;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.ProdutoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,10 +56,10 @@ public class ProdutoControllerTest {
                 .alwaysDo(print())
                 .build();
 
-        produtoModel = new ProdutoModelMock();
+        produtoModel = ProdutoStaticBuilder.getMockProdutoModelComId();
         idProduto = produtoModel.getId().toString();
         nomeProduto = produtoModel.getNome();
-        produtoDTO = new ProdutoDTOMock();
+        produtoDTO = ProdutoStaticBuilder.getProdutoDto();
         listaProdutos = new PageImpl<>(Collections.singletonList(produtoModel));
 
         exception = new IllegalArgumentException("[\n" +

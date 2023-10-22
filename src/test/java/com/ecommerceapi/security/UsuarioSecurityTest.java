@@ -2,7 +2,8 @@ package com.ecommerceapi.security;
 
 
 import com.ecommerceapi.dtos.UsuarioDTO;
-import com.ecommerceapi.mockedmodels.*;
+import com.ecommerceapi.dtos.UsuarioViewDTO;
+import com.ecommerceapi.modelsbuilders.UsuarioStaticBuilder;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.PapelDoUsuarioService;
 import com.ecommerceapi.services.PapelService;
@@ -49,9 +50,9 @@ public class UsuarioSecurityTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    private UsuarioModelMock usuarioModel;
-    private UsuarioDTOMock usuarioDTO;
-    private UsuarioViewDTOMock usuarioViewDTOMock;
+    private UsuarioModel usuarioModel;
+    private UsuarioDTO usuarioDTO;
+    private UsuarioViewDTO usuarioViewDTOMock;
     private String idUsuario, nome;
     private Page<UsuarioModel> listaUsuarios;
 
@@ -62,9 +63,9 @@ public class UsuarioSecurityTest {
                 .apply(springSecurity())
                 .build();
 
-        usuarioModel = new UsuarioModelMock();
-        usuarioDTO = new UsuarioDTOMock();
-        usuarioViewDTOMock = new UsuarioViewDTOMock();
+        usuarioModel = UsuarioStaticBuilder.getMockUsuarioModelComId();
+        usuarioDTO = UsuarioStaticBuilder.getUsuarioDTO();
+        usuarioViewDTOMock = UsuarioStaticBuilder.getUsuarioViewDTO();
         idUsuario = usuarioModel.getId().toString();
         nome = usuarioModel.getNome();
         listaUsuarios = new PageImpl<>(Collections.singletonList(usuarioModel));

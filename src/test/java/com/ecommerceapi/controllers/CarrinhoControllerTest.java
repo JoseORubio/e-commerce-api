@@ -1,7 +1,11 @@
 package com.ecommerceapi.controllers;
 
-import com.ecommerceapi.mockedmodels.*;
+import com.ecommerceapi.modelsbuilders.CarrinhoStaticBuilder;
+import com.ecommerceapi.modelsbuilders.ProdutoStaticBuilder;
+import com.ecommerceapi.modelsbuilders.UsuarioStaticBuilder;
 import com.ecommerceapi.models.CarrinhoModel;
+import com.ecommerceapi.models.ProdutoModel;
+import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,8 +49,8 @@ public class CarrinhoControllerTest {
     MockMvc mockMvc;
 
     private CarrinhoModel carrinhoModel;
-    private UsuarioModelMock usuarioModel;
-    private ProdutoModelMock produtoModel;
+    private UsuarioModel usuarioModel;
+    private ProdutoModel produtoModel;
     private String idProduto, quantidadeProduto;
     private List<CarrinhoModel> carrinhoExistente;
     private List<Object> listaCarrinhoView;
@@ -57,9 +61,9 @@ public class CarrinhoControllerTest {
                 .alwaysDo(print())
                 .build();
 
-        carrinhoModel = new CarrinhoModelMock();
-        usuarioModel = new UsuarioModelMock();
-        produtoModel = new ProdutoModelMock();
+        carrinhoModel = CarrinhoStaticBuilder.getMockCarrinhoModel();
+        usuarioModel = UsuarioStaticBuilder.getMockUsuarioModelComId();
+        produtoModel = ProdutoStaticBuilder.getMockProdutoModelComId();
 
         idProduto = produtoModel.getId().toString();
         quantidadeProduto = String.valueOf(produtoModel.getQuantidade_estoque());

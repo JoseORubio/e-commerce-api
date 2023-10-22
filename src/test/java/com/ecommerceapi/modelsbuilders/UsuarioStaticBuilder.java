@@ -1,8 +1,7 @@
-package com.ecommerceapi.mockedmodels.builders;
+package com.ecommerceapi.modelsbuilders;
 
 import com.ecommerceapi.dtos.UsuarioDTO;
 import com.ecommerceapi.dtos.UsuarioViewDTO;
-import com.ecommerceapi.mockedmodels.UsuarioViewDTOMock;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.utils.ConversorUUID;
 
@@ -12,8 +11,9 @@ import java.time.LocalDateTime;
 public class UsuarioStaticBuilder {
 
     private static UsuarioModel usuarioModel = new UsuarioModel();
+    private static UsuarioModel usuarioModelMock = new UsuarioModel();
     private static UsuarioDTO usuarioDTO = new UsuarioDTO();
-    private static UsuarioViewDTO usuarioViewDTO = new UsuarioViewDTOMock();
+    private static UsuarioViewDTO usuarioViewDTO = new UsuarioViewDTO();
 
     private static String nome = "Tiago da Silva";
     private static String login = "tiago123";
@@ -49,6 +49,26 @@ public class UsuarioStaticBuilder {
         usuarioModel.setNumero_rua(Integer.parseInt(numeroRua));
 
         return usuarioModel;
+    }
+
+    public static UsuarioModel getMockUsuarioModelComId() {
+        usuarioModelMock.setId(ConversorUUID.converteUUID("b77a0ee4-3ec2-479b-9640-a215a6cab4a3"));
+        usuarioModelMock.setNome(nome);
+        usuarioModelMock.setLogin(login);
+        usuarioModelMock.setSenha(senha);
+        usuarioModelMock.setCpf(cpf);
+        usuarioModelMock.setData_nasc(dataNasc);
+        usuarioModelMock.setData_cadastro(dataCadastro);
+        usuarioModelMock.setSexo(sexo.charAt(0));
+        usuarioModelMock.setTelefone(telefone);
+        usuarioModelMock.setEmail(email);
+        usuarioModelMock.setCep(cep);
+        usuarioModelMock.setUf(uf);
+        usuarioModelMock.setCidade(cidade);
+        usuarioModelMock.setRua(rua);
+        usuarioModelMock.setNumero_rua(Integer.parseInt(numeroRua));
+
+        return usuarioModelMock;
     }
 
     public static UsuarioDTO getUsuarioDTO() {

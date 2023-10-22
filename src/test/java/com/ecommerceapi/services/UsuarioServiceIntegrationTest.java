@@ -2,7 +2,7 @@ package com.ecommerceapi.services;
 
 import com.ecommerceapi.dtos.UsuarioDTO;
 import com.ecommerceapi.dtos.UsuarioViewDTO;
-import com.ecommerceapi.mockedmodels.builders.UsuarioStaticBuilder;
+import com.ecommerceapi.modelsbuilders.UsuarioStaticBuilder;
 import com.ecommerceapi.models.UsuarioModel;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -52,11 +52,6 @@ public class UsuarioServiceIntegrationTest {
         pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "nome"));
     }
 
-//    @Test
-    void apagarUsuarioThiago() {
-        Optional<Page<UsuarioModel>> usuarioModelPage = usuarioService.pesquisarUsuarios(usuarioModel.getNome(), pageable);
-        usuarioService.apagarUsuario(usuarioModelPage.get().getContent().get(0));
-    }
 
     //SalvarEApagar
     @Test
@@ -365,15 +360,6 @@ public class UsuarioServiceIntegrationTest {
 
         }
 
-        void naoDeveValidarCadastroUsuarioNomeInvalido() {
-            usuarioDTO = UsuarioStaticBuilder.getUsuarioDTONomeInvalido();
-            validarDTOEPreencherBindingResult();
-            assertTrue(bindingResult.hasFieldErrors("nome"));
-            assertThrows(IllegalArgumentException.class,
-                    () -> {
-                        usuarioService.validaAtualizacaoUsuario(usuarioModel, usuarioDTO, bindingResult);
-                    });
-        }
 
         @Test
         void naoDeveValidarAtualizacaoUsuarioLoginInvalido() {
@@ -522,7 +508,6 @@ public class UsuarioServiceIntegrationTest {
         void naoDeveValidarAtualizacaoUsuarioLoginCPFEmailDuplicado() {
 
             UsuarioModel usuarioModelBD = usuarioService.buscarUsuarios(pageable).get().toList().get(0);
-//            String nomeUsuarioExistente = usuarioService.buscarUsuarios(pageable).get().toList().get(0).getNome();
             usuarioDTO = UsuarioStaticBuilder.getUsuarioDTO();
             usuarioDTO.setLogin(usuarioModelBD.getLogin());
             usuarioDTO.setCpf(usuarioModelBD.getCpf());

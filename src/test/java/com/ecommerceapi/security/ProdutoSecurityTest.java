@@ -1,8 +1,7 @@
 package com.ecommerceapi.security;
 
 import com.ecommerceapi.dtos.ProdutoDTO;
-import com.ecommerceapi.mockedmodels.ProdutoDTOMock;
-import com.ecommerceapi.mockedmodels.ProdutoModelMock;
+import com.ecommerceapi.modelsbuilders.ProdutoStaticBuilder;
 import com.ecommerceapi.models.ProdutoModel;
 import com.ecommerceapi.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,8 +41,8 @@ public class ProdutoSecurityTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    private ProdutoDTOMock produtoDTO;
-    private ProdutoModelMock produtoModel;
+    private ProdutoDTO produtoDTO;
+    private ProdutoModel produtoModel;
     private String idProduto, nome;
     Page<ProdutoModel> listaProdutos;
 
@@ -54,8 +53,8 @@ public class ProdutoSecurityTest {
                 .apply(springSecurity())
                 .build();
 
-        produtoModel = new ProdutoModelMock();
-        produtoDTO = new ProdutoDTOMock();
+        produtoModel = ProdutoStaticBuilder.getMockProdutoModelComId();
+        produtoDTO = ProdutoStaticBuilder.getProdutoDto();
         idProduto = produtoModel.getId().toString();
         nome = produtoModel.getNome();
         listaProdutos = new PageImpl<>(Collections.singletonList(produtoModel));

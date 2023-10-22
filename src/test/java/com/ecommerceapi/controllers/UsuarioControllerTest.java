@@ -3,9 +3,7 @@ package com.ecommerceapi.controllers;
 
 import com.ecommerceapi.dtos.UsuarioDTO;
 import com.ecommerceapi.dtos.UsuarioViewDTO;
-import com.ecommerceapi.mockedmodels.UsuarioDTOMock;
-import com.ecommerceapi.mockedmodels.UsuarioModelMock;
-import com.ecommerceapi.mockedmodels.UsuarioViewDTOMock;
+import com.ecommerceapi.modelsbuilders.UsuarioStaticBuilder;
 import com.ecommerceapi.models.UsuarioModel;
 import com.ecommerceapi.services.PapelDoUsuarioService;
 import com.ecommerceapi.services.PapelService;
@@ -70,11 +68,11 @@ public class UsuarioControllerTest {
                 .alwaysDo(print())
                 .build();
 
-        usuarioModel = new UsuarioModelMock();
+        usuarioModel = UsuarioStaticBuilder.getMockUsuarioModelComId();
         idUsuario = usuarioModel.getId().toString();
         nomeUsuario = usuarioModel.getNome();
-        usuarioDTO = new UsuarioDTOMock();
-        usuarioViewDTO = new UsuarioViewDTOMock();
+        usuarioDTO = UsuarioStaticBuilder.getUsuarioDTO();
+        usuarioViewDTO = UsuarioStaticBuilder.getUsuarioViewDTO();
         listaUsuarios = new PageImpl<>(Collections.singletonList(usuarioModel));
 
         exception = new IllegalArgumentException("[\n" +

@@ -1,7 +1,7 @@
 package com.ecommerceapi.services;
 
 import com.ecommerceapi.dtos.CarrinhoViewDTO;
-import com.ecommerceapi.mockedmodels.builders.ProdutoStaticBuilder;
+import com.ecommerceapi.modelsbuilders.ProdutoStaticBuilder;
 import com.ecommerceapi.models.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,25 +53,6 @@ public class CarrinhoVendaServiceIntegrationTest {
         produtoService.apagarProduto(produtoModel3);
     }
 
-    //    @Test
-//    void consertaFalhaRemocaoCarrinho() {
-//        Optional<List<CarrinhoModel>> carrinhoUsuario = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel);
-//        if (!carrinhoUsuario.get().isEmpty()) {
-//            for (CarrinhoModel carrinho : carrinhoUsuario.get()) {
-//                carrinhoService.apagarItemCarrinho(carrinho);
-//            }
-//        }
-//        ProdutoModel produtoModel = new ProdutoModel();
-//        Optional<Page<ProdutoModel>> produtoModelOptionalPage = produtoService.pesquisarProdutos("Blusa Z", pageable);
-//        produtoModel = produtoModelOptionalPage.get().getContent().get(0);
-//        produtoService.apagarProduto(produtoModel);
-//        produtoModelOptionalPage = produtoService.pesquisarProdutos("Tênis W", pageable);
-//        produtoModel = produtoModelOptionalPage.get().getContent().get(0);
-//        produtoService.apagarProduto(produtoModel);
-//        produtoModelOptionalPage = produtoService.pesquisarProdutos("Meia Y", pageable);
-//        produtoModel = produtoModelOptionalPage.get().getContent().get(0);
-//        produtoService.apagarProduto(produtoModel);
-//    }
 
     //SalvarCarrinho
     @Test

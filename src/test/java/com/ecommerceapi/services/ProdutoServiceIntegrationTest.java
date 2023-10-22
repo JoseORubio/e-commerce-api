@@ -1,7 +1,7 @@
 package com.ecommerceapi.services;
 
 import com.ecommerceapi.dtos.ProdutoDTO;
-import com.ecommerceapi.mockedmodels.builders.ProdutoStaticBuilder;
+import com.ecommerceapi.modelsbuilders.ProdutoStaticBuilder;
 import com.ecommerceapi.models.ProdutoModel;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;

@@ -1,12 +1,14 @@
-package com.ecommerceapi.mockedmodels.builders;
+package com.ecommerceapi.modelsbuilders;
 
 import com.ecommerceapi.dtos.ProdutoDTO;
 import com.ecommerceapi.models.ProdutoModel;
+import com.ecommerceapi.utils.ConversorUUID;
 
 import java.math.BigDecimal;
 
 public class ProdutoStaticBuilder {
     private static ProdutoModel produtoModel = new ProdutoModel();
+    private static ProdutoModel produtoModel1 = new ProdutoModel();
     private static ProdutoModel produtoModel2 = new ProdutoModel();
     private static ProdutoModel produtoModel3 = new ProdutoModel();
     private static ProdutoDTO produtoDto = new ProdutoDTO();
@@ -16,12 +18,21 @@ public class ProdutoStaticBuilder {
     private static String quantidadeEstoque = "15";
 
 
-    public static ProdutoModel getProdutoModelSemId(){
-        produtoModel.setId(null);
+
+
+    public static ProdutoModel getMockProdutoModelComId(){
+        produtoModel.setId(ConversorUUID.converteUUID("b77a0ee4-3ec2-479b-9640-a215a6cab4a3"));
         produtoModel.setNome(nome);
         produtoModel.setPreco(BigDecimal.valueOf(Double.parseDouble(preco)));
         produtoModel.setQuantidade_estoque(Integer.parseInt(quantidadeEstoque));
         return produtoModel;
+    }
+    public static ProdutoModel getProdutoModelSemId(){
+        produtoModel1.setId(null);
+        produtoModel1.setNome(nome);
+        produtoModel1.setPreco(BigDecimal.valueOf(Double.parseDouble(preco)));
+        produtoModel1.setQuantidade_estoque(Integer.parseInt(quantidadeEstoque));
+        return produtoModel1;
     }
     public static ProdutoModel getProdutoModelSemId2(){
         produtoModel2.setId(null);
