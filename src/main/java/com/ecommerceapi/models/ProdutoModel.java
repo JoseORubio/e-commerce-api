@@ -16,7 +16,8 @@ public class ProdutoModel extends RepresentationModel<ProdutoModel>  implements 
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String nome;
-    private int quantidade_estoque;
+    @Column(name = "quantidade_estoque")
+    private int quantidadeEstoque;
     private BigDecimal preco;
 
     public UUID getId() {
@@ -35,12 +36,12 @@ public class ProdutoModel extends RepresentationModel<ProdutoModel>  implements 
         this.nome = nome;
     }
 
-    public int getQuantidade_estoque() {
-        return quantidade_estoque;
+    public int getQuantidadeEstoque() {
+        return quantidadeEstoque;
     }
 
-    public void setQuantidade_estoque(int quantidade_estoque) {
-        this.quantidade_estoque = quantidade_estoque;
+    public void setQuantidadeEstoque(int quantidadeEstoque) {
+        this.quantidadeEstoque = quantidadeEstoque;
     }
 
     public BigDecimal getPreco() {

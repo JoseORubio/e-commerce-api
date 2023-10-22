@@ -28,7 +28,7 @@ public class UsuarioDTO {
 
     @NotBlank
     @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Deve estar no formato: 'dd/MM/yyyy'.")
-    private String data_nasc;
+    private String dataNasc;
 
     @NotBlank
     @Pattern(regexp = "^(?:M|F|O)$", message = "Apenas 'M' para masculino, 'F' para feminino e 'O' para outro.")
@@ -49,7 +49,7 @@ public class UsuarioDTO {
 
     @NotBlank
     @Pattern(regexp = "^[1-9]\\d{0,4}$", message = "Deve ser qualquer número entre 1 e 99999.")
-    private String numero_rua;
+    private String numeroRua;
 
     public String getNome() {
         return nome;
@@ -85,12 +85,12 @@ public class UsuarioDTO {
     }
 
 
-    public String getData_nasc() {
-        return data_nasc;
+    public String getDataNasc() {
+        return dataNasc;
     }
 
-    public void setData_nasc(String data_nasc) {
-        this.data_nasc = data_nasc;
+    public void setDataNasc(String dataNasc) {
+        this.dataNasc = dataNasc;
     }
 
 
@@ -130,11 +130,11 @@ public class UsuarioDTO {
     }
 
 
-    public String getNumero_rua() {
-        return numero_rua;
+    public String getNumeroRua() {
+        return numeroRua;
     }
 
-    public void setNumero_rua(String numero_rua) {
-        this.numero_rua = numero_rua;
+    public void setNumeroRua(String numeroRua) {
+        this.numeroRua = numeroRua;
     }
 }

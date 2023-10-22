@@ -53,7 +53,7 @@ public class CarrinhoService {
             throw new IllegalArgumentException("Quantidade inválida.");
         }
 
-        if (quantidade > produtoModel.getQuantidade_estoque()) {
+        if (quantidade > produtoModel.getQuantidadeEstoque()) {
             throw new IllegalArgumentException("Quantidade indisponível no estoque.");
         }
 

@@ -16,17 +16,19 @@ public class VendaModel implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private UUID id_usuario;
-    private BigDecimal valor_total;
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
+    @Column(name = "valor_total")
+    private BigDecimal valorTotal;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
     private LocalDateTime data_venda;
 
     public VendaModel(){}
-    public VendaModel(UUID id_usuario){
-        this.id_usuario = id_usuario;
-        this.valor_total= BigDecimal.ZERO;
+    public VendaModel(UUID idUsuario){
+        this.idUsuario = idUsuario;
+        this.valorTotal = BigDecimal.ZERO;
         this.data_venda = LocalDateTime.now(ZoneId.of("UTC"));
     }
     public UUID getId() {
@@ -37,19 +39,19 @@ public class VendaModel implements Serializable {
         this.id = id;
     }
 
-    public UUID getId_usuario() {
-        return id_usuario;
+    public UUID getIdUsuario() {
+        return idUsuario;
     }
-    public void setId_usuario(UUID id_usuario) {
-        this.id_usuario = id_usuario;
-    }
-
-    public BigDecimal getValor_total() {
-        return valor_total;
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public void setValor_total(BigDecimal valor_total) {
-        this.valor_total = valor_total;
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
     public LocalDateTime getData_venda() {

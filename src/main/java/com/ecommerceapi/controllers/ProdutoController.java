@@ -52,7 +52,7 @@ public class ProdutoController {
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
                             value = "{\"id\": \"9da57f64-dc4b-4d6d-b39b-426ffea66e3b\",\n" +
                                     "    \"nome\": \"Blusa C\",\n" +
-                                    "    \"quantidade_estoque\": 76,\n" +
+                                    "    \"quantidadeEstoque\": 76,\n" +
                                     "    \"preco\": 38.99\n" +
                                     "}")})),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já cadastrados",
@@ -63,7 +63,7 @@ public class ProdutoController {
                                     "        \"Erros\": \"Não deve estar em branco. Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .\"\n" +
                                     "    },\n" +
                                     "    {\n" +
-                                    "        \"Campo\": \"quantidade_estoque\",\n" +
+                                    "        \"Campo\": \"quantidadeEstoque\",\n" +
                                     "        \"Erros\": \"Não deve estar em branco. Deve ser qualquer número entre 0 e 999999.\"\n" +
                                     "    },\n" +
                                     "    {\n" +
@@ -78,7 +78,7 @@ public class ProdutoController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
                             value = "{ \"nome\" : \"Blusa C\",\n" +
-                                    "    \"quantidade_estoque\" : \"76\",\n" +
+                                    "    \"quantidadeEstoque\" : \"76\",\n" +
                                     "    \"preco\": \"38,99\"}")
                     }))
             @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
@@ -105,7 +105,7 @@ public class ProdutoController {
                             value = "{\n" +
                                     "    \"id\": \"9da57f64-dc4b-4d6d-b39b-426ffea66e3b\",\n" +
                                     "    \"nome\": \"Blusa C\",\n" +
-                                    "    \"quantidade_estoque\": 36,\n" +
+                                    "    \"quantidadeEstoque\": 36,\n" +
                                     "    \"preco\": 87.5\n" +
                                     "}")})),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já cadastrados",
@@ -116,7 +116,7 @@ public class ProdutoController {
                                     "        \"Erros\": \"Não deve estar em branco. Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .\"\n" +
                                     "    },\n" +
                                     "    {\n" +
-                                    "        \"Campo\": \"quantidade_estoque\",\n" +
+                                    "        \"Campo\": \"quantidadeEstoque\",\n" +
                                     "        \"Erros\": \"Não deve estar em branco. Deve ser qualquer número entre 0 e 999999.\"\n" +
                                     "    },\n" +
                                     "    {\n" +
@@ -130,19 +130,19 @@ public class ProdutoController {
     })
     public ResponseEntity<Object> atualizarProduto(
             @Parameter(content = @Content(examples = @ExampleObject("9da57f64-dc4b-4d6d-b39b-426ffea66e3b")))
-            @PathVariable(value = "id_produto") String id_produto,
+            @PathVariable(value = "id_produto") String idProduto,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
                             value = "{\n" +
                                     "   \"nome\" : \"Blusa C\",\n" +
-                                    "   \"quantidade_estoque\" : \"36\",\n" +
+                                    "   \"quantidadeEstoque\" : \"36\",\n" +
                                     "   \"preco\": \"87,50\"\n" +
                                     "}")}))
             @RequestBody @Valid ProdutoDTO produtoDTO, BindingResult errosDeValidacao) {
 
         Optional<ProdutoModel> produtoOptional = null;
         try {
-            produtoOptional = produtoService.buscarProdutoPorId(id_produto);
+            produtoOptional = produtoService.buscarProdutoPorId(idProduto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
@@ -177,11 +177,11 @@ public class ProdutoController {
     })
     public ResponseEntity<Object> removerProduto(
             @Parameter(content = @Content(examples = @ExampleObject("bc4c0129-e190-4d5c-bf42-780585b74edf")))
-            @PathVariable(value = "id_produto") String id_produto) {
+            @PathVariable(value = "id_produto") String idProduto) {
 
         Optional<ProdutoModel> produtoOptional = null;
         try {
-            produtoOptional = produtoService.buscarProdutoPorId(id_produto);
+            produtoOptional = produtoService.buscarProdutoPorId(idProduto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
@@ -203,7 +203,7 @@ public class ProdutoController {
                             "        {\n" +
                             "            \"id\": \"b47861f2-5ae0-4771-9d52-8d45bfec6acb\",\n" +
                             "            \"nome\": \"Bermuda A\",\n" +
-                            "            \"quantidade_estoque\": 410,\n" +
+                            "            \"quantidadeEstoque\": 410,\n" +
                             "            \"preco\": 900.00,\n" +
                             "            \"links\": [\n" +
                             "                {\n" +
@@ -215,7 +215,7 @@ public class ProdutoController {
                             "        {\n" +
                             "            \"id\": \"6bb93022-563a-4e01-ac6f-9752559447b7\",\n" +
                             "            \"nome\": \"Bermuda B\",\n" +
-                            "            \"quantidade_estoque\": 84,\n" +
+                            "            \"quantidadeEstoque\": 84,\n" +
                             "            \"preco\": 6.44,\n" +
                             "            \"links\": [\n" +
                             "                {\n" +
@@ -227,7 +227,7 @@ public class ProdutoController {
                             "        {\n" +
                             "            \"id\": \"02e177c8-1d32-4ffb-984f-63e3e8a4e966\",\n" +
                             "            \"nome\": \"Blusa A\",\n" +
-                            "            \"quantidade_estoque\": 495,\n" +
+                            "            \"quantidadeEstoque\": 495,\n" +
                             "            \"preco\": 10.00,\n" +
                             "            \"links\": [\n" +
                             "                {\n" +
@@ -239,7 +239,7 @@ public class ProdutoController {
                             "        {\n" +
                             "            \"id\": \"f9c473bf-afb8-4eb2-9d32-d1c2b9498408\",\n" +
                             "            \"nome\": \"Blusa B\",\n" +
-                            "            \"quantidade_estoque\": 500,\n" +
+                            "            \"quantidadeEstoque\": 500,\n" +
                             "            \"preco\": 10.00,\n" +
                             "            \"links\": [\n" +
                             "                {\n" +
@@ -251,7 +251,7 @@ public class ProdutoController {
                             "        {\n" +
                             "            \"id\": \"9da57f64-dc4b-4d6d-b39b-426ffea66e3b\",\n" +
                             "            \"nome\": \"Blusa C\",\n" +
-                            "            \"quantidade_estoque\": 36,\n" +
+                            "            \"quantidadeEstoque\": 36,\n" +
                             "            \"preco\": 87.50,\n" +
                             "            \"links\": [\n" +
                             "                {\n" +
@@ -315,7 +315,7 @@ public class ProdutoController {
                     value = "{\n" +
                             "  \"id\": \"f9c473bf-afb8-4eb2-9d32-d1c2b9498408\",\n" +
                             "  \"nome\": \"Blusa B\",\n" +
-                            "  \"quantidade_estoque\": 500,\n" +
+                            "  \"quantidadeEstoque\": 500,\n" +
                             "  \"preco\": 10,\n" +
                             "  \"_links\": {\n" +
                             "    \"Lista de Produtos\": {\n" +
@@ -356,7 +356,7 @@ public class ProdutoController {
                             "    {\n" +
                             "      \"id\": \"b47861f2-5ae0-4771-9d52-8d45bfec6acb\",\n" +
                             "      \"nome\": \"Bermuda A\",\n" +
-                            "      \"quantidade_estoque\": 410,\n" +
+                            "      \"quantidadeEstoque\": 410,\n" +
                             "      \"preco\": 900,\n" +
                             "      \"links\": [\n" +
                             "        {\n" +
@@ -368,7 +368,7 @@ public class ProdutoController {
                             "    {\n" +
                             "      \"id\": \"6bb93022-563a-4e01-ac6f-9752559447b7\",\n" +
                             "      \"nome\": \"Bermuda B\",\n" +
-                            "      \"quantidade_estoque\": 84,\n" +
+                            "      \"quantidadeEstoque\": 84,\n" +
                             "      \"preco\": 6.44,\n" +
                             "      \"links\": [\n" +
                             "        {\n" +

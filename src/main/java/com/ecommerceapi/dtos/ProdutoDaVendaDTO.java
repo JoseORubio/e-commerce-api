@@ -7,9 +7,9 @@ public class ProdutoDaVendaDTO {
 
 
     @NotBlank
-    private String id_produto;
+    private String idProduto;
     @NotBlank
     private String quantidade;
     @NotBlank
-    private String valor_total_produto;
+    private String valorTotalProduto;
 }

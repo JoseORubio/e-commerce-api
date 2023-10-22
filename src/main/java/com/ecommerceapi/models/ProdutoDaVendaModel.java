@@ -11,41 +11,45 @@ public class ProdutoDaVendaModel implements Serializable {
     private final static long serialVersionUID = 1L;
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id_item_venda;
-    private UUID id_venda;
-    private UUID id_produto;
+    @Column(name = "id_item_venda")
+    private UUID idItemVenda;
+    @Column(name = "id_venda")
+    private UUID idVenda;
+    @Column(name = "id_produto")
+    private UUID idProduto;
     private int quantidade;
-    private BigDecimal valor_total_produto;
+    @Column(name = "valor_total_produto")
+    private BigDecimal valorTotalProduto;
 
     public ProdutoDaVendaModel(){}
-    public ProdutoDaVendaModel(UUID id_venda, UUID id_produto, int quantidade) {
-        this.id_venda = id_venda;
-        this.id_produto = id_produto;
+    public ProdutoDaVendaModel(UUID idVenda, UUID idProduto, int quantidade) {
+        this.idVenda = idVenda;
+        this.idProduto = idProduto;
         this.quantidade = quantidade;
     }
 
-    public UUID getId_item_venda() {
-        return id_item_venda;
+    public UUID getIdItemVenda() {
+        return idItemVenda;
     }
 
-    public void setId_item_venda(UUID id_item_venda) {
-        this.id_item_venda = id_item_venda;
+    public void setIdItemVenda(UUID idItemVenda) {
+        this.idItemVenda = idItemVenda;
     }
 
-    public UUID getId_venda() {
-        return id_venda;
+    public UUID getIdVenda() {
+        return idVenda;
     }
 
-    public void setId_venda(UUID id_venda) {
-        this.id_venda = id_venda;
+    public void setIdVenda(UUID idVenda) {
+        this.idVenda = idVenda;
     }
 
-    public UUID getId_produto() {
-        return id_produto;
+    public UUID getIdProduto() {
+        return idProduto;
     }
 
-    public void setId_produto(UUID id_produto) {
-        this.id_produto = id_produto;
+    public void setIdProduto(UUID idProduto) {
+        this.idProduto = idProduto;
     }
 
     public int getQuantidade() {
@@ -56,11 +60,11 @@ public class ProdutoDaVendaModel implements Serializable {
         this.quantidade = quantidade;
     }
 
-    public BigDecimal getValor_total_produto() {
-        return valor_total_produto;
+    public BigDecimal getValorTotalProduto() {
+        return valorTotalProduto;
     }
 
-    public void setValor_total_produto(BigDecimal valor_total_produto) {
-        this.valor_total_produto = valor_total_produto;
+    public void setValorTotalProduto(BigDecimal valorTotalProduto) {
+        this.valorTotalProduto = valorTotalProduto;
     }
 }

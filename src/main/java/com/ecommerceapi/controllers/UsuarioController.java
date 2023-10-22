@@ -63,7 +63,7 @@ public class UsuarioController {
                                     "  \"nome\": \"Heloisa Yasmin Costa\",\n" +
                                     "  \"login\": \"heloi123\",\n" +
                                     "  \"cpf\": \"70181125404\",\n" +
-                                    "  \"data_nasc\": \"06/03/1945\",\n" +
+                                    "  \"dataNasc\": \"06/03/1945\",\n" +
                                     "  \"sexo\": \"F\",\n" +
                                     "  \"telefone\": \"(85)98981-2256\",\n" +
                                     "  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\n" +
@@ -71,7 +71,7 @@ public class UsuarioController {
                                     "  \"uf\": \"CE\",\n" +
                                     "  \"cidade\": \"Caucaia\",\n" +
                                     "  \"rua\": \"Rua Sargento Feitosa\",\n" +
-                                    "  \"numero_rua\": 981\n" +
+                                    "  \"numeroRua\": 981\n" +
                                     "}")})),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já cadastrados",
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
@@ -97,7 +97,7 @@ public class UsuarioController {
                                     "    \"Erros\": \"Deve conter apenas números ou '_', e pelo menos uma letra minúscula. Não deve estar em branco. Login deve ter entre 8 e 20 caracteres.\"\n" +
                                     "  },\n" +
                                     "  {\n" +
-                                    "    \"Campo\": \"numero_rua\",\n" +
+                                    "    \"Campo\": \"numeroRua\",\n" +
                                     "    \"Erros\": \"Deve ser qualquer número entre 1 e 99999. Não deve estar em branco.\"\n" +
                                     "  },\n" +
                                     "  {\n" +
@@ -113,7 +113,7 @@ public class UsuarioController {
                                     "    \"Erros\": \"Senha deve ter entre 8 e 20 caracteres. Não deve estar em branco. Deve conter ao menos uma letra maiúscula, uma minúscula e um número.\"\n" +
                                     "  },\n" +
                                     "  {\n" +
-                                    "    \"Campo\": \"data_nasc\",\n" +
+                                    "    \"Campo\": \"dataNasc\",\n" +
                                     "    \"Erros\": \"Não deve estar em branco. Deve estar no formato: 'dd/MM/yyyy'. Data inválida.\"\n" +
                                     "  }\n" +
                                     "]")}))})
@@ -125,12 +125,12 @@ public class UsuarioController {
                                     "  \"login\": \"heloi123\",\n" +
                                     "  \"senha\": \"asd123aaD\",\n" +
                                     "  \"cpf\": \"70181125404\",\n" +
-                                    "  \"data_nasc\": \"06/03/1945\",\n" +
+                                    "  \"dataNasc\": \"06/03/1945\",\n" +
                                     "  \"sexo\": \"F\",\n" +
                                     "  \"telefone\": \"(85)98981-2256\",\n" +
                                     "  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\n" +
                                     "  \"cep\": \"61604-270\",\n" +
-                                    "  \"numero_rua\": \"981\"\n" +
+                                    "  \"numeroRua\": \"981\"\n" +
                                     "}")
                     }))
             @RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
@@ -163,12 +163,12 @@ public class UsuarioController {
                                     "  \"login\": \"heloi123\",\n" +
                                     "  \"senha\": \"asd123aaD\",\n" +
                                     "  \"cpf\": \"70181125404\",\n" +
-                                    "  \"data_nasc\": \"06/03/1945\",\n" +
+                                    "  \"dataNasc\": \"06/03/1945\",\n" +
                                     "  \"sexo\": \"F\",\n" +
                                     "  \"telefone\": \"(85)98981-2256\",\n" +
                                     "  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\n" +
                                     "  \"cep\": \"61604-270\",\n" +
-                                    "  \"numero_rua\": \"981\"\n" +
+                                    "  \"numeroRua\": \"981\"\n" +
                                     "}")})),
             @ApiResponse(responseCode = "400", description = "Parametros inválidos ou já cadastrados",
                     content = @Content(mediaType = "application/json", examples = {@ExampleObject(
@@ -194,7 +194,7 @@ public class UsuarioController {
                                     "    \"Erros\": \"Deve conter apenas números ou '_', e pelo menos uma letra minúscula. Não deve estar em branco. Login deve ter entre 8 e 20 caracteres.\"\n" +
                                     "  },\n" +
                                     "  {\n" +
-                                    "    \"Campo\": \"numero_rua\",\n" +
+                                    "    \"Campo\": \"numeroRua\",\n" +
                                     "    \"Erros\": \"Deve ser qualquer número entre 1 e 99999. Não deve estar em branco.\"\n" +
                                     "  },\n" +
                                     "  {\n" +
@@ -210,7 +210,7 @@ public class UsuarioController {
                                     "    \"Erros\": \"Senha deve ter entre 8 e 20 caracteres. Não deve estar em branco. Deve conter ao menos uma letra maiúscula, uma minúscula e um número.\"\n" +
                                     "  },\n" +
                                     "  {\n" +
-                                    "    \"Campo\": \"data_nasc\",\n" +
+                                    "    \"Campo\": \"dataNasc\",\n" +
                                     "    \"Erros\": \"Não deve estar em branco. Deve estar no formato: 'dd/MM/yyyy'. Data inválida.\"\n" +
                                     "  }\n" +
                                     "]")})),
@@ -223,12 +223,12 @@ public class UsuarioController {
                                     "  \"login\": \"heloi123\",\n" +
                                     "  \"senha\": \"asd123aaD\",\n" +
                                     "  \"cpf\": \"70181125404\",\n" +
-                                    "  \"data_nasc\": \"06/03/1945\",\n" +
+                                    "  \"dataNasc\": \"06/03/1945\",\n" +
                                     "  \"sexo\": \"F\",\n" +
                                     "  \"telefone\": \"(85)98981-2256\",\n" +
                                     "  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\n" +
                                     "  \"cep\": \"61604-270\",\n" +
-                                    "  \"numero_rua\": \"981\"\n" +
+                                    "  \"numeroRua\": \"981\"\n" +
                                     "}")
                     }))
             @RequestBody @Valid UsuarioDTO usuarioDTO, BindingResult errosDeValidacao) {
@@ -263,11 +263,11 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)})
     public ResponseEntity<Object> deletarUsuarioPorId(
             @Parameter(content = @Content(examples = @ExampleObject("f9c473bf-afb8-4eb2-9d32-d1c2b9498408")))
-            @PathVariable(value = "id_usuario") String id_usuario) {
+            @PathVariable(value = "id_usuario") String idUsuario) {
 
         Optional<UsuarioModel> usuarioOptional = null;
         try {
-            usuarioOptional = usuarioService.buscarUsuarioPorId(id_usuario);
+            usuarioOptional = usuarioService.buscarUsuarioPorId(idUsuario);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
@@ -305,7 +305,7 @@ public class UsuarioController {
                                     "  \"nome\": \"Bernardo Kauê da Silva\",\n" +
                                     "  \"login\": \"berna123\",\n" +
                                     "  \"cpf\": \"59105639042\",\n" +
-                                    "  \"data_nasc\": \"16/01/1975\",\n" +
+                                    "  \"dataNasc\": \"16/01/1975\",\n" +
                                     "  \"sexo\": \"M\",\n" +
                                     "  \"telefone\": \"(45)12345-1234\",\n" +
                                     "  \"email\": \"bernardo-dasilva98@hotmail.co.jp\",\n" +
@@ -313,7 +313,7 @@ public class UsuarioController {
                                     "  \"uf\": \"PR\",\n" +
                                     "  \"cidade\": \"Curitiba\",\n" +
                                     "  \"rua\": \"Jardinete Rutílio de Sá Ribas\",\n" +
-                                    "  \"numero_rua\": 252\n" +
+                                    "  \"numeroRua\": 252\n" +
                                     "}")})),
             @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content)})
     public ResponseEntity<UsuarioViewDTO> buscarUsuarioLogado() {
@@ -335,8 +335,8 @@ public class UsuarioController {
                                     "      \"login\": \"andrea123\",\n" +
                                     "      \"senha\": \"$2a$10$1nsF8HaOjqB7lh3fgTA0wOow62WMWJsl6k5sZYMshihTDVFM/zuoq\",\n" +
                                     "      \"cpf\": \"20259721808\",\n" +
-                                    "      \"data_nasc\": \"22/02/1970\",\n" +
-                                    "      \"data_cadastro\": \"15/07/2023 às 18:34:59 UTC\",\n" +
+                                    "      \"dataNasc\": \"22/02/1970\",\n" +
+                                    "      \"dataCadastro\": \"15/07/2023 às 18:34:59 UTC\",\n" +
                                     "      \"sexo\": \"F\",\n" +
                                     "      \"telefone\": \"(67)99156-1981\",\n" +
                                     "      \"email\": \"andrea_simone_cardoso@hp.com\",\n" +
@@ -344,7 +344,7 @@ public class UsuarioController {
                                     "      \"uf\": \"MS\",\n" +
                                     "      \"cidade\": \"Três Lagoas\",\n" +
                                     "      \"rua\": \"Rua João de Almeida Barros\",\n" +
-                                    "      \"numero_rua\": 2884,\n" +
+                                    "      \"numeroRua\": 2884,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$1nsF8HaOjqB7lh3fgTA0wOow62WMWJsl6k5sZYMshihTDVFM/zuoq\",\n" +
                                     "      \"authorities\": [\n" +
@@ -371,8 +371,8 @@ public class UsuarioController {
                                     "      \"login\": \"artur123\",\n" +
                                     "      \"senha\": \"$2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW\",\n" +
                                     "      \"cpf\": \"68497813081\",\n" +
-                                    "      \"data_nasc\": \"26/02/2002\",\n" +
-                                    "      \"data_cadastro\": \"24/05/2023 às 12:50:05 UTC\",\n" +
+                                    "      \"dataNasc\": \"26/02/2002\",\n" +
+                                    "      \"dataCadastro\": \"24/05/2023 às 12:50:05 UTC\",\n" +
                                     "      \"sexo\": \"F\",\n" +
                                     "      \"telefone\": \"(45)12345-1234\",\n" +
                                     "      \"email\": \"artur@pibnet.com.br\",\n" +
@@ -380,7 +380,7 @@ public class UsuarioController {
                                     "      \"uf\": \"CE\",\n" +
                                     "      \"cidade\": \"Juazeiro do Norte\",\n" +
                                     "      \"rua\": \"Rua São Pedro\",\n" +
-                                    "      \"numero_rua\": 22,\n" +
+                                    "      \"numeroRua\": 22,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW\",\n" +
                                     "      \"authorities\": [\n" +
@@ -407,8 +407,8 @@ public class UsuarioController {
                                     "      \"login\": \"aurora123\",\n" +
                                     "      \"senha\": \"$2a$10$R6YIwkfUj2HUO0a.kbaJXurLI8eoCHRy7c7OWoeR3HWqyQfriLLiC\",\n" +
                                     "      \"cpf\": \"87773610240\",\n" +
-                                    "      \"data_nasc\": \"13/06/1963\",\n" +
-                                    "      \"data_cadastro\": \"15/07/2023 às 18:25:54 UTC\",\n" +
+                                    "      \"dataNasc\": \"13/06/1963\",\n" +
+                                    "      \"dataCadastro\": \"15/07/2023 às 18:25:54 UTC\",\n" +
                                     "      \"sexo\": \"F\",\n" +
                                     "      \"telefone\": \"(21)98620-6951\",\n" +
                                     "      \"email\": \"aurora_depaula@gustavoscoelho.com.br\",\n" +
@@ -416,7 +416,7 @@ public class UsuarioController {
                                     "      \"uf\": \"RJ\",\n" +
                                     "      \"cidade\": \"Rio de Janeiro\",\n" +
                                     "      \"rua\": \"Rua Sândalo\",\n" +
-                                    "      \"numero_rua\": 981,\n" +
+                                    "      \"numeroRua\": 981,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$R6YIwkfUj2HUO0a.kbaJXurLI8eoCHRy7c7OWoeR3HWqyQfriLLiC\",\n" +
                                     "      \"authorities\": [\n" +
@@ -443,8 +443,8 @@ public class UsuarioController {
                                     "      \"login\": \"bened123\",\n" +
                                     "      \"senha\": \"$2a$10$K3UzNbc7TAdIiozqlOJHZe9leli3wefvke88JoFNvK/FSwNthDcAW\",\n" +
                                     "      \"cpf\": \"98153379470\",\n" +
-                                    "      \"data_nasc\": \"30/11/2034\",\n" +
-                                    "      \"data_cadastro\": \"09/07/2023 às 14:16:17 UTC\",\n" +
+                                    "      \"dataNasc\": \"30/11/2034\",\n" +
+                                    "      \"dataCadastro\": \"09/07/2023 às 14:16:17 UTC\",\n" +
                                     "      \"sexo\": \"M\",\n" +
                                     "      \"telefone\": \"(69)98856-5123\",\n" +
                                     "      \"email\": \"benedito.juan.sales@gerj.com.br\",\n" +
@@ -452,7 +452,7 @@ public class UsuarioController {
                                     "      \"uf\": \"PR\",\n" +
                                     "      \"cidade\": \"Curitiba\",\n" +
                                     "      \"rua\": \"Jardinete Rutílio de Sá Ribas\",\n" +
-                                    "      \"numero_rua\": 22,\n" +
+                                    "      \"numeroRua\": 22,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$K3UzNbc7TAdIiozqlOJHZe9leli3wefvke88JoFNvK/FSwNthDcAW\",\n" +
                                     "      \"authorities\": [\n" +
@@ -479,8 +479,8 @@ public class UsuarioController {
                                     "      \"login\": \"berna123\",\n" +
                                     "      \"senha\": \"$2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW\",\n" +
                                     "      \"cpf\": \"59105639042\",\n" +
-                                    "      \"data_nasc\": \"16/01/1975\",\n" +
-                                    "      \"data_cadastro\": \"24/05/2023 às 12:51:44 UTC\",\n" +
+                                    "      \"dataNasc\": \"16/01/1975\",\n" +
+                                    "      \"dataCadastro\": \"24/05/2023 às 12:51:44 UTC\",\n" +
                                     "      \"sexo\": \"M\",\n" +
                                     "      \"telefone\": \"(45)12345-1234\",\n" +
                                     "      \"email\": \"bernardo-dasilva98@hotmail.co.jp\",\n" +
@@ -488,7 +488,7 @@ public class UsuarioController {
                                     "      \"uf\": \"PR\",\n" +
                                     "      \"cidade\": \"Curitiba\",\n" +
                                     "      \"rua\": \"Jardinete Rutílio de Sá Ribas\",\n" +
-                                    "      \"numero_rua\": 252,\n" +
+                                    "      \"numeroRua\": 252,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW\",\n" +
                                     "      \"authorities\": [\n" +
@@ -579,8 +579,8 @@ public class UsuarioController {
                                     "      \"login\": \"heloi123\",\n" +
                                     "      \"senha\": \"$2a$10$HhxGI2Ic8SkNNRU3vsq9m.3kJjzxRtik.uePu3WSjm3PxZeyS5VFC\",\n" +
                                     "      \"cpf\": \"70181125404\",\n" +
-                                    "      \"data_nasc\": \"06/03/1945\",\n" +
-                                    "      \"data_cadastro\": \"24/07/2023 às 16:58:49 UTC\",\n" +
+                                    "      \"dataNasc\": \"06/03/1945\",\n" +
+                                    "      \"dataCadastro\": \"24/07/2023 às 16:58:49 UTC\",\n" +
                                     "      \"sexo\": \"F\",\n" +
                                     "      \"telefone\": \"(85)98981-2256\",\n" +
                                     "      \"email\": \"heloisa_costa@ciaimoveissjc.com\",\n" +
@@ -588,7 +588,7 @@ public class UsuarioController {
                                     "      \"uf\": \"CE\",\n" +
                                     "      \"cidade\": \"Caucaia\",\n" +
                                     "      \"rua\": \"Rua Sargento Feitosa\",\n" +
-                                    "      \"numero_rua\": 981,\n" +
+                                    "      \"numeroRua\": 981,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$HhxGI2Ic8SkNNRU3vsq9m.3kJjzxRtik.uePu3WSjm3PxZeyS5VFC\",\n" +
                                     "      \"authorities\": [\n" +
@@ -643,11 +643,11 @@ public class UsuarioController {
     })
     public ResponseEntity<Object> buscarUsuarioPorId(
             @Parameter(content = @Content(examples = @ExampleObject("dceeba4a-b80c-42ac-8511-fae017a42bd5")))
-            @PathVariable(value = "id_usuario") String id_usuario) {
+            @PathVariable(value = "id_usuario") String idUsuario) {
 
         Optional<UsuarioModel> usuarioOptional = null;
         try {
-            usuarioOptional = usuarioService.buscarUsuarioPorId(id_usuario);
+            usuarioOptional = usuarioService.buscarUsuarioPorId(idUsuario);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
@@ -677,8 +677,8 @@ public class UsuarioController {
                                     "      \"login\": \"artur123\",\n" +
                                     "      \"senha\": \"$2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW\",\n" +
                                     "      \"cpf\": \"68497813081\",\n" +
-                                    "      \"data_nasc\": \"26/02/2002\",\n" +
-                                    "      \"data_cadastro\": \"24/05/2023 às 12:50:05 UTC\",\n" +
+                                    "      \"dataNasc\": \"26/02/2002\",\n" +
+                                    "      \"dataCadastro\": \"24/05/2023 às 12:50:05 UTC\",\n" +
                                     "      \"sexo\": \"F\",\n" +
                                     "      \"telefone\": \"(45)12345-1234\",\n" +
                                     "      \"email\": \"artur@pibnet.com.br\",\n" +
@@ -686,7 +686,7 @@ public class UsuarioController {
                                     "      \"uf\": \"CE\",\n" +
                                     "      \"cidade\": \"Juazeiro do Norte\",\n" +
                                     "      \"rua\": \"Rua São Pedro\",\n" +
-                                    "      \"numero_rua\": 22,\n" +
+                                    "      \"numeroRua\": 22,\n" +
                                     "      \"enabled\": true,\n" +
                                     "      \"password\": \"$2a$10$0kAMvnI4u0rilAO2brHI1eULAll.lBVCXu1J2fTgTSI19GutNT1bW\",\n" +
                                     "      \"accountNonExpired\": true,\n" +

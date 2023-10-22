@@ -37,13 +37,13 @@ public class CarrinhoVendaServiceIntegrationTest {
         usuarioModel = usuarioService.buscarUsuarioPorId("2eb8d460-2ac3-48f0-bb2e-72cbd20c206c").get();
         produtoModel1 = ProdutoStaticBuilder.getProdutoModelSemId();
         produtoModel1 = produtoService.salvarProduto(produtoModel1);
-        metadeQuantidadeEstoqueProduto1String = String.valueOf((int) ceil(produtoModel1.getQuantidade_estoque() / 2.0));
+        metadeQuantidadeEstoqueProduto1String = String.valueOf((int) ceil(produtoModel1.getQuantidadeEstoque() / 2.0));
         produtoModel2 = ProdutoStaticBuilder.getProdutoModelSemId2();
         produtoModel2 = produtoService.salvarProduto(produtoModel2);
-        metadeQuantidadeEstoqueProduto2String = String.valueOf((int) ceil(produtoModel2.getQuantidade_estoque() / 2.0));
+        metadeQuantidadeEstoqueProduto2String = String.valueOf((int) ceil(produtoModel2.getQuantidadeEstoque() / 2.0));
         produtoModel3 = ProdutoStaticBuilder.getProdutoModelSemId3();
         produtoModel3 = produtoService.salvarProduto(produtoModel3);
-        metadeQuantidadeEstoqueProduto3String = String.valueOf((int) ceil(produtoModel3.getQuantidade_estoque() / 2.0));
+        metadeQuantidadeEstoqueProduto3String = String.valueOf((int) ceil(produtoModel3.getQuantidadeEstoque() / 2.0));
     }
 
     @AfterAll
@@ -135,7 +135,7 @@ public class CarrinhoVendaServiceIntegrationTest {
         exception = assertThrows(IllegalArgumentException.class,
                 () -> {
                     carrinhoService.validaInsercaoProduto
-                            (usuarioModel, produtoModel1, String.valueOf(produtoModel1.getQuantidade_estoque() + 1));
+                            (usuarioModel, produtoModel1, String.valueOf(produtoModel1.getQuantidadeEstoque() + 1));
                 });
         assertTrue(exception.getMessage().contains("Quantidade indisponível no estoque."));
     }
@@ -227,7 +227,7 @@ public class CarrinhoVendaServiceIntegrationTest {
             @Test
             void naoDeveEfetivarVendaCompletaQuantidadeCarrinhoMaiorEstoque() {
                 List<CarrinhoModel> carrinhoModelList = carrinhoService.buscarCarrinhoDoUsuario(usuarioModel).get();
-                carrinhoModelList.get(0).setQuantidade(carrinhoModelList.get(0).getProduto().getQuantidade_estoque() +1);
+                carrinhoModelList.get(0).setQuantidade(carrinhoModelList.get(0).getProduto().getQuantidadeEstoque() +1);
 
                 exception = assertThrows(IllegalArgumentException.class,
                         () -> {

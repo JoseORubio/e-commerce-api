@@ -48,7 +48,7 @@ public class CarrinhoController {
                                     "    \"produto\": {\n" +
                                     "      \"id\": \"8fcfe445-864c-4d96-b8c0-7d75acb45dc5\",\n" +
                                     "      \"nome\": \"Tênis B\",\n" +
-                                    "      \"quantidade_estoque\": 87,\n" +
+                                    "      \"quantidadeEstoque\": 87,\n" +
                                     "      \"preco\": 6.44,\n" +
                                     "      \"links\": [\n" +
                                     "        {\n" +
@@ -73,13 +73,13 @@ public class CarrinhoController {
     })
     public ResponseEntity<Object> inserirProduto(
             @Parameter(content = @Content(examples = @ExampleObject("8fcfe445-864c-4d96-b8c0-7d75acb45dc5")))
-            @RequestParam("id_produto") String id_produto,
+            @RequestParam("id_produto") String idProduto,
             @Parameter(content = @Content(examples = @ExampleObject("4")))
             @RequestParam("quantidade") String quantidadeString) {
 
         Optional<ProdutoModel> produtoOptional = null;
         try {
-            produtoOptional = produtoService.buscarProdutoPorId(id_produto);
+            produtoOptional = produtoService.buscarProdutoPorId(idProduto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
@@ -113,11 +113,11 @@ public class CarrinhoController {
     })
     public ResponseEntity<Object> removeItemCarrinho(
             @Parameter(content = @Content(examples = @ExampleObject("8fcfe445-864c-4d96-b8c0-7d75acb45dc5")))
-            @PathVariable(value = "id_produto") String id_produto) {
+            @PathVariable(value = "id_produto") String idProduto) {
 
         Optional<ProdutoModel> produtoOptional = null;
         try {
-            produtoOptional = produtoService.buscarProdutoPorId(id_produto);
+            produtoOptional = produtoService.buscarProdutoPorId(idProduto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id inválida.");
         }
@@ -172,7 +172,7 @@ public class CarrinhoController {
                                     "    \"produto\": {\n" +
                                     "      \"id\": \"f9c473bf-afb8-4eb2-9d32-d1c2b9498408\",\n" +
                                     "      \"nome\": \"Blusa B\",\n" +
-                                    "      \"quantidade_estoque\": 326,\n" +
+                                    "      \"quantidadeEstoque\": 326,\n" +
                                     "      \"preco\": 87.5,\n" +
                                     "      \"links\": [\n" +
                                     "        {\n" +
@@ -188,7 +188,7 @@ public class CarrinhoController {
                                     "    \"produto\": {\n" +
                                     "      \"id\": \"b7545abe-eec2-4537-88fc-63667782789c\",\n" +
                                     "      \"nome\": \"Meia B\",\n" +
-                                    "      \"quantidade_estoque\": 56,\n" +
+                                    "      \"quantidadeEstoque\": 56,\n" +
                                     "      \"preco\": 6.44,\n" +
                                     "      \"links\": [\n" +
                                     "        {\n" +
@@ -204,7 +204,7 @@ public class CarrinhoController {
                                     "    \"produto\": {\n" +
                                     "      \"id\": \"8fcfe445-864c-4d96-b8c0-7d75acb45dc5\",\n" +
                                     "      \"nome\": \"Tênis B\",\n" +
-                                    "      \"quantidade_estoque\": 91,\n" +
+                                    "      \"quantidadeEstoque\": 91,\n" +
                                     "      \"preco\": 6.44,\n" +
                                     "      \"links\": [\n" +
                                     "        {\n" +

@@ -13,13 +13,15 @@ public class PapelDoUsuarioModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private UUID id_usuario;
-    private UUID id_papel;
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
+    @Column(name = "id_papel")
+    private UUID idPapel;
 
     public PapelDoUsuarioModel(){}
-    public PapelDoUsuarioModel(UUID id_usuario, UUID id_papel) {
-        this.id_usuario = id_usuario;
-        this.id_papel = id_papel;
+    public PapelDoUsuarioModel(UUID idUsuario, UUID idPapel) {
+        this.idUsuario = idUsuario;
+        this.idPapel = idPapel;
     }
 
     public UUID getId() {
@@ -30,19 +32,19 @@ public class PapelDoUsuarioModel implements Serializable {
         this.id = id;
     }
 
-    public UUID getId_usuario() {
-        return id_usuario;
+    public UUID getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId_usuario(UUID id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public UUID getId_papel() {
-        return id_papel;
+    public UUID getIdPapel() {
+        return idPapel;
     }
 
-    public void setId_papel(UUID id_papel) {
-        this.id_papel = id_papel;
+    public void setIdPapel(UUID idPapel) {
+        this.idPapel = idPapel;
     }
 }

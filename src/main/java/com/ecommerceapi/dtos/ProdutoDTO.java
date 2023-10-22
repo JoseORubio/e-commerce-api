@@ -14,7 +14,7 @@ public class ProdutoDTO {
 
     @NotBlank
     @Pattern(regexp ="^\\d{1,6}$", message = "Deve ser qualquer número entre 0 e 999999.")
-    private String quantidade_estoque;
+    private String quantidadeEstoque;
 
     @NotBlank
     @Pattern(regexp ="^\\d{1,6}([,|.]\\d{1,2})?$", message = "Deve ser qualquer valor monetário até 9999,99 com dois dígitos após , ou .")
@@ -28,12 +28,12 @@ public class ProdutoDTO {
         this.nome = nome;
     }
 
-    public String getQuantidade_estoque() {
-        return quantidade_estoque;
+    public String getQuantidadeEstoque() {
+        return quantidadeEstoque;
     }
 
-    public void setQuantidade_estoque(String quantidade_estoque) {
-        this.quantidade_estoque = quantidade_estoque;
+    public void setQuantidadeEstoque(String quantidadeEstoque) {
+        this.quantidadeEstoque = quantidadeEstoque;
     }
 
     public String getPreco() {

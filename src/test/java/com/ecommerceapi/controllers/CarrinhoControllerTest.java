@@ -66,7 +66,7 @@ public class CarrinhoControllerTest {
         produtoModel = ProdutoStaticBuilder.getMockProdutoModelComId();
 
         idProduto = produtoModel.getId().toString();
-        quantidadeProduto = String.valueOf(produtoModel.getQuantidade_estoque());
+        quantidadeProduto = String.valueOf(produtoModel.getQuantidadeEstoque());
 
         carrinhoExistente = new ArrayList<>(Collections.singletonList(carrinhoModel));
         listaCarrinhoView = new ArrayList<>(Collections.singletonList(carrinhoExistente));

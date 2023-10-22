@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -30,10 +29,12 @@ public class UsuarioModel extends RepresentationModel<UsuarioModel> implements U
     private String cpf;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate data_nasc;
+    @Column(name ="data_nasc" )
+    private LocalDate dataNasc;
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat( pattern = "dd/MM/yyyy 'às' HH:mm:ss 'UTC'")
-    private LocalDateTime data_cadastro;
+    @Column(name ="data_cadastro" )
+    private LocalDateTime dataCadastro;
     private char sexo;
     private String telefone;
     private String email;
@@ -41,7 +42,8 @@ public class UsuarioModel extends RepresentationModel<UsuarioModel> implements U
     private String uf;
     private String cidade;
     private String rua;
-    private int numero_rua;
+    @Column(name ="numero_rua" )
+    private int numeroRua;
 
     @ManyToMany
     @JoinTable(name = "papeis_do_usuario"
@@ -128,21 +130,21 @@ public class UsuarioModel extends RepresentationModel<UsuarioModel> implements U
     }
 
 
-    public LocalDate getData_nasc() {
-        return data_nasc;
+    public LocalDate getDataNasc() {
+        return dataNasc;
     }
 
-    public void setData_nasc(LocalDate data_nasc) {
-        this.data_nasc = data_nasc;
+    public void setDataNasc(LocalDate dataNasc) {
+        this.dataNasc = dataNasc;
     }
 
 
-    public LocalDateTime getData_cadastro() {
-        return data_cadastro;
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
     }
 
-    public void setData_cadastro(LocalDateTime data_cadastro) {
-        this.data_cadastro = data_cadastro;
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 
 
@@ -206,12 +208,12 @@ public class UsuarioModel extends RepresentationModel<UsuarioModel> implements U
     }
 
 
-    public int getNumero_rua() {
-        return numero_rua;
+    public int getNumeroRua() {
+        return numeroRua;
     }
 
-    public void setNumero_rua(int numero_rua) {
-        this.numero_rua = numero_rua;
+    public void setNumeroRua(int numeroRua) {
+        this.numeroRua = numeroRua;
     }
 
 

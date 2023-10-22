@@ -42,7 +42,7 @@ public class ProdutoService {
             throw e;
         }
 
-        produtoModel.setQuantidade_estoque(Integer.parseInt(produtoDTO.getQuantidade_estoque()));
+        produtoModel.setQuantidadeEstoque(Integer.parseInt(produtoDTO.getQuantidadeEstoque()));
         produtoModel.setPreco(BigDecimal.valueOf(
                 Double.parseDouble(produtoDTO.getPreco().replace(',', '.'))));
         return produtoModel;
@@ -67,7 +67,7 @@ public class ProdutoService {
             produtoAtualizado.setNome(produtoSalvo.getNome());
 
         produtoAtualizado.setId(produtoSalvo.getId());
-        produtoAtualizado.setQuantidade_estoque(Integer.parseInt(produtoDTO.getQuantidade_estoque()));
+        produtoAtualizado.setQuantidadeEstoque(Integer.parseInt(produtoDTO.getQuantidadeEstoque()));
         produtoAtualizado.setPreco(BigDecimal.valueOf(
                 Double.parseDouble(produtoDTO.getPreco().replace(',', '.'))));
         return produtoAtualizado;
@@ -95,8 +95,8 @@ public class ProdutoService {
     }
 
     public void baixarEstoqueProduto(ProdutoModel produtoModel, int quantidade) {
-        produtoModel.setQuantidade_estoque
-                (produtoModel.getQuantidade_estoque() - quantidade);
+        produtoModel.setQuantidadeEstoque
+                (produtoModel.getQuantidadeEstoque() - quantidade);
         salvarProduto(produtoModel);
     }
 
@@ -109,9 +109,9 @@ public class ProdutoService {
         return produtoRepository.findAll(pageable);
     }
 
-    public Optional<ProdutoModel> buscarProdutoPorId(String id_produto) {
-        UUID id = ConversorUUID.converteUUID(id_produto);
-        if (id_produto.equals("") || id == null)
+    public Optional<ProdutoModel> buscarProdutoPorId(String idProduto) {
+        UUID id = ConversorUUID.converteUUID(idProduto);
+        if (idProduto.equals("") || id == null)
             throw new IllegalArgumentException();
         return produtoRepository.findById(id);
     }

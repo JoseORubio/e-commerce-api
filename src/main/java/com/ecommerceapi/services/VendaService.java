@@ -32,7 +32,7 @@ public class VendaService {
     public List<Object> efetivaVendaCompleta(UsuarioModel usuario, List<CarrinhoModel> carrinhoModel) {
 
         for (CarrinhoModel itens : carrinhoModel) {
-            if (itens.getQuantidade() > itens.getProduto().getQuantidade_estoque()) {
+            if (itens.getQuantidade() > itens.getProduto().getQuantidadeEstoque()) {
                 throw new IllegalArgumentException("Quantidade de " + itens.getProduto().getNome() + " indisponível no estoque.");
             }
         }

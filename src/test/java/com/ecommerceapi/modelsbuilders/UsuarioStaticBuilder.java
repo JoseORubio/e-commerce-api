@@ -37,8 +37,8 @@ public class UsuarioStaticBuilder {
         usuarioModel.setLogin(login);
         usuarioModel.setSenha(senha);
         usuarioModel.setCpf(cpf);
-        usuarioModel.setData_nasc(dataNasc);
-        usuarioModel.setData_cadastro(dataCadastro);
+        usuarioModel.setDataNasc(dataNasc);
+        usuarioModel.setDataCadastro(dataCadastro);
         usuarioModel.setSexo(sexo.charAt(0));
         usuarioModel.setTelefone(telefone);
         usuarioModel.setEmail(email);
@@ -46,7 +46,7 @@ public class UsuarioStaticBuilder {
         usuarioModel.setUf(uf);
         usuarioModel.setCidade(cidade);
         usuarioModel.setRua(rua);
-        usuarioModel.setNumero_rua(Integer.parseInt(numeroRua));
+        usuarioModel.setNumeroRua(Integer.parseInt(numeroRua));
 
         return usuarioModel;
     }
@@ -57,8 +57,8 @@ public class UsuarioStaticBuilder {
         usuarioModelMock.setLogin(login);
         usuarioModelMock.setSenha(senha);
         usuarioModelMock.setCpf(cpf);
-        usuarioModelMock.setData_nasc(dataNasc);
-        usuarioModelMock.setData_cadastro(dataCadastro);
+        usuarioModelMock.setDataNasc(dataNasc);
+        usuarioModelMock.setDataCadastro(dataCadastro);
         usuarioModelMock.setSexo(sexo.charAt(0));
         usuarioModelMock.setTelefone(telefone);
         usuarioModelMock.setEmail(email);
@@ -66,7 +66,7 @@ public class UsuarioStaticBuilder {
         usuarioModelMock.setUf(uf);
         usuarioModelMock.setCidade(cidade);
         usuarioModelMock.setRua(rua);
-        usuarioModelMock.setNumero_rua(Integer.parseInt(numeroRua));
+        usuarioModelMock.setNumeroRua(Integer.parseInt(numeroRua));
 
         return usuarioModelMock;
     }
@@ -76,12 +76,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -91,12 +91,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin("nicole123");
         usuarioDTO.setSenha("TYu123Asd");
         usuarioDTO.setCpf("15876511498");
-        usuarioDTO.setData_nasc("22/02/1922");
+        usuarioDTO.setDataNasc("22/02/1922");
         usuarioDTO.setSexo("F");
         usuarioDTO.setTelefone("(85)99951-1672");
         usuarioDTO.setEmail("nicole_lopes@netservicos.com.br");
         usuarioDTO.setCep("60422-670");
-        usuarioDTO.setNumero_rua("912");
+        usuarioDTO.setNumeroRua("912");
 
         return usuarioDTO;
     }
@@ -106,12 +106,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -121,12 +121,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin("******");
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -136,12 +136,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha("******");
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -151,12 +151,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf("******");
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -166,12 +166,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc("******");
+        usuarioDTO.setDataNasc("******");
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -181,12 +181,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo("******");
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -196,12 +196,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone("******");
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -211,12 +211,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail("******");
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -226,12 +226,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep("******");
-        usuarioDTO.setNumero_rua(numeroRua);
+        usuarioDTO.setNumeroRua(numeroRua);
 
         return usuarioDTO;
     }
@@ -241,12 +241,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(login);
         usuarioDTO.setSenha(senha);
         usuarioDTO.setCpf(cpf);
-        usuarioDTO.setData_nasc(dataNascString);
+        usuarioDTO.setDataNasc(dataNascString);
         usuarioDTO.setSexo(sexo);
         usuarioDTO.setTelefone(telefone);
         usuarioDTO.setEmail(email);
         usuarioDTO.setCep(cep);
-        usuarioDTO.setNumero_rua("******");
+        usuarioDTO.setNumeroRua("******");
 
         return usuarioDTO;
     }
@@ -257,12 +257,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin(null);
         usuarioDTO.setSenha(null);
         usuarioDTO.setCpf(null);
-        usuarioDTO.setData_nasc(null);
+        usuarioDTO.setDataNasc(null);
         usuarioDTO.setSexo(null);
         usuarioDTO.setTelefone(null);
         usuarioDTO.setEmail(null);
         usuarioDTO.setCep(null);
-        usuarioDTO.setNumero_rua(null);
+        usuarioDTO.setNumeroRua(null);
 
         return usuarioDTO;
     }
@@ -272,12 +272,12 @@ public class UsuarioStaticBuilder {
         usuarioDTO.setLogin("");
         usuarioDTO.setSenha("");
         usuarioDTO.setCpf("");
-        usuarioDTO.setData_nasc("");
+        usuarioDTO.setDataNasc("");
         usuarioDTO.setSexo("");
         usuarioDTO.setTelefone("");
         usuarioDTO.setEmail("");
         usuarioDTO.setCep("");
-        usuarioDTO.setNumero_rua("");
+        usuarioDTO.setNumeroRua("");
 
         return usuarioDTO;
     }
@@ -286,7 +286,7 @@ public class UsuarioStaticBuilder {
         usuarioViewDTO.setNome(nome);
         usuarioViewDTO.setLogin(login);
         usuarioViewDTO.setCpf(cpf);
-        usuarioViewDTO.setData_nasc(dataNasc);
+        usuarioViewDTO.setDataNasc(dataNasc);
         usuarioViewDTO.setSexo(sexo.charAt(0));
         usuarioViewDTO.setTelefone(telefone);
         usuarioViewDTO.setEmail(email);
@@ -294,7 +294,7 @@ public class UsuarioStaticBuilder {
         usuarioViewDTO.setUf(uf);
         usuarioViewDTO.setCidade(cidade);
         usuarioViewDTO.setRua(rua);
-        usuarioViewDTO.setNumero_rua(Integer.parseInt(numeroRua));
+        usuarioViewDTO.setNumeroRua(Integer.parseInt(numeroRua));
 
         return usuarioViewDTO;
     }

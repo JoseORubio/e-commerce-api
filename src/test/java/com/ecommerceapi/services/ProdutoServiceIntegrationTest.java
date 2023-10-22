@@ -98,7 +98,7 @@ public class ProdutoServiceIntegrationTest {
     void naoDeveValidarCadastroProdutoQuantidadeEstoqueInvalido() {
         produtoDTO = ProdutoStaticBuilder.getProdutoDtoQuantidadeEstoqueInvalida();
         validarDtoEPreencherBindingResult();
-        assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+        assertTrue(bindingResult.hasFieldErrors("quantidadeEstoque"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     produtoService.validaCadastroProduto(produtoDTO, bindingResult);
@@ -111,7 +111,7 @@ public class ProdutoServiceIntegrationTest {
         validarDtoEPreencherBindingResult();
         assertTrue(bindingResult.hasFieldErrors("nome"));
         assertTrue(bindingResult.hasFieldErrors("preco"));
-        assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+        assertTrue(bindingResult.hasFieldErrors("quantidadeEstoque"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     produtoService.validaCadastroProduto(produtoDTO, bindingResult);
@@ -124,7 +124,7 @@ public class ProdutoServiceIntegrationTest {
         validarDtoEPreencherBindingResult();
         assertTrue(bindingResult.hasFieldErrors("nome"));
         assertTrue(bindingResult.hasFieldErrors("preco"));
-        assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+        assertTrue(bindingResult.hasFieldErrors("quantidadeEstoque"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     produtoService.validaCadastroProduto(produtoDTO, bindingResult);
@@ -273,7 +273,7 @@ public class ProdutoServiceIntegrationTest {
 
             produtoDTO = ProdutoStaticBuilder.getProdutoDtoQuantidadeEstoqueInvalida();
             validarDtoEPreencherBindingResult();
-            assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+            assertTrue(bindingResult.hasFieldErrors("quantidadeEstoque"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
@@ -288,7 +288,7 @@ public class ProdutoServiceIntegrationTest {
             validarDtoEPreencherBindingResult();
             assertTrue(bindingResult.hasFieldErrors("nome"));
             assertTrue(bindingResult.hasFieldErrors("preco"));
-            assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+            assertTrue(bindingResult.hasFieldErrors("quantidadeEstoque"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
@@ -303,7 +303,7 @@ public class ProdutoServiceIntegrationTest {
             validarDtoEPreencherBindingResult();
             assertTrue(bindingResult.hasFieldErrors("nome"));
             assertTrue(bindingResult.hasFieldErrors("preco"));
-            assertTrue(bindingResult.hasFieldErrors("quantidade_estoque"));
+            assertTrue(bindingResult.hasFieldErrors("quantidadeEstoque"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         produtoService.validaAtualizacaoProduto(produtoModel, produtoDTO, bindingResult);
@@ -330,9 +330,9 @@ public class ProdutoServiceIntegrationTest {
 
         @Test
         void deveBaixarEstoqueProduto() {
-            int quantidadeCompra = produtoModel.getQuantidade_estoque() - 1;
+            int quantidadeCompra = produtoModel.getQuantidadeEstoque() - 1;
             produtoService.baixarEstoqueProduto(produtoModel, quantidadeCompra);
-            assertEquals(produtoModel.getQuantidade_estoque(), 1);
+            assertEquals(produtoModel.getQuantidadeEstoque(), 1);
 
         }
 

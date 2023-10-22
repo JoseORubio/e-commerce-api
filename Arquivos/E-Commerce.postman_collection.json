@@ -20,7 +20,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Heloisa Yasmin Costa\",\r\n  \"login\": \"heloi123\",\r\n  \"senha\": \"asd123aaD\",\r\n  \"cpf\": \"70181125404\",\r\n  \"data_nasc\": \"06/03/1945\",\r\n  \"sexo\": \"F\",\r\n  \"telefone\": \"(85)98981-2256\",\r\n  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\r\n  \"cep\": \"61604-270\",\r\n  \"numero_rua\": \"981\"\r\n}",
+							"raw": "{\r\n  \"nome\": \"Heloisa Yasmin Costa\",\r\n  \"login\": \"heloi123\",\r\n  \"senha\": \"asd123aaD\",\r\n  \"cpf\": \"70181125404\",\r\n  \"dataNasc\": \"06/03/1945\",\r\n  \"sexo\": \"F\",\r\n  \"telefone\": \"(85)98981-2256\",\r\n  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\r\n  \"cep\": \"61604-270\",\r\n  \"numeroRua\": \"981\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -64,7 +64,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Heloisa Yasmin Costa\",\r\n  \"login\": \"heloi123\",\r\n  \"senha\": \"asd123aaD\",\r\n  \"cpf\": \"70181125404\",\r\n  \"data_nasc\": \"06/03/1945\",\r\n  \"sexo\": \"F\",\r\n  \"telefone\": \"(85)98981-2256\",\r\n  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\r\n  \"cep\": \"61604-270\",\r\n  \"numero_rua\": \"981\"\r\n}",
+							"raw": "{\r\n  \"nome\": \"Heloisa Yasmin Costa\",\r\n  \"login\": \"heloi123\",\r\n  \"senha\": \"asd123aaD\",\r\n  \"cpf\": \"70181125404\",\r\n  \"dataNasc\": \"06/03/1945\",\r\n  \"sexo\": \"F\",\r\n  \"telefone\": \"(85)98981-2256\",\r\n  \"email\": \"heloisa_costa@ciaimoveissjc.com\",\r\n  \"cep\": \"61604-270\",\r\n  \"numeroRua\": \"981\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -378,7 +378,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Blusa C\",\r\n  \"quantidade_estoque\": \"76\",\r\n  \"preco\": \"38,99\"\r\n}",
+							"raw": "{\r\n  \"nome\": \"Blusa C\",\r\n  \"quantidadeEstoque\": \"76\",\r\n  \"preco\": \"38,99\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -422,7 +422,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Blusa C\",\r\n  \"quantidade_estoque\": \"36\",\r\n  \"preco\": \"87,50\"\r\n}",
+							"raw": "{\r\n  \"nome\": \"Blusa C\",\r\n  \"quantidadeEstoque\": \"36\",\r\n  \"preco\": \"87,50\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

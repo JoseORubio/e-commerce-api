@@ -122,7 +122,7 @@ public class UsuarioServiceIntegrationTest {
     void naoDeveValidarCadastroUsuarioDataNascInvalida() {
         usuarioDTO = UsuarioStaticBuilder.getUsuarioDTODataNascInvalida();
         validarDTOEPreencherBindingResult();
-        assertTrue(bindingResult.hasFieldErrors("data_nasc"));
+        assertTrue(bindingResult.hasFieldErrors("dataNasc"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     usuarioService.validaCadastroUsuario(usuarioDTO, bindingResult);
@@ -177,7 +177,7 @@ public class UsuarioServiceIntegrationTest {
     void naoDeveValidarCadastroUsuarioNumeroRuaInvalida() {
         usuarioDTO = UsuarioStaticBuilder.getUsuarioDTONumeroRuaInvalido();
         validarDTOEPreencherBindingResult();
-        assertTrue(bindingResult.hasFieldErrors("numero_rua"));
+        assertTrue(bindingResult.hasFieldErrors("numeroRua"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     usuarioService.validaCadastroUsuario(usuarioDTO, bindingResult);
@@ -192,12 +192,12 @@ public class UsuarioServiceIntegrationTest {
         assertTrue(bindingResult.hasFieldErrors("login"));
         assertTrue(bindingResult.hasFieldErrors("senha"));
         assertTrue(bindingResult.hasFieldErrors("cpf"));
-        assertTrue(bindingResult.hasFieldErrors("data_nasc"));
+        assertTrue(bindingResult.hasFieldErrors("dataNasc"));
         assertTrue(bindingResult.hasFieldErrors("sexo"));
         assertTrue(bindingResult.hasFieldErrors("telefone"));
         assertTrue(bindingResult.hasFieldErrors("email"));
         assertTrue(bindingResult.hasFieldErrors("cep"));
-        assertTrue(bindingResult.hasFieldErrors("numero_rua"));
+        assertTrue(bindingResult.hasFieldErrors("numeroRua"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     usuarioService.validaCadastroUsuario(usuarioDTO, bindingResult);
@@ -212,12 +212,12 @@ public class UsuarioServiceIntegrationTest {
         assertTrue(bindingResult.hasFieldErrors("login"));
         assertTrue(bindingResult.hasFieldErrors("senha"));
         assertTrue(bindingResult.hasFieldErrors("cpf"));
-        assertTrue(bindingResult.hasFieldErrors("data_nasc"));
+        assertTrue(bindingResult.hasFieldErrors("dataNasc"));
         assertTrue(bindingResult.hasFieldErrors("sexo"));
         assertTrue(bindingResult.hasFieldErrors("telefone"));
         assertTrue(bindingResult.hasFieldErrors("email"));
         assertTrue(bindingResult.hasFieldErrors("cep"));
-        assertTrue(bindingResult.hasFieldErrors("numero_rua"));
+        assertTrue(bindingResult.hasFieldErrors("numeroRua"));
         assertThrows(IllegalArgumentException.class,
                 () -> {
                     usuarioService.validaCadastroUsuario(usuarioDTO, bindingResult);
@@ -326,12 +326,12 @@ public class UsuarioServiceIntegrationTest {
             assertEquals(usuarioModel.getNome(), usuarioDTO.getNome());
             assertEquals(usuarioModel.getLogin(), usuarioDTO.getLogin());
             assertEquals(usuarioModel.getCpf(), usuarioDTO.getCpf());
-            assertEquals(usuarioModel.getData_nasc().format(DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT)), usuarioDTO.getData_nasc());
+            assertEquals(usuarioModel.getDataNasc().format(DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT)), usuarioDTO.getDataNasc());
             assertEquals(usuarioModel.getSexo(), usuarioDTO.getSexo().charAt(0));
             assertEquals(usuarioModel.getTelefone(), usuarioDTO.getTelefone());
             assertEquals(usuarioModel.getEmail(), usuarioDTO.getEmail());
             assertEquals(usuarioModel.getCep(), usuarioDTO.getCep());
-            assertEquals(String.valueOf(usuarioModel.getNumero_rua()), usuarioDTO.getNumero_rua());
+            assertEquals(String.valueOf(usuarioModel.getNumeroRua()), usuarioDTO.getNumeroRua());
 
         }
 
@@ -398,7 +398,7 @@ public class UsuarioServiceIntegrationTest {
         void naoDeveValidarAtualizacaoUsuarioDataNascInvalida() {
             usuarioDTO = UsuarioStaticBuilder.getUsuarioDTODataNascInvalida();
             validarDTOEPreencherBindingResult();
-            assertTrue(bindingResult.hasFieldErrors("data_nasc"));
+            assertTrue(bindingResult.hasFieldErrors("dataNasc"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         usuarioService.validaAtualizacaoUsuario(usuarioModel, usuarioDTO, bindingResult);
@@ -453,7 +453,7 @@ public class UsuarioServiceIntegrationTest {
         void naoDeveValidarAtualizacaoUsuarioNumeroRuaInvalida() {
             usuarioDTO = UsuarioStaticBuilder.getUsuarioDTONumeroRuaInvalido();
             validarDTOEPreencherBindingResult();
-            assertTrue(bindingResult.hasFieldErrors("numero_rua"));
+            assertTrue(bindingResult.hasFieldErrors("numeroRua"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         usuarioService.validaAtualizacaoUsuario(usuarioModel, usuarioDTO, bindingResult);
@@ -469,12 +469,12 @@ public class UsuarioServiceIntegrationTest {
             assertTrue(bindingResult.hasFieldErrors("login"));
             assertTrue(bindingResult.hasFieldErrors("senha"));
             assertTrue(bindingResult.hasFieldErrors("cpf"));
-            assertTrue(bindingResult.hasFieldErrors("data_nasc"));
+            assertTrue(bindingResult.hasFieldErrors("dataNasc"));
             assertTrue(bindingResult.hasFieldErrors("sexo"));
             assertTrue(bindingResult.hasFieldErrors("telefone"));
             assertTrue(bindingResult.hasFieldErrors("email"));
             assertTrue(bindingResult.hasFieldErrors("cep"));
-            assertTrue(bindingResult.hasFieldErrors("numero_rua"));
+            assertTrue(bindingResult.hasFieldErrors("numeroRua"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         usuarioService.validaAtualizacaoUsuario(usuarioModel, usuarioDTO, bindingResult);
@@ -491,12 +491,12 @@ public class UsuarioServiceIntegrationTest {
             assertTrue(bindingResult.hasFieldErrors("login"));
             assertTrue(bindingResult.hasFieldErrors("senha"));
             assertTrue(bindingResult.hasFieldErrors("cpf"));
-            assertTrue(bindingResult.hasFieldErrors("data_nasc"));
+            assertTrue(bindingResult.hasFieldErrors("dataNasc"));
             assertTrue(bindingResult.hasFieldErrors("sexo"));
             assertTrue(bindingResult.hasFieldErrors("telefone"));
             assertTrue(bindingResult.hasFieldErrors("email"));
             assertTrue(bindingResult.hasFieldErrors("cep"));
-            assertTrue(bindingResult.hasFieldErrors("numero_rua"));
+            assertTrue(bindingResult.hasFieldErrors("numeroRua"));
             assertThrows(IllegalArgumentException.class,
                     () -> {
                         usuarioService.validaAtualizacaoUsuario(usuarioModel, usuarioDTO, bindingResult);

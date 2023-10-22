@@ -54,9 +54,9 @@ public class UsuarioService {
             throw e;
         }
 
-        usuarioModel.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
+        usuarioModel.setNumeroRua(Integer.parseInt(usuarioDTO.getNumeroRua()));
         usuarioModel.setSexo(usuarioDTO.getSexo().charAt(0));
-        usuarioModel.setData_cadastro(LocalDateTime.now(ZoneId.of("UTC")));
+        usuarioModel.setDataCadastro(LocalDateTime.now(ZoneId.of("UTC")));
         usuarioModel.setSenha(new BCryptPasswordEncoder().encode(usuarioModel.getSenha()));
 
         return usuarioModel;
@@ -86,9 +86,9 @@ public class UsuarioService {
         if (usuarioAtualizado.getEmail() == null) usuarioAtualizado.setEmail(usuarioLogado.getEmail());
 
         usuarioAtualizado.setId(usuarioLogado.getId());
-        usuarioAtualizado.setData_cadastro(usuarioLogado.getData_cadastro());
+        usuarioAtualizado.setDataCadastro(usuarioLogado.getDataCadastro());
 
-        usuarioAtualizado.setNumero_rua(Integer.parseInt(usuarioDTO.getNumero_rua()));
+        usuarioAtualizado.setNumeroRua(Integer.parseInt(usuarioDTO.getNumeroRua()));
         usuarioAtualizado.setSexo(usuarioDTO.getSexo().charAt(0));
         usuarioAtualizado.setSenha(new BCryptPasswordEncoder().encode(usuarioAtualizado.getSenha()));
 
@@ -121,12 +121,12 @@ public class UsuarioService {
             }
         }
 
-        if (usuarioDTO.getData_nasc() != null) {
+        if (usuarioDTO.getDataNasc() != null) {
             try {
-                usuarioModel.setData_nasc(LocalDate.parse(usuarioDTO.getData_nasc()
+                usuarioModel.setDataNasc(LocalDate.parse(usuarioDTO.getDataNasc()
                         , DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT)));
             } catch (DateTimeParseException e) {
-                manipuladorListaErros.adicionarErros("data_nasc", "Data inválida.");
+                manipuladorListaErros.adicionarErros("dataNasc", "Data inválida.");
             }
         }
 
@@ -153,9 +153,9 @@ public class UsuarioService {
         return usuarioRepository.findAll(pageable);
     }
 
-    public Optional<UsuarioModel> buscarUsuarioPorId(String id_usuario) {
-        UUID id = ConversorUUID.converteUUID(id_usuario);
-        if (id_usuario.equals("") || id == null)
+    public Optional<UsuarioModel> buscarUsuarioPorId(String idUsuario) {
+        UUID id = ConversorUUID.converteUUID(idUsuario);
+        if (idUsuario.equals("") || id == null)
             throw new IllegalArgumentException();
         return usuarioRepository.findById(id);
     }

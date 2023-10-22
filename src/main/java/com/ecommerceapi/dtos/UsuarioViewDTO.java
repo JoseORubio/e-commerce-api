@@ -13,7 +13,7 @@ public class UsuarioViewDTO {
     private String cpf;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate data_nasc;
+    private LocalDate dataNasc;
     private char sexo;
     private String telefone;
     private String email;
@@ -21,7 +21,7 @@ public class UsuarioViewDTO {
     private String uf;
     private String cidade;
     private String rua;
-    private int numero_rua;
+    private int numeroRua;
 
     public String getNome() {
         return nome;
@@ -47,12 +47,12 @@ public class UsuarioViewDTO {
         this.cpf = cpf;
     }
 
-    public LocalDate getData_nasc() {
-        return data_nasc;
+    public LocalDate getDataNasc() {
+        return dataNasc;
     }
 
-    public void setData_nasc(LocalDate data_nasc) {
-        this.data_nasc = data_nasc;
+    public void setDataNasc(LocalDate dataNasc) {
+        this.dataNasc = dataNasc;
     }
 
     public char getSexo() {
@@ -111,11 +111,11 @@ public class UsuarioViewDTO {
         this.rua = rua;
     }
 
-    public int getNumero_rua() {
-        return numero_rua;
+    public int getNumeroRua() {
+        return numeroRua;
     }
 
-    public void setNumero_rua(int numero_rua) {
-        this.numero_rua = numero_rua;
+    public void setNumeroRua(int numeroRua) {
+        this.numeroRua = numeroRua;
     }
 }
