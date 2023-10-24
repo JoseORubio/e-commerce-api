@@ -34,6 +34,8 @@ Todos os dados de entrada são validados, em alguns casos com o uso de expressõ
 
 Cada endpoint possui uma regra de permissão específica que será exposto no tópico "Segurança".
 
+Toda a API é coberta por testes automatizados, sendo testes unitários para os controllers para conferir as respostas de retorno corretas, testes de segurança para conferir as permissões e testes de integração que interagem com o banco de dados partindo dos services.
+
 Este é meu projeto principal no momento, onde pretendo adicionar funcionalidades aliadas às novas tecnologias ou ferramentas que eu estiver estudando.
 
 ## Funcionalidades
@@ -86,6 +88,8 @@ As permissões ("ADMIN", "USER", anônimo) são gerenciadas da seguinte forma de
 - - Spring Validation    
 - - Spring Security
 - - Spring HATEOAS
+- JUnit 5
+- Mockito
 - Maven 
 - Jackson 2.14.2
 - Springdoc-Openapi 2.1.0
@@ -113,7 +117,6 @@ Você pode [acessar o código fonte do projeto](https://github.com/JoseORubio/e-
 
 Ordenado por prioridade.
 
-- Criar testes unitários e de integração.
 - Aprofundar a especificidade de produtos, com criação de sub-categorias, preço de compra, taxas, registro de imagem...
 - Utilizar o Lombok para limpar mais o código do programa.
 - Criar serviço de administração do sistema, aplicando ciclo vermelho-verde-refatora do TDD  desde o início.
