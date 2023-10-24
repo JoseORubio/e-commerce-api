@@ -83,7 +83,7 @@ As permissões ("ADMIN", "USER", anônimo) são gerenciadas da seguinte forma de
 - MySQL
 - Spring 3.0.6
 - - Spring Boot
-- - Spring Web MVC
+- - Spring Web
 - - Spring Data JPA
 - - Spring Validation    
 - - Spring Security
